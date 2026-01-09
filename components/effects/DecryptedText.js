@@ -9,7 +9,7 @@ const ANIMATION_PLAYED_KEY = 'decrypted_text_played';
  */
 const DecryptedText = memo(function DecryptedText({
   text = '',
-  speed = 7,
+  speed = 3,
   delay = 0,
   className = '',
   characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*',
