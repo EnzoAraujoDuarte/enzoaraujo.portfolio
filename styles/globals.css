@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 147, 51, 234;
+  --primary-dark: 126, 34, 206;
+  --primary-light: 168, 85, 247;
+  --background: 255, 255, 255;
+  --foreground: 17, 17, 17;
+  --dark: 17, 17, 17;
+  --dark-secondary: 31, 31, 31;
+  --dark-lighter: 45, 45, 45;
+}
+
+.dark {
+  --background: 17, 17, 17;
+  --foreground: 255, 255, 255;
+}
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-dark dark:text-white;
+  }
+
+  /* Ensure hero section is always black */
+  .hero-section,
+  section.bg-black {
+    background-color: #000000 !important;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 mx-auto max-w-7xl largemobile:px-6 laptop:px-8;
+  }
+
+  .btn {
+    @apply px-5 py-2.5 font-medium rounded-full shadow-sm transition-all duration-300
+    focus:outline-none focus:ring-2 focus:ring-offset-2
+    transform hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-primary {
+    @apply text-white bg-primary hover:bg-primary-dark focus:ring-primary
+    shadow-md hover:shadow-lg border border-primary hover:border-primary-dark;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .translate-z-1 {
+    transform: translateZ(1px);
+  }
+
+  .profile-image-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  /* Glass morphism effect for cards */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  /* Text gradient effect */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  /* Animation for fade in up */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stagger animation delay utilities */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* Gradient animation for profile image */
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Profile image gradient border - matches page background */
+  .profile-gradient-border {
+    background: linear-gradient(135deg, rgb(31, 31, 31) 0%, rgb(45, 45, 45) 25%, rgb(58, 58, 58) 50%, rgb(45, 45, 45) 75%, rgb(31, 31, 31) 100%);
+    background-size: 300% 300%;
+    animation: gradient 4s ease infinite;
+  }
+
+  .dark .profile-gradient-border {
+    background: linear-gradient(135deg, rgb(31, 31, 31) 0%, rgb(45, 45, 45) 25%, rgb(58, 58, 58) 50%, rgb(45, 45, 45) 75%, rgb(31, 31, 31) 100%);
+  }
+
+  html:not(.dark) .profile-gradient-border {
+    background: linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(245, 245, 245) 25%, rgb(235, 235, 235) 50%, rgb(245, 245, 245) 75%, rgb(255, 255, 255) 100%);
+  }
+}
