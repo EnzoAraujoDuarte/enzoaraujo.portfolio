@@ -1,46 +1,40 @@
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Deploy documentation
+DEPLOY.md
+QUICK_DEPLOY.md
 
-# testing
-/coverage
+# Claude/Cursor configuration
+.claude/
+.cursorrules
+.cursor/
 
-# next.js
-/.next/
-/out/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
 
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# local env files
-.env*.local
+# Environment variables
 .env
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+.env.local
+.env*.local
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
-# OS generated files
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -49,9 +43,18 @@ next-env.d.ts
 ehthumbs.db
 Thumbs.db
 
+# Node (will be in frontend/.gitignore too)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js (will be in frontend/.gitignore too)
+.next/
+out/
+.vercel
+
 # Backup files
 *.bak
-components/about/data.js.bak
-
-# Cache
-.cache/ 
+*.backup
