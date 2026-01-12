@@ -7,8 +7,16 @@ import Head from 'next/head';
 
 export default function Contact() {
   const { language } = useLanguage();
+  const isEnglish = language === 'en-US';
 
-  // Animation variants
+  const pageTitle = isEnglish
+    ? 'Contact | Enzo Araujo Duarte - SAP Developer & AI Engineer'
+    : 'Contato | Enzo Araujo Duarte - Desenvolvedor SAP e Engenheiro de IA';
+
+  const pageDescription = isEnglish
+    ? 'Get in touch with Enzo Araujo Duarte. SAP ABAP Developer, AI Engineer with Python and Shopify Developer available for projects and opportunities.'
+    : 'Entre em contato com Enzo Araujo Duarte. Desenvolvedor SAP ABAP, Engenheiro de IA com Python e Desenvolvedor Shopify disponível para projetos e oportunidades.';
+
   const containerAnimation = {
     hidden: { opacity: 0 },
     show: {
@@ -27,7 +35,20 @@ export default function Contact() {
   return (
     <Layout>
       <Head>
-        <title>{t('contact.title', language)} | Enzo Araujo Duarte</title>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href="https://enzoaraujo.site/contact" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content="https://enzoaraujo.site/contact" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
       </Head>
       
       <div className="container py-16 min-h-[calc(100vh-4rem)] flex flex-col justify-center">

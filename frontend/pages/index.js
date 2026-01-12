@@ -42,9 +42,44 @@ export default function Home() {
     subtitle: t('home.subtitle', language),
     ctaAbout: t('home.cta.about', language),
     ctaCv: t('home.cta.cv', language),
-    metaTitle: `Enzo Araujo Duarte | ${t('nav.home', language)}`,
+    metaTitle: language === 'pt-BR'
+      ? 'Enzo Araujo Duarte | Desenvolvedor ABAP, Shopify e IA com Python'
+      : 'Enzo Araujo Duarte | ABAP Developer, Shopify & AI Engineer with Python',
     metaDescription: t('home.meta.description', language),
   }), [language]);
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Enzo Araujo Duarte",
+    "jobTitle": language === 'pt-BR' ? "Programador de Sistemas" : "Systems Programmer",
+    "url": "https://enzoaraujo.site",
+    "sameAs": [
+      "https://github.com/EnzoAraujoDuarte",
+      "https://linkedin.com/in/enzo-araujo-duarte"
+    ],
+    "knowsAbout": [
+      "ABAP",
+      "SAP ERP",
+      "Python",
+      "LangChain",
+      "LangGraph",
+      "SQL Server",
+      "Shopify",
+      "React",
+      "Next.js",
+      "CDS Views",
+      "OData"
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Unimarka Distribuidora"
+    },
+    "alumniOf": {
+      "@type": "EducationalOrganization",
+      "name": "UNESC"
+    }
+  };
 
   // Animation variants
   const containerVariants = {
@@ -95,25 +130,31 @@ export default function Home() {
         <title>{content.metaTitle}</title>
         <meta name="description" content={content.metaDescription} />
         <meta name="author" content="Enzo Araujo Duarte" />
-        <link rel="canonical" href="https://enzoaduarte.dev" />
+        <meta name="keywords" content="Desenvolvedor ABAP, SAP Developer, Shopify Developer, IA com Python, LangChain, LangGraph, Engenheiro de IA, CDS Views, OData" />
+        <link rel="canonical" href="https://enzoaraujo.site" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content={content.metaTitle} />
         <meta property="og:description" content={content.metaDescription} />
-        <meta property="og:url" content="https://enzoaduarte.dev" />
+        <meta property="og:url" content="https://enzoaraujo.site" />
         <meta property="og:site_name" content="Enzo Araujo Duarte" />
-        <meta property="og:locale" content={language} />
+        <meta property="og:locale" content={language === 'pt-BR' ? 'pt_BR' : 'en_US'} />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={content.metaTitle} />
         <meta name="twitter:description" content={content.metaDescription} />
 
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </Head>
 
       {/* Hero Section - Full viewport with centered content */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black dark:bg-black">
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black dark:bg-black pt-0 pb-20 sm:pb-0">
         {/* Grid Distortion Background */}
         <div className="absolute inset-0 z-0 w-full h-full">
           <GridDistortion
@@ -133,7 +174,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="relative z-20 container px-6 ultrawide:px-8 4k:px-12 text-center max-w-4xl ultrawide:max-w-6xl 4k:max-w-[90rem] mx-auto pt-20 ultrawide:pt-24 4k:pt-28"
+          className="relative z-20 container px-6 ultrawide:px-8 4k:px-12 text-center max-w-4xl ultrawide:max-w-6xl 4k:max-w-[90rem] mx-auto pt-0 sm:pt-20 desktop:pt-32 ultrawide:pt-24 4k:pt-28"
         >
           {/* Greeting */}
           <motion.div variants={itemVariants} className="mb-3 4k:mb-4">

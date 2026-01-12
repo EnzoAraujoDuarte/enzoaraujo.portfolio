@@ -13,16 +13,37 @@ import LanguageCard from '../components/about/LanguageCard';
 import CourseItem from '../components/about/CourseItem';
 import { TimelineItem, TimelineItemWithImage, CareerPosition } from '../components/about/TimelineItems';
 
-import { getSkillsDetails, getLanguageSkills, getCoursesDetails, getTabs } from '../components/about/data';
+import { getSkillsDetails, getLanguageSkills, getCoursesDetails, getPersonalGoals, getTabs } from '../components/about/data';
 
 export default function About() {
   const { language } = useLanguage();
+  const isEnglish = language === 'en-US';
+
+  const pageTitle = isEnglish
+    ? 'About | SAP ABAP Developer & AI Engineer - Enzo Araujo Duarte'
+    : 'Sobre | Desenvolvedor SAP ABAP e Engenheiro de IA - Enzo Araujo Duarte';
+
+  const pageDescription = isEnglish
+    ? 'Systems Programmer specializing in SAP ABAP, Python automation, and AI development with LangChain. Experience with CDS Views, OData, SQL Server and Shopify.'
+    : 'Programador de Sistemas especializado em SAP ABAP, automações Python e desenvolvimento de IA com LangChain. Experiência com CDS Views, OData, SQL Server e Shopify.';
 
   return (
     <Layout>
       <Head>
-        <title>{t('about.title', language)} | Enzo Araujo Duarte</title>
-        <meta name="description" content={t('about.intro.content', language).substring(0, 160) + '...'} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href="https://enzoaraujo.site/about" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content="https://enzoaraujo.site/about" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
       </Head>
       
       <div className="container py-16">
@@ -83,6 +104,7 @@ function AboutContent({ language }) {
   const skillsDetails = useMemo(() => getSkillsDetails(isEnglish), [isEnglish]);
   const languageSkills = useMemo(() => getLanguageSkills(isEnglish), [isEnglish]);
   const coursesDetails = useMemo(() => getCoursesDetails(isEnglish), [isEnglish]);
+  const personalGoals = useMemo(() => getPersonalGoals(isEnglish), [isEnglish]);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -460,19 +482,109 @@ function AboutContent({ language }) {
           </motion.div>
         )}
 
-        {/* Objective Tab */}
-        {activeTab === 'objective' && (
+        {/* Goals Tab */}
+        {activeTab === 'goals' && (
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <h2 className="text-2xl font-bold text-primary mb-4">{t('about.objective.title', language)}</h2>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-              {t('about.objective.content', language)}
-            </p>
-            <div className="mt-6 bg-gray-100 dark:bg-dark p-4 rounded-lg border-l-4 border-primary">
-              <p className="italic text-gray-700 dark:text-gray-300">
-                {isEnglish ? 
-                  "Combining technical expertise with a passion for continuous learning to deliver high-quality solutions." : 
-                  "Combinando expertise técnica com paixão pelo aprendizado contínuo para entregar soluções de alta qualidade."}
-              </p>
+            <h2 className="text-2xl font-bold text-primary mb-6">
+              {isEnglish ? 'Personal Goals 2026' : 'Metas Pessoais 2026'}
+            </h2>
+
+            <div className="space-y-8">
+              {/* Reading Goal */}
+              <div className="bg-gray-100 dark:bg-dark rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <FiBook className="text-primary" size={24} />
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {personalGoals.reading.title}
+                  </h3>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  {personalGoals.reading.description}
+                </p>
+
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {isEnglish ? 'Progress' : 'Progresso'}
+                    </span>
+                    <span className="text-primary font-semibold">
+                      {personalGoals.reading.current}/{personalGoals.reading.target} {isEnglish ? 'books' : 'livros'}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-300 dark:bg-dark-lighter rounded-full h-3">
+                    <div
+                      className="bg-primary h-3 rounded-full transition-all duration-500"
+                      style={{ width: `${(personalGoals.reading.current / personalGoals.reading.target) * 100}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Books Read */}
+                <div>
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                    {isEnglish ? 'Books Read' : 'Livros Lidos'}
+                  </h4>
+                  <div className="space-y-2">
+                    {personalGoals.reading.booksRead.map((book, index) => (
+                      <div key={index} className="flex items-start gap-2 text-sm">
+                        <FiCheck className="text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700 dark:text-gray-300">
+                          <strong>{book.title}</strong> - {book.author}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Development Goal */}
+              <div className="bg-gray-100 dark:bg-dark rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <FiCode className="text-primary" size={24} />
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {personalGoals.aiDevelopment.title}
+                  </h3>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  {personalGoals.aiDevelopment.description}
+                </p>
+
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {isEnglish ? 'Progress' : 'Progresso'}
+                    </span>
+                    <span className="text-primary font-semibold">
+                      {personalGoals.aiDevelopment.progress}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-300 dark:bg-dark-lighter rounded-full h-3">
+                    <div
+                      className="bg-primary h-3 rounded-full transition-all duration-500"
+                      style={{ width: `${personalGoals.aiDevelopment.progress}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Topics */}
+                <div>
+                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                    {isEnglish ? 'Focus Areas' : 'Áreas de Foco'}
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {personalGoals.aiDevelopment.topics.map((topic, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 rounded-full text-sm font-medium bg-primary bg-opacity-10 text-primary"
+                      >
+                        {topic}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

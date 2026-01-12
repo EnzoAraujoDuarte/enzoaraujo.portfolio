@@ -55,6 +55,8 @@ export default function EnzoIAChat() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [threadId, setThreadId] = useState(null);
+  const [streamingText, setStreamingText] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -68,7 +70,7 @@ export default function EnzoIAChat() {
       const timer = setTimeout(() => {
         if (currentLine < code.length) {
           const line = code[currentLine];
-          
+
           if (line === '') {
             setDisplayedCode(prev => [...prev, '']);
             setCurrentLine(prev => prev + 1);
@@ -113,7 +115,24 @@ export default function EnzoIAChat() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, streamingText]);
+
+  const createThread = async () => {
+    try {
+      const response = await fetch('/api/threads', { method: 'POST' });
+      if (response.ok) {
+        const data = await response.json();
+        const newThreadId = data.thread?.thread_id;
+        if (newThreadId) {
+          setThreadId(newThreadId);
+          return newThreadId;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create thread:', error);
+    }
+    return null;
+  };
 
   const hasSeenAnimation = () => {
     if (typeof window === 'undefined') return false;
@@ -126,11 +145,11 @@ export default function EnzoIAChat() {
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (!isOpen) {
       setIsOpen(true);
       const shouldShowAnimation = !hasSeenAnimation();
-      
+
       if (shouldShowAnimation) {
         setShowCodeAnimation(true);
         setDisplayedCode([]);
@@ -141,6 +160,10 @@ export default function EnzoIAChat() {
       } else {
         setShowCodeAnimation(false);
         setCodeComplete(true);
+      }
+
+      if (!threadId) {
+        await createThread();
       }
     } else {
       setIsOpen(false);
@@ -154,60 +177,114 @@ export default function EnzoIAChat() {
   const handleSendMessage = async (text = inputValue) => {
     if (!text.trim() || isLoading) return;
 
+    let currentThreadId = threadId;
+    if (!currentThreadId) {
+      currentThreadId = await createThread();
+      if (!currentThreadId) {
+        setMessages(prev => [...prev, {
+          type: 'bot',
+          text: isEnglish ? 'Failed to start conversation. Please try again.' : 'Falha ao iniciar conversa. Por favor, tente novamente.'
+        }]);
+        return;
+      }
+    }
+
     const userMessage = { type: 'user', text: text.trim() };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    setStreamingText('');
 
     try {
-      const conversationHistory = messages.map(msg => ({
-        type: msg.type === 'user' ? 'user' : 'bot',
-        text: msg.text
-      }));
-
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`/api/threads/${currentThreadId}/stream`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: text.trim(),
-          thread_id: 'enzo-ia-chat',
+          content: text.trim(),
           language: language,
-          conversation_history: conversationHistory
         }),
       });
 
       if (response.status === 429) {
-        const botMessage = {
+        setMessages(prev => [...prev, {
           type: 'bot',
           text: isEnglish
             ? 'You are sending too many messages. Please wait a moment before trying again.'
             : 'Você está enviando muitas mensagens. Por favor, aguarde um momento antes de tentar novamente.'
-        };
-        setMessages(prev => [...prev, botMessage]);
+        }]);
+        setIsLoading(false);
         return;
       }
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
+      if (!response.ok || !response.body) {
+        throw new Error('Stream failed');
       }
 
-      const data = await response.json();
-      const botMessage = {
-        type: 'bot',
-        text: data.response || (isEnglish ? 'Sorry, I encountered an error.' : 'Desculpe, encontrei um erro.')
-      };
-      setMessages(prev => [...prev, botMessage]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let accumulatedText = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const chunks = buffer.split('\n\n');
+        buffer = chunks.pop() || '';
+
+        for (const rawChunk of chunks) {
+          const line = rawChunk.trim();
+          if (!line.startsWith('data:')) continue;
+
+          const jsonText = line.slice(5).trim();
+          if (!jsonText) continue;
+
+          try {
+            const payload = JSON.parse(jsonText);
+
+            if (payload.event === 'chunk') {
+              const delta = payload.text || '';
+              if (delta) {
+                accumulatedText += delta;
+                setStreamingText(accumulatedText);
+              }
+            } else if (payload.event === 'final') {
+              setStreamingText('');
+              setMessages(prev => [...prev, {
+                type: 'bot',
+                text: accumulatedText || (isEnglish ? 'Sorry, I could not generate a response.' : 'Desculpe, não consegui gerar uma resposta.')
+              }]);
+            } else if (payload.event === 'error') {
+              throw new Error(payload.detail || 'Stream error');
+            }
+          } catch (parseError) {
+            continue;
+          }
+        }
+      }
+
+      if (accumulatedText && !messages.find(m => m.text === accumulatedText)) {
+        setStreamingText('');
+        setMessages(prev => {
+          const lastBot = prev[prev.length - 1];
+          if (lastBot?.type === 'bot' && lastBot?.text === accumulatedText) {
+            return prev;
+          }
+          return [...prev, { type: 'bot', text: accumulatedText }];
+        });
+      }
+
     } catch (error) {
       console.error('Error sending message:', error);
-      const botMessage = {
+      setStreamingText('');
+      setMessages(prev => [...prev, {
         type: 'bot',
         text: isEnglish ? 'Sorry, I encountered an error. Please try again.' : 'Desculpe, encontrei um erro. Por favor, tente novamente.'
-      };
-      setMessages(prev => [...prev, botMessage]);
+      }]);
     } finally {
       setIsLoading(false);
+      setStreamingText('');
     }
   };
 
@@ -291,8 +368,8 @@ export default function EnzoIAChat() {
                             )}
                           </>
                         )}
-                        {index === displayedCode.length - 1 && 
-                         currentLine < getInitializationCode(language).length && 
+                        {index === displayedCode.length - 1 &&
+                         currentLine < getInitializationCode(language).length &&
                          currentChar < (getInitializationCode(language)[currentLine]?.length || 0) && (
                           <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse"></span>
                         )}
@@ -342,8 +419,8 @@ export default function EnzoIAChat() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.length === 0 && (
-                    <motion.div 
+                  {messages.length === 0 && !streamingText && (
+                    <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="space-y-2 mb-4"
@@ -386,7 +463,20 @@ export default function EnzoIAChat() {
                       </motion.div>
                     </motion.div>
                   ))}
-                  {isLoading && (
+
+                  {streamingText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex justify-start"
+                    >
+                      <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-dark text-gray-900 dark:text-white">
+                        <p className="text-sm whitespace-pre-wrap">{streamingText}</p>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {isLoading && !streamingText && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
