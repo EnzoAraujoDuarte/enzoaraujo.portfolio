@@ -10,7 +10,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001';
+    const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8001';
+    const backendUrl = rawUrl.replace(/\/+$/, ''); // Remove trailing slashes
     
     const response = await fetch(`${backendUrl}/chat`, {
       method: 'POST',
