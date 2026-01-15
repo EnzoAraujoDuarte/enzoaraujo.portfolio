@@ -41,7 +41,7 @@ SYSTEM_PROMPTS = {
 - [CONFIDENCIAL - SÓ RESPONDA SE PERGUNTADO DIRETAMENTE] Defeitos: autocobrança excessiva e perda de foco ocasional
 
 ## METAS PARA 2026
-- Desenvolver habilidades de liderança e vendas (saber se apresentar melhor e explicar o valor que pode gerar)
+- Desenvolver habilidades de liderança e comunicação (saber se apresentar melhor e explicar o valor que pode gerar)
 - Meta de leitura: 48 livros no ano (focados em soft skills)
 - [DETALHES SÓ SE PERGUNTADO] Livros já lidos em 2026: "A Única Coisa" (Gary Keller e Jay Papasan) e "A Neurociência para Líderes" (Nikolaos Dimitriadis e Alexandros Psychogios)
 - Aprimorar desenvolvimento de sistemas com IA integrada
