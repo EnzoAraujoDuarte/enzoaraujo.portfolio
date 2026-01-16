@@ -28,7 +28,7 @@ export default function About() {
     : 'Programador de Sistemas especializado em SAP ABAP, automações Python e desenvolvimento de IA com LangChain. Experiência com CDS Views, OData, SQL Server e Shopify.';
 
   return (
-    <Layout>
+    <Layout hideHeaderOnDesktop={true}>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -44,9 +44,26 @@ export default function About() {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
+        
+        {/* Preload important images */}
+        <link rel="preload" as="image" href="/Images/novafotoperfil.png" />
+        <link rel="preload" as="image" href="/Images/Unesc.png" />
+        <link rel="preload" as="image" href="/Images/EEEFMHonorioFraga.webp" />
+        <link rel="preload" as="image" href="/Images/Logo_Unimarka.png" />
       </Head>
       
-      <div className="container py-16">
+      <div className="relative min-h-screen">
+        <div 
+          className="fixed inset-0 z-0 opacity-30 dark:opacity-20"
+          style={{
+            backgroundImage: 'url(/Images/griddistortion.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'fixed'
+          }}
+        />
+        <div className="relative z-10 container py-16">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-3xl tablet:text-4xl font-bold text-gray-900 dark:text-white">
             {t('about.title', language)}
@@ -54,6 +71,7 @@ export default function About() {
         </div>
 
         <AboutContent language={language} />
+        </div>
       </div>
     </Layout>
   );
@@ -220,6 +238,7 @@ function AboutContent({ language }) {
                         sizes="(max-width: 768px) 256px, 320px, 384px"
                         className="object-contain"
                         priority
+                        loading="eager"
                         style={{ 
                           backgroundColor: 'transparent',
                           imageRendering: 'crisp-edges',
@@ -274,6 +293,8 @@ function AboutContent({ language }) {
                               width={60}
                               height={60}
                               className="object-contain"
+                              loading="eager"
+                              quality={90}
                             />
                           </div>
                           <div className="flex-grow">
@@ -364,6 +385,8 @@ function AboutContent({ language }) {
                     width={120}
                     height={120}
                     style={{ objectFit: "contain" }}
+                    loading="eager"
+                    quality={90}
                   />
                 </div>
               </div>
@@ -436,6 +459,8 @@ function AboutContent({ language }) {
                               width={80}
                               height={80}
                               className="object-contain"
+                              loading="eager"
+                              quality={90}
                             />
                           </div>
                           <div className="flex-grow">

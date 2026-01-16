@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BotMessageSquare } from 'lucide-react';
+import { BotMessageSquare, FastForward } from 'lucide-react';
 import { FiX, FiSend } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -16,7 +16,6 @@ const getInitializationCode = (language) => {
     "  mode: 'interactive',",
     "  personality: 'friendly'",
     "})",
-    "",
     "await enzo.initialize()",
     "",
     isEnglish ? "console.log('Connecting...')" : "console.log('Conectando...')",
@@ -59,6 +58,7 @@ export default function EnzoIAChat() {
   const [streamingText, setStreamingText] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const animationScrollRef = useRef(null);
 
   const INITIALIZATION_CODE = getInitializationCode(language);
   const SUGGESTED_QUESTIONS = getSuggestedQuestions(language);
@@ -117,6 +117,13 @@ export default function EnzoIAChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingText]);
 
+  useEffect(() => {
+    if (showCodeAnimation && animationScrollRef.current) {
+      const scrollContainer = animationScrollRef.current;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight + 50;
+    }
+  }, [displayedCode, currentLine, currentChar, showCodeAnimation]);
+
   const createThread = async () => {
     try {
       const response = await fetch('/api/threads', { method: 'POST' });
@@ -144,6 +151,26 @@ export default function EnzoIAChat() {
       localStorage.setItem('enzoIA-animation-seen', 'true');
     }
   };
+
+  /**
+ * executar resetEnzoIAAnimation() dentro do console do navegador para resetar a animação
+ */
+  const resetAnimation = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('enzoIA-animation-seen');
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.resetEnzoIAAnimation = resetAnimation;
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete window.resetEnzoIAAnimation;
+      }
+    };
+  }, []);
 
   const handleButtonClick = async () => {
     if (!isOpen) {
@@ -331,9 +358,19 @@ export default function EnzoIAChat() {
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-gray-900 rounded-lg p-8 max-w-2xl w-full mx-4"
+                  className="bg-gray-900 rounded-lg p-8 max-w-2xl w-full mx-4 relative"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  <button
+                    onClick={() => {
+                      setShowCodeAnimation(false);
+                      setCodeComplete(true);
+                    }}
+                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                    title={isEnglish ? 'Skip animation' : 'Pular animação'}
+                  >
+                    <FastForward className="w-5 h-5" />
+                  </button>
                   <div className="flex items-center gap-2 mb-4">
                     <div className="flex gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -342,7 +379,10 @@ export default function EnzoIAChat() {
                     </div>
                     <span className="text-gray-400 ml-2 font-mono text-sm">terminal</span>
                   </div>
-                  <div className="bg-black/50 rounded p-4 h-96 overflow-auto font-mono text-sm">
+                  <div 
+                    ref={animationScrollRef}
+                    className="bg-black/50 rounded p-4 h-96 overflow-auto font-mono text-sm hide-scrollbar"
+                  >
                     {displayedCode.map((line, index) => (
                       <div key={index} className="mb-1 text-gray-300">
                         {line === '' ? (

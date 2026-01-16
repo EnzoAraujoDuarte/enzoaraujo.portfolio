@@ -36,6 +36,8 @@ export default function CourseItem({ title, description, progress, imageSrc, onC
                 alt={title}
                 fill
                 style={{ objectFit: "contain" }}
+                loading="eager"
+                quality={90}
               />
             </div>
           </div>

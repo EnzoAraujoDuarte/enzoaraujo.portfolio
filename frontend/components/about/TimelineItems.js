@@ -37,6 +37,8 @@ export function TimelineItemWithImage({ period, title, description, imageSrc, al
             alt={alt || title}
             fill
             style={{ objectFit: "contain" }}
+            loading="eager"
+            quality={90}
           />
         </div>
       </div>

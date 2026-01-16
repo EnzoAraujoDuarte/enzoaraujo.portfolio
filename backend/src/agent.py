@@ -150,13 +150,13 @@ def create_agent(language: str = "pt-BR"):
         temperature=0.7
     )
     system_prompt = SYSTEM_PROMPTS.get(language, SYSTEM_PROMPTS["pt-BR"])
-
+    
     def call_model(state: AgentState):
         messages = state["messages"]
         if not any(isinstance(m, SystemMessage) for m in messages):
             messages = [SystemMessage(content=system_prompt)] + list(messages)
         return {"messages": [llm.invoke(messages)]}
-
+    
     graph = StateGraph(AgentState)
     graph.add_node("agent", call_model)
     graph.set_entry_point("agent")

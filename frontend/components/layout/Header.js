@@ -20,8 +20,8 @@ export default function Header({ isTransparent = false }) {
   ], [language]);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 ${isTransparent ? 'bg-transparent' : 'bg-white/95 dark:bg-dark/95 backdrop-blur-sm'}`}>
-      <div className="container flex items-center justify-between h-20 ultrawide:h-24 4k:h-28">
+    <header className={`fixed top-0 left-0 right-0 z-50 ${isTransparent ? 'bg-transparent pointer-events-none' : 'bg-white/95 dark:bg-dark/95 backdrop-blur-sm'}`}>
+      <div className={`container flex items-center justify-between h-20 ultrawide:h-24 4k:h-28 ${isTransparent ? 'pointer-events-auto' : ''}`}>
         {/* Logo */}
         <Link href="/" className="text-2xl ultrawide:text-3xl 4k:text-4xl font-bold text-white group">
           <span className="text-primary group-hover:text-primary-light transition-colors">Enzo</span>
@@ -53,9 +53,9 @@ export default function Header({ isTransparent = false }) {
         </nav>
 
         {/* Mobile Menu Controls */}
-        <div className="flex items-center tablet:hidden">
+        <div className="flex items-center tablet:hidden pointer-events-auto">
           <button
-            className="text-white p-2 focus:outline-none"
+            className="text-white p-2 focus:outline-none cursor-pointer"
             onClick={toggleMenu}
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
@@ -71,14 +71,14 @@ export default function Header({ isTransparent = false }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="tablet:hidden bg-black/95 backdrop-blur-lg border-t border-white/10"
+            className="tablet:hidden bg-black/95 backdrop-blur-lg border-t border-white/10 pointer-events-auto"
           >
             <div className="container py-6 space-y-4">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block py-3 text-lg text-white/80 hover:text-primary font-medium transition-colors"
+                  className="block py-3 text-lg text-white/80 hover:text-primary font-medium transition-colors cursor-pointer"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
@@ -91,7 +91,7 @@ export default function Header({ isTransparent = false }) {
                   toggleLanguage();
                   setIsOpen(false);
                 }}
-                className="flex items-center py-3 text-lg text-white/80 hover:text-primary font-medium"
+                className="flex items-center py-3 text-lg text-white/80 hover:text-primary font-medium cursor-pointer w-full text-left"
                 aria-label={`Switch to ${languageText}`}
               >
                 <FiGlobe className="mr-2" />
@@ -104,3 +104,4 @@ export default function Header({ isTransparent = false }) {
     </header>
   );
 }
+

@@ -44,7 +44,7 @@ export default function Home() {
     ctaCv: t('home.cta.cv', language),
     metaTitle: language === 'pt-BR'
       ? 'Enzo Araujo Duarte | Desenvolvedor ABAP, Shopify e IA com Python'
-      : 'Enzo Araujo Duarte | ABAP Developer, Shopify & AI Engineer with Python',
+      : 'Enzo Araujo Duarte | ABAP Developer, Shopify & Python',
     metaDescription: t('home.meta.description', language),
   }), [language]);
 
