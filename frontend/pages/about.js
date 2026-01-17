@@ -28,7 +28,7 @@ export default function About() {
     : 'Programador de Sistemas especializado em SAP ABAP, automações Python e desenvolvimento de IA com LangChain. Experiência com CDS Views, OData, SQL Server e Shopify.';
 
   return (
-    <Layout hideHeaderOnDesktop={true}>
+    <Layout>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />

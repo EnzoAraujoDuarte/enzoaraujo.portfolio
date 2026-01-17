@@ -125,7 +125,7 @@ export default function Home() {
   };
 
   return (
-    <Layout isHomePage={true}>
+    <Layout>
       <Head>
         <title>{content.metaTitle}</title>
         <meta name="description" content={content.metaDescription} />
