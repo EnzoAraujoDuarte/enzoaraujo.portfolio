@@ -3,6 +3,7 @@ const translations = {
     // Header navigation
     'nav.home': 'Início',
     'nav.about': 'Sobre',
+    'nav.projects': 'Projetos',
     'nav.contact': 'Contato',
 
     // Language toggle
@@ -78,6 +79,9 @@ const translations = {
     'contact.form.subjectRequired': 'Assunto é obrigatório',
     'contact.form.messageRequired': 'Mensagem é obrigatória',
 
+    // Projects page
+    'projects.title': 'Projetos',
+
     // 404 page
     '404.title': 'Página não encontrada',
     '404.description': 'A página que você está procurando não existe ou foi movida.',
@@ -87,6 +91,7 @@ const translations = {
     // Header navigation
     'nav.home': 'Home',
     'nav.about': 'About',
+    'nav.projects': 'Projects',
     'nav.contact': 'Contact',
 
     // Language toggle
@@ -161,6 +166,9 @@ const translations = {
     'contact.form.emailInvalid': 'Invalid email',
     'contact.form.subjectRequired': 'Subject is required',
     'contact.form.messageRequired': 'Message is required',
+
+    // Projects page
+    'projects.title': 'Projects',
 
     // 404 page
     '404.title': 'Page not found',
