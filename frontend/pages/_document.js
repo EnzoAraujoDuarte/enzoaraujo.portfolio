@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="pt-BR" className="dark">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/Images/EnzoIA.png" />
-        <link rel="apple-touch-icon" href="/Images/EnzoIA.png" />
+        <link rel="icon" href="/Images/novafotoperfil.png" />
+        <link rel="apple-touch-icon" href="/Images/novafotoperfil.png" />
 
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
