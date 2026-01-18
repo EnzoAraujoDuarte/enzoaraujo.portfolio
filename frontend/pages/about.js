@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
@@ -83,7 +83,9 @@ function AboutContent({ language }) {
   const [isHovered, setIsHovered] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [scrollDirection, setScrollDirection] = useState('right');
   const imageRef = useRef(null);
+  const tabsScrollRef = useRef(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const rotateX = useTransform(mouseY, [-100, 100], [10, -10]);
@@ -129,6 +131,32 @@ function AboutContent({ language }) {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
+  const handleScroll = () => {
+    if (tabsScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsScrollRef.current;
+      const isAtStart = scrollLeft === 0;
+      const isAtEnd = Math.abs(scrollWidth - clientWidth - scrollLeft) < 1;
+      
+      if (isAtEnd) {
+        setScrollDirection('left');
+      } else if (isAtStart) {
+        setScrollDirection('right');
+      }
+    }
+  };
+
+  useEffect(() => {
+    const scrollContainer = tabsScrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      handleScroll();
+      
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -137,7 +165,25 @@ function AboutContent({ language }) {
       className="max-w-none"
     >
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto pb-4 mb-8 hide-scrollbar">
+      {/* Mobile scroll hint */}
+      <div className="tablet:hidden mb-3 flex items-center justify-center">
+        <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+          <span>{isEnglish ? 'Swipe to see more' : 'Role para o lado'}</span>
+          <motion.span 
+            animate={{ x: scrollDirection === 'right' ? [0, 5, 0] : [0, -5, 0] }}
+            transition={{ repeat: Infinity, repeatType: "reverse", duration: 1 }}
+            className="ml-1"
+          >
+            {scrollDirection === 'right' ? '→' : '←'}
+          </motion.span>
+        </div>
+      </div>
+      
+      <div 
+        ref={tabsScrollRef}
+        className="flex overflow-x-auto pb-4 mb-8 hide-scrollbar"
+        onScroll={handleScroll}
+      >
         <div className="flex space-x-2 tablet:space-x-4 mx-auto">
           {tabs.map((tab) => (
             <motion.button
