@@ -144,6 +144,7 @@ export function getPersonalGoals(isEnglish) {
     reading: {
       title: isEnglish ? "Reading Goal 2026" : "Meta de Leitura 2026",
       target: 48,
+      progress: 10,
       current: booksNumber(isEnglish, booksRead),
       description: isEnglish ?
         "Goal to read 48 books this year, focusing on soft skills, leadership and personal development." :
