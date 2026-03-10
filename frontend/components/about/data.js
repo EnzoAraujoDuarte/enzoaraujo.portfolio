@@ -1,3 +1,15 @@
+const booksRead = [
+  { title: "A Única Coisa", author: "Gary Keller e Jay Papasan" },
+  { title: "A Neurociência para Líderes", author: "Nikolaos Dimitriadis e Alexandros Psychogios" },
+  { title: "Scrum: Guia prático", author: "J. J. Sutherland" },
+  { title: "14 Hábitos de Desenvolvedores Altamente Produtivos", author: "Zeno Rocha" },
+  { title: "Lógica de Programação e Algoritmos com JavaScript", author: "Edécio Fernando Iepsen" },
+  { title: "Liderança: Como conquistar a confiança, a lealdade e a admiração das pessoas", author: "Dale Carnegie" },
+  { title: "Nada pode me ferir", author: "David Goggins" },
+  { title: "Nunca é hora de parar", author: "David Goggins" }
+]
+
+
 export function getSkillsDetails(isEnglish) {
   return {
 
@@ -132,14 +144,11 @@ export function getPersonalGoals(isEnglish) {
     reading: {
       title: isEnglish ? "Reading Goal 2026" : "Meta de Leitura 2026",
       target: 48,
-      current: 2,
+      current: booksNumber(isEnglish, booksRead),
       description: isEnglish ?
         "Goal to read 48 books this year, focusing on soft skills, leadership and personal development." :
         "Meta de ler 48 livros este ano, com foco em soft skills, liderança e desenvolvimento pessoal.",
-      booksRead: [
-        { title: "A Única Coisa", author: "Gary Keller e Jay Papasan" },
-        { title: "A Neurociência para Líderes", author: "Nikolaos Dimitriadis e Alexandros Psychogios" }
-      ]
+      booksRead: booksRead,
     },
     aiDevelopment: {
       title: isEnglish ? "AI-Integrated Systems Development" : "Desenvolvimento de Sistemas com IA",
@@ -164,3 +173,12 @@ export function getTabs(isEnglish, icons) {
     { id: 'goals', label: isEnglish ? 'Goals' : 'Metas', icon: icons.target },
   ];
 }
+// 24.02.2026:
+export function booksNumber(isEnglish, booksRead){
+  if (isEnglish) {
+    return booksRead.length + " " + (booksRead.length === 1 ? "book" : "books");
+  } else {
+    return booksRead.length + " " + (booksRead.length === 1 ? "livro" : "livros");
+  }
+}
+// 24.02.2026.
