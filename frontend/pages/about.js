@@ -20,8 +20,8 @@ export default function About() {
   const isEnglish = language === 'en-US';
 
   const pageTitle = isEnglish
-    ? 'About | SAP ABAP Developer & AI Engineer - Enzo Araujo Duarte'
-    : 'Sobre | Desenvolvedor SAP ABAP e Engenheiro de IA - Enzo Araujo Duarte';
+    ? 'About | SAP ABAP & Frontend Developer  - Enzo Araujo Duarte'
+    : 'Sobre | Desenvolvedor SAP ABAP e Frontend - Enzo Araujo Duarte';
 
   const pageDescription = isEnglish
     ? 'Systems Programmer specializing in SAP ABAP, Python automation, and AI development with LangChain. Experience with CDS Views, OData, SQL Server and Shopify.'
