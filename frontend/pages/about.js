@@ -3,25 +3,24 @@ import Layout from '../components/layout/Layout';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../locales/translations';
-import { FiCode, FiDatabase, FiShoppingBag, FiBook, FiTarget, FiUser, FiBriefcase, FiGlobe, FiCheck } from 'react-icons/fi';
+import { FiCode, FiDatabase, FiBook, FiTarget, FiUser, FiBriefcase, FiGlobe, FiCheck } from 'react-icons/fi';
 import Image from 'next/image';
 import Head from 'next/head';
 import { formatPeriod } from '../utils/dateUtils';
 
 import SkillCard from '../components/about/SkillCard';
 import LanguageCard from '../components/about/LanguageCard';
-import CourseItem from '../components/about/CourseItem';
 import { TimelineItem, TimelineItemWithImage, CareerPosition } from '../components/about/TimelineItems';
 
-import { getSkillsDetails, getLanguageSkills, getCoursesDetails, getPersonalGoals, getTabs } from '../components/about/data';
+import { getSkillsDetails, getLanguageSkills, getPersonalGoals, getTabs } from '../components/about/data';
 
 export default function About() {
   const { language } = useLanguage();
   const isEnglish = language === 'en-US';
 
   const pageTitle = isEnglish
-    ? 'About | SAP ABAP & Frontend Developer  - Enzo Araujo Duarte'
-    : 'Sobre | Desenvolvedor SAP ABAP e Frontend - Enzo Araujo Duarte';
+    ? 'About | SAP ABAP Developer & AI Engineer - Enzo Araujo Duarte'
+    : 'Sobre | Desenvolvedor SAP ABAP e Engenheiro de IA - Enzo Araujo Duarte';
 
   const pageDescription = isEnglish
     ? 'Systems Programmer specializing in SAP ABAP, Python automation, and AI development with LangChain. Experience with CDS Views, OData, SQL Server and Shopify.'
@@ -82,7 +81,6 @@ function AboutContent({ language }) {
   const [activeTab, setActiveTab] = useState('intro');
   const [isHovered, setIsHovered] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState(null);
-  const [selectedCourse, setSelectedCourse] = useState(null);
   const [scrollDirection, setScrollDirection] = useState('right');
   const imageRef = useRef(null);
   const tabsScrollRef = useRef(null);
@@ -116,14 +114,12 @@ function AboutContent({ language }) {
     code: <FiCode />,
     book: <FiBook />,
     briefcase: <FiBriefcase />,
-    shop: <FiShoppingBag />,
     target: <FiTarget />
   }), []);
   
   const tabs = useMemo(() => getTabs(isEnglish, icons), [isEnglish, icons]);
   const skillsDetails = useMemo(() => getSkillsDetails(isEnglish), [isEnglish]);
   const languageSkills = useMemo(() => getLanguageSkills(isEnglish), [isEnglish]);
-  const coursesDetails = useMemo(() => getCoursesDetails(isEnglish), [isEnglish]);
   const personalGoals = useMemo(() => getPersonalGoals(isEnglish), [isEnglish]);
 
   const fadeIn = {
@@ -397,22 +393,96 @@ function AboutContent({ language }) {
         {/* Education Tab */}
         {activeTab === 'education' && (
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <h2 className="text-2xl font-bold text-primary mb-6">{t('about.education.title', language)}</h2>
-            <div className="space-y-4">
-              <TimelineItemWithImage 
-                period="2023-2026" 
-                title={t('about.education.bachelor', language)}
-                description={t('about.education.bachelor.details', language)}
-                imageSrc="/Images/Unesc.png"
-                alt="UNESC Logo"
-              />
-              <TimelineItemWithImage 
-                period="2020-2022" 
-                title={t('about.education.highschool', language)}
-                description={t('about.education.highschool.details', language)}
-                imageSrc="/Images/EEEFMHonorioFraga.webp"
-                alt="EEEFM Honório Fraga Logo"
-              />
+            {/* Header */}
+            <div className="mb-8">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">
+                {isEnglish ? 'Academic Path' : 'Trajetória Acadêmica'}
+              </p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {t('about.education.title', language)}
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-5">
+              {/* UNESC */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden"
+              >
+                {/* Logo area */}
+                <div className="relative h-32 bg-white dark:bg-dark-secondary flex items-center justify-center px-6 border-b border-gray-100 dark:border-white/[0.04]">
+                  <div className="relative w-36 h-16">
+                    <Image
+                      src="/Images/Unesc.png"
+                      alt="UNESC Logo"
+                      fill
+                      className="object-contain"
+                      loading="eager"
+                      quality={90}
+                    />
+                  </div>
+                  <div className="absolute top-3 right-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-primary/10 text-primary border border-primary/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      {isEnglish ? 'In Progress' : 'Em Andamento'}
+                    </span>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="p-5 laptop:p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary mb-2">
+                    UNESC — 2023–2026
+                  </p>
+                  <h3 className="text-base laptop:text-lg font-bold text-gray-900 dark:text-white leading-snug mb-2">
+                    {t('about.education.bachelor', language)}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                    {t('about.education.bachelor.details', language)}
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* EEEFM */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden"
+              >
+                {/* Logo area */}
+                <div className="relative h-32 bg-white dark:bg-dark-secondary flex items-center justify-center px-6 border-b border-gray-100 dark:border-white/[0.04]">
+                  <div className="relative w-36 h-16">
+                    <Image
+                      src="/Images/EEEFMHonorioFraga.webp"
+                      alt="EEEFM Honório Fraga Logo"
+                      fill
+                      className="object-contain"
+                      loading="eager"
+                      quality={90}
+                    />
+                  </div>
+                  <div className="absolute top-3 right-3">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                      <FiCheck size={9} />
+                      {isEnglish ? 'Completed' : 'Concluído'}
+                    </span>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="p-5 laptop:p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary mb-2">
+                    EEEFM — 2020–2022
+                  </p>
+                  <h3 className="text-base laptop:text-lg font-bold text-gray-900 dark:text-white leading-snug mb-2">
+                    {t('about.education.highschool', language)}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                    {t('about.education.highschool.details', language)}
+                  </p>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
@@ -420,238 +490,308 @@ function AboutContent({ language }) {
         {/* Career Tab */}
         {activeTab === 'career' && (
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <h2 className="text-2xl font-bold text-primary mb-6">{t('about.career.title', language)}</h2>
-            
-            <div className="mb-8 flex flex-col tablet:flex-row items-center tablet:items-start gap-6">
-              <div className="w-32 h-32 relative flex-shrink-0 bg-gray-800 dark:bg-dark rounded-lg p-2 shadow-sm">
-                <div className="relative w-full h-full">
-                  <Image 
-                    src="/Images/Logo_Unimarka.png"
-                    alt="Unimarka Logo"
-                    width={120}
-                    height={120}
-                    style={{ objectFit: "contain" }}
-                    loading="eager"
-                    quality={90}
-                  />
-                </div>
+            {/* Company header */}
+            <div className="flex items-center gap-4 mb-8 pb-8 border-b border-gray-200 dark:border-white/[0.06]">
+              <div className="w-14 h-14 laptop:w-16 laptop:h-16 relative flex-shrink-0 bg-gray-800 dark:bg-dark rounded-xl p-2 shadow-sm">
+                <Image
+                  src="/Images/Logo_Unimarka.png"
+                  alt="Unimarka Logo"
+                  width={60}
+                  height={60}
+                  style={{ objectFit: 'contain' }}
+                  loading="eager"
+                  quality={90}
+                />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
+                  {isEnglish ? 'Current Employer' : 'Empresa Atual'}
+                </p>
+                <h2 className="text-xl laptop:text-2xl font-bold text-gray-900 dark:text-white leading-tight">
                   {t('about.career.unimarka', language)}
-                </h3>
-                <div className="mt-4 space-y-6">
-                  <CareerPosition 
-                    title={t('about.career.position1', language)}
-                    period={formatPeriod(2024, 12, isEnglish)}
-                    description={t('about.career.position1.description', language)}
-                  />
-                  <CareerPosition 
-                    title={t('about.career.position2', language)}
-                    period={t('about.career.position2.period', language)}
-                    description={t('about.career.position2.description', language)}
-                  />
-                  <CareerPosition 
-                    title={t('about.career.position3', language)}
-                    period={t('about.career.position3.period', language)}
-                    description={t('about.career.position3.description', language)}
-                  />
+                </h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {isEnglish ? 'Feb 2023 – Present · ~2 years' : 'Fev 2023 – Atual · ~2 anos'}
+                </p>
+              </div>
+            </div>
+
+            {/* Section label */}
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-6">
+              {isEnglish ? 'Career Progression' : 'Progressão de Carreira'}
+            </p>
+
+            {/* Timeline */}
+            <div className="relative">
+              {/* Vertical line — tablet+ */}
+              <div className="absolute left-[1.125rem] top-5 bottom-5 w-px bg-gradient-to-b from-primary via-primary/40 to-primary/10 hidden tablet:block" />
+
+              <div className="space-y-4">
+                {/* Position 1 — Current */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="relative tablet:pl-12"
+                >
+                  <div className="hidden tablet:flex absolute left-0 top-5 w-9 h-9 rounded-full bg-primary shadow-lg shadow-primary/30 items-center justify-center z-10">
+                    <span className="text-[9px] font-black text-white">01</span>
+                  </div>
+                  <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark p-5 laptop:p-6">
+                    <div className="flex items-center gap-2 flex-wrap mb-3">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        {isEnglish ? 'Current role' : 'Cargo atual'}
+                      </span>
+                      <span className="tablet:hidden inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-[9px] font-black text-white">01</span>
+                    </div>
+                    <h3 className="text-base laptop:text-lg font-bold text-gray-900 dark:text-white mb-1 leading-snug">
+                      {t('about.career.position1', language)}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary mb-3">
+                      {formatPeriod(2024, 12, isEnglish)}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {t('about.career.position1.description', language)}
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Promotion divider */}
+                <div className="tablet:pl-12 flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary whitespace-nowrap">
+                    <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[11px] leading-none">↑</div>
+                    <span>{isEnglish ? 'Promoted' : 'Promoção'}</span>
+                  </div>
+                  <div className="flex-1 h-px bg-gray-200 dark:bg-white/[0.05]" />
                 </div>
+
+                {/* Position 2 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="relative tablet:pl-12"
+                >
+                  <div className="hidden tablet:flex absolute left-0 top-5 w-9 h-9 rounded-full bg-primary/20 border border-primary/30 items-center justify-center z-10">
+                    <span className="text-[9px] font-black text-primary">02</span>
+                  </div>
+                  <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark p-5 laptop:p-6">
+                    <span className="tablet:hidden inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 border border-primary/30 text-[9px] font-black text-primary mb-3 block">02</span>
+                    <h3 className="text-base laptop:text-lg font-bold text-gray-900 dark:text-white mb-1 leading-snug">
+                      {t('about.career.position2', language)}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary mb-3">
+                      {t('about.career.position2.period', language)}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {t('about.career.position2.description', language)}
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Promotion divider */}
+                <div className="tablet:pl-12 flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary whitespace-nowrap">
+                    <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[11px] leading-none">↑</div>
+                    <span>{isEnglish ? 'Promoted' : 'Promoção'}</span>
+                  </div>
+                  <div className="flex-1 h-px bg-gray-200 dark:bg-white/[0.05]" />
+                </div>
+
+                {/* Position 3 */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="relative tablet:pl-12"
+                >
+                  <div className="hidden tablet:flex absolute left-0 top-5 w-9 h-9 rounded-full bg-primary/10 border border-primary/20 items-center justify-center z-10">
+                    <span className="text-[9px] font-black text-primary/60">03</span>
+                  </div>
+                  <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark p-5 laptop:p-6">
+                    <span className="tablet:hidden inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-[9px] font-black text-primary/60 mb-3 block">03</span>
+                    <h3 className="text-base laptop:text-lg font-bold text-gray-900 dark:text-white mb-1 leading-snug">
+                      {t('about.career.position3', language)}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary mb-3">
+                      {t('about.career.position3.period', language)}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      {t('about.career.position3.description', language)}
+                    </p>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* Development Tab */}
-        {activeTab === 'development' && (
-          <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <h2 className="text-2xl font-bold text-primary mb-6">{t('about.development.title', language)}</h2>
-            
-            <div className="space-y-6">
-              {Object.entries(coursesDetails).map(([course, details]) => (
-                <div key={course}>
-                  <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
-                    <CourseItem
-                      title={course}
-                      description={details.description}
-                      progress={details.progress}
-                      imageSrc={details.imageSrc}
-                      onClick={details.expandable ? () => setSelectedCourse(course === selectedCourse ? null : course) : undefined}
-                      isActive={selectedCourse === course}
-                      expandable={details.expandable}
-                    />
-                  </motion.div>
-                  
-                  <AnimatePresence>
-                    {selectedCourse === course && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
-                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="bg-gray-100 dark:bg-dark rounded-lg p-6 border-l-4 border-primary relative overflow-hidden"
-                      >
-                        <button 
-                          onClick={() => setSelectedCourse(null)}
-                          className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-dark-lighter text-gray-500 hover:bg-gray-200 dark:hover:bg-dark-secondary"
-                        >
-                          ×
-                        </button>
-                        <div className="flex flex-col tablet:flex-row gap-4 items-start">
-                          <div className="bg-white dark:bg-dark-secondary p-2 rounded-lg shadow-sm">
-                            <Image
-                              src={coursesDetails[selectedCourse].imageSrc}
-                              alt={selectedCourse}
-                              width={80}
-                              height={80}
-                              className="object-contain"
-                              loading="eager"
-                              quality={90}
-                            />
-                          </div>
-                          <div className="flex-grow">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{selectedCourse}</h3>
-                            <p className="text-gray-700 dark:text-gray-300 mb-4">
-                              {coursesDetails[selectedCourse].description}
-                            </p>
-                            
-                            <div className="mb-4">
-                              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                                {isEnglish ? "Key Topics" : "Tópicos Principais"}
-                              </h4>
-                              <div className="flex flex-wrap gap-2">
-                                {coursesDetails[selectedCourse].topics.map((topic) => (
-                                  <span 
-                                    key={topic} 
-                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary bg-opacity-10 text-primary"
-                                  >
-                                    <FiCheck className="mr-1" size={14} />
-                                    {topic}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                            
-                            {coursesDetails[selectedCourse].experience && (
-                              <div className="p-4 mb-4 bg-white dark:bg-dark-secondary rounded-lg">
-                                <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                                  {isEnglish ? "My Experience" : "Minha Experiência"}
-                                </h4>
-                                <p className="text-gray-700 dark:text-gray-300">
-                                  {coursesDetails[selectedCourse].experience}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
 
         {/* Goals Tab */}
         {activeTab === 'goals' && (
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <h2 className="text-2xl font-bold text-primary mb-6">
-              {isEnglish ? 'Personal Goals 2026' : 'Metas Pessoais 2026'}
-            </h2>
+            {/* Header */}
+            <div className="mb-8">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">2026</p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                {isEnglish ? 'Personal Goals' : 'Metas Pessoais'}
+              </h2>
+            </div>
 
-            <div className="space-y-8">
-              {/* Reading Goal */}
-              <div className="bg-gray-100 dark:bg-dark rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <FiBook className="text-primary" size={24} />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                    {personalGoals.reading.title}
-                  </h3>
+            <div className="space-y-5">
+              {/* ── Reading Goal ── */}
+              <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden">
+                {/* Card header */}
+                <div className="flex items-start justify-between gap-4 p-6 pb-4">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <FiBook className="text-primary" size={18} />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
+                        {personalGoals.reading.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                        {personalGoals.reading.description}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Counter */}
+                  <div className="text-right flex-shrink-0">
+                    <div className="flex items-baseline gap-0.5 justify-end">
+                      <span className="text-3xl font-black text-primary tabular-nums leading-none">
+                        {personalGoals.reading.booksRead.length}
+                      </span>
+                      <span className="text-base font-bold text-gray-400 leading-none">
+                        /{personalGoals.reading.target}
+                      </span>
+                    </div>
+                    <p className="text-[9px] font-semibold uppercase tracking-wider text-gray-400 mt-1">
+                      {isEnglish ? 'books' : 'livros'}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  {personalGoals.reading.description}
-                </p>
 
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {isEnglish ? 'Progress' : 'Progresso'}
-                    </span>
-                    <span className="text-primary font-semibold">
-                      {personalGoals.reading.current}/{personalGoals.reading.target} {isEnglish ? 'books' : 'livros'}
+                {/* Progress bar */}
+                <div className="px-6 pb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-1.5 bg-gray-200 dark:bg-dark-lighter rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-primary to-primary-light rounded-full"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(personalGoals.reading.booksRead.length / personalGoals.reading.target) * 100}%` }}
+                        transition={{ duration: 1.1, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      />
+                    </div>
+                    <span className="text-xs font-bold text-primary tabular-nums">
+                      {Math.round((personalGoals.reading.booksRead.length / personalGoals.reading.target) * 100)}%
                     </span>
                   </div>
-                  <div className="w-full bg-gray-300 dark:bg-dark-lighter rounded-full h-3">
-                    <div
-                      className="bg-primary h-3 rounded-full transition-all duration-500"
-                      style={{ width: `${(personalGoals.reading.current / personalGoals.reading.target) * 100}%` }}
-                    />
-                  </div>
                 </div>
 
-                {/* Books Read */}
-                <div>
-                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                {/* Divider */}
+                <div className="mx-6 h-px bg-gray-200 dark:bg-white/[0.05] mb-5" />
+
+                {/* Books list */}
+                <div className="px-6 pb-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-4">
                     {isEnglish ? 'Books Read' : 'Livros Lidos'}
-                  </h4>
-                  <div className="space-y-2">
+                  </p>
+                  <div className="grid grid-cols-1 tablet:grid-cols-2 gap-2">
                     {personalGoals.reading.booksRead.map((book, index) => (
-                      <div key={index} className="flex items-start gap-2 text-sm">
-                        <FiCheck className="text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          <strong>{book.title}</strong> - {book.author}
-                        </span>
-                      </div>
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.08 + index * 0.04, duration: 0.4 }}
+                        className="flex items-start gap-2.5 p-3 rounded-xl bg-white dark:bg-dark-secondary border border-gray-100 dark:border-white/[0.04]"
+                      >
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <FiCheck className="text-emerald-500" size={10} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 leading-snug">
+                            {book.title}
+                          </p>
+                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">
+                            {book.author}
+                          </p>
+                        </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* AI Development Goal */}
-              <div className="bg-gray-100 dark:bg-dark rounded-xl p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <FiCode className="text-primary" size={24} />
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                    {personalGoals.aiDevelopment.title}
-                  </h3>
+              {/* ── AI Development Goal ── */}
+              <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden">
+                {/* Card header */}
+                <div className="flex items-start justify-between gap-4 p-6 pb-4">
+                  <div className="flex items-start gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <FiCode className="text-primary" size={18} />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
+                        {personalGoals.aiDevelopment.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
+                        {personalGoals.aiDevelopment.description}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Progress % */}
+                  <div className="text-right flex-shrink-0">
+                    <div className="flex items-baseline gap-0.5 justify-end">
+                      <span className="text-3xl font-black text-primary tabular-nums leading-none">
+                        {personalGoals.aiDevelopment.progress}
+                      </span>
+                      <span className="text-base font-bold text-gray-400 leading-none">%</span>
+                    </div>
+                    <p className="text-[9px] font-semibold uppercase tracking-wider text-gray-400 mt-1">
+                      {isEnglish ? 'progress' : 'progresso'}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  {personalGoals.aiDevelopment.description}
-                </p>
 
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {isEnglish ? 'Progress' : 'Progresso'}
-                    </span>
-                    <span className="text-primary font-semibold">
+                {/* Progress bar */}
+                <div className="px-6 pb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-1.5 bg-gray-200 dark:bg-dark-lighter rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-primary to-primary-light rounded-full"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${personalGoals.aiDevelopment.progress}%` }}
+                        transition={{ duration: 1.1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      />
+                    </div>
+                    <span className="text-xs font-bold text-primary tabular-nums">
                       {personalGoals.aiDevelopment.progress}%
                     </span>
                   </div>
-                  <div className="w-full bg-gray-300 dark:bg-dark-lighter rounded-full h-3">
-                    <div
-                      className="bg-primary h-3 rounded-full transition-all duration-500"
-                      style={{ width: `${personalGoals.aiDevelopment.progress}%` }}
-                    />
-                  </div>
                 </div>
 
-                {/* Topics */}
-                <div>
-                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                {/* Divider */}
+                <div className="mx-6 h-px bg-gray-200 dark:bg-white/[0.05] mb-5" />
+
+                {/* Focus areas */}
+                <div className="px-6 pb-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-4">
                     {isEnglish ? 'Focus Areas' : 'Áreas de Foco'}
-                  </h4>
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {personalGoals.aiDevelopment.topics.map((topic, index) => (
-                      <span
+                      <motion.span
                         key={index}
-                        className="px-3 py-1 rounded-full text-sm font-medium bg-primary bg-opacity-10 text-primary"
+                        initial={{ opacity: 0, scale: 0.85 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.15 + index * 0.05, duration: 0.35 }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-dark-secondary border border-gray-100 dark:border-white/[0.06] text-gray-700 dark:text-gray-300"
                       >
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
                         {topic}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
                 </div>
