@@ -170,7 +170,6 @@ export function getTabs(isEnglish, icons) {
     { id: 'skills', label: isEnglish ? 'Skills' : 'Habilidades', icon: icons.code },
     { id: 'education', label: isEnglish ? 'Education' : 'Formação', icon: icons.book },
     { id: 'career', label: isEnglish ? 'Career' : 'Carreira', icon: icons.briefcase },
-    { id: 'development', label: isEnglish ? 'Studies' : 'Estudos', icon: icons.shop },
     { id: 'goals', label: isEnglish ? 'Goals' : 'Metas', icon: icons.target },
   ];
 }
