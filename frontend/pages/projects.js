@@ -88,7 +88,7 @@ function FeaturedProjectCard({ project, index, isEnglish }) {
           </h3>
 
           {/* Description */}
-          <p className="relative text-sm laptop:text-[0.925rem] text-gray-500 dark:text-gray-400 leading-relaxed mb-6 line-clamp-3 overflow-hidden">
+          <p className="relative text-sm laptop:text-[0.925rem] text-gray-500 dark:text-gray-400 leading-relaxed mb-6">
             {project.description}
           </p>
 
@@ -190,7 +190,7 @@ function LibraryCard({ project, index, isEnglish }) {
             {project.title}
           </h3>
 
-          <p className="text-xs laptop:text-[0.8125rem] text-gray-500 dark:text-gray-400 mb-4 line-clamp-2 overflow-hidden leading-relaxed flex-grow">
+          <p className="text-xs laptop:text-[0.8125rem] text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
             {project.description}
           </p>
 
