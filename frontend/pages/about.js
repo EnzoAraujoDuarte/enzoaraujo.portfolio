@@ -204,92 +204,93 @@ function AboutContent({ language }) {
       <div className="bg-white dark:bg-dark-secondary rounded-xl p-6 tablet:p-8 shadow-sm">
         {/* Introduction Tab */}
         {activeTab === 'intro' && (
-          <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            <div className="flex flex-col tablet:flex-row tablet:items-start gap-6 tablet:gap-8">
-              <div className="tablet:flex-grow">
-                <h2 className="text-2xl font-bold text-primary mb-4">{t('about.intro.title', language)}</h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {t('about.intro.content', language)}
-                </p>
-              </div>
-              
-              {/* Interactive image in intro section */}
-              <div className="mx-auto tablet:mx-0 relative w-64 h-64 tablet:w-80 tablet:h-80 desktop:w-96 desktop:h-96 flex-shrink-0">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+          >
+            <div className="flex flex-col tablet:flex-row-reverse tablet:items-stretch gap-8 tablet:gap-10">
+
+              {/* Image — top on mobile, right on desktop */}
+              <motion.div
+                variants={{ hidden: { opacity: 0, x: 24 }, visible: { opacity: 1, x: 0, transition: { duration: 0.55, ease: 'easeOut' } } }}
+                className="mx-auto tablet:mx-0 flex-shrink-0 w-64 tablet:w-72 desktop:w-80"
+              >
                 <motion.div
                   ref={imageRef}
-                  className="w-full h-full rounded-3xl shadow-2xl overflow-hidden bg-transparent relative"
-                  style={{ 
+                  className="w-full h-full min-h-[340px] tablet:min-h-0 rounded-3xl shadow-2xl overflow-hidden bg-transparent relative"
+                  style={{
                     rotateX: isHovered ? rotateX : 0,
                     rotateY: isHovered ? rotateY : 0,
-                    transformStyle: "preserve-3d",
-                    perspective: "1000px",
-                    backgroundColor: 'transparent'
+                    transformStyle: 'preserve-3d',
+                    perspective: '1000px',
+                    backgroundColor: 'transparent',
                   }}
                   animate={imageAnimation}
                   onMouseMove={handleMouseMove}
                   onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => {
-                    setIsHovered(false);
-                    mouseX.set(0);
-                    mouseY.set(0);
-                  }}
+                  onMouseLeave={() => { setIsHovered(false); mouseX.set(0); mouseY.set(0); }}
                   transition={springConfig}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {/* Gradient border effect with grain */}
-                  <div 
-                    className="absolute inset-0 rounded-3xl p-1.5 profile-gradient-border"
-                    style={{
-                      filter: 'blur(0.5px)',
-                      zIndex: 0,
-                    }}
-                  >
-                    <div 
-                      className="w-full h-full rounded-3xl relative overflow-hidden"
-                      style={{
-                        backgroundColor: 'transparent',
-                        position: 'relative',
-                      }}
-                    >
-                      {/* Grain/noise overlay with better effect */}
-                      <div 
-                        className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none"
-                        style={{
-                          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                          backgroundSize: '150px 150px',
-                          backgroundRepeat: 'repeat',
-                          zIndex: 1,
-                        }}
-                      />
+                  <div className="absolute inset-0 rounded-3xl p-1.5 profile-gradient-border" style={{ filter: 'blur(0.5px)', zIndex: 0 }}>
+                    <div className="w-full h-full rounded-3xl relative overflow-hidden" style={{ backgroundColor: 'transparent' }}>
+                      <div className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`, backgroundSize: '150px 150px', backgroundRepeat: 'repeat', zIndex: 1 }} />
                     </div>
                   </div>
-                  
-                  {/* Image - Sharp and clear */}
-                  <div 
-                    className="absolute inset-0 rounded-3xl overflow-hidden"
-                    style={{
-                      padding: '6px',
-                      zIndex: 2,
-                    }}
-                  >
+                  <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ padding: '6px', zIndex: 2 }}>
                     <div className="relative w-full h-full" style={{ backgroundColor: 'transparent' }}>
-                      <Image 
+                      <Image
                         src="/Images/novafotoperfil.png"
                         alt="Profile Image"
                         fill
-                        sizes="(max-width: 768px) 256px, 320px, 384px"
-                        className="object-contain"
+                        sizes="(max-width: 768px) 256px, (max-width: 1024px) 288px, 320px"
+                        className="object-cover object-top"
                         priority
                         loading="eager"
-                        style={{ 
-                          backgroundColor: 'transparent',
-                          imageRendering: 'crisp-edges',
-                        }}
+                        style={{ backgroundColor: 'transparent' }}
                         quality={100}
                       />
                     </div>
                   </div>
                 </motion.div>
+              </motion.div>
+
+              {/* Text content */}
+              <div className="flex-grow flex flex-col gap-4">
+                {/* Eyebrow */}
+                <motion.p
+                  variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+                  className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary"
+                >
+                  {t('about.intro.eyebrow', language)}
+                </motion.p>
+
+                {/* Title */}
+                <motion.h2
+                  variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+                  className="text-2xl tablet:text-3xl font-bold text-gray-900 dark:text-white leading-tight"
+                >
+                  {t('about.intro.title', language)}
+                </motion.h2>
+
+                {/* Gradient divider */}
+                <motion.div
+                  variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1, transition: { duration: 0.5 } } }}
+                  style={{ transformOrigin: 'left', background: 'linear-gradient(90deg, rgb(147,51,234), transparent)', height: '1px' }}
+                  className="w-3/4"
+                />
+
+                {/* Body paragraphs */}
+                {t('about.intro.content', language).split('\n\n').map((paragraph, idx) => (
+                  <motion.p
+                    key={idx}
+                    variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+                    className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm tablet:text-base"
+                  >
+                    {paragraph}
+                  </motion.p>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -297,63 +298,75 @@ function AboutContent({ language }) {
 
         {/* Skills Tab */}
         {activeTab === 'skills' && (
-          <motion.div variants={fadeIn} initial="hidden" animate="visible" className="relative">
-            <h2 className="text-2xl font-bold text-primary mb-6">{t('about.skills.title', language)}</h2>
-            
-            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8">
-              {Object.entries(skillsDetails).map(([skill, details]) => (
+          <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.06 } } }} className="relative">
+
+            {/* Section header */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+              className="mb-8"
+            >
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-1.5">
+                {t('about.skills.eyebrow', language)}
+              </p>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('about.skills.title', language)}</h2>
+              <div className="mt-2 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
+            </motion.div>
+
+            {/* Skills grid */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+              className="grid grid-cols-1 tablet:grid-cols-2 gap-3 mb-8"
+            >
+              {['Shopify', 'SAP ABAP', 'SQL Server', 'JavaScript', 'React', 'Python', 'HTML/CSS']
+                .filter(s => skillsDetails[s])
+                .map(skill => { const details = skillsDetails[skill]; return (
                 <div key={skill}>
-                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                    <SkillCard
-                      title={skill}
-                      percentage={details.percentage}
-                      onClick={() => setSelectedSkill(selectedSkill === skill ? null : skill)}
-                      isActive={selectedSkill === skill}
-                    />
-                  </motion.div>
-                  
+                  <SkillCard
+                    title={skill}
+                    percentage={details.percentage}
+                    icon={details.icon}
+                    onClick={() => setSelectedSkill(selectedSkill === skill ? null : skill)}
+                    isActive={selectedSkill === skill}
+                  />
                   <AnimatePresence>
                     {selectedSkill === skill && (
                       <motion.div
                         initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                        animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                        animate={{ opacity: 1, height: 'auto', marginTop: 10 }}
                         exit={{ opacity: 0, height: 0, marginTop: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-gray-100 dark:bg-dark rounded-lg p-6 border-l-4 border-primary relative overflow-hidden"
+                        className="relative overflow-hidden rounded-xl bg-gray-50 dark:bg-dark border border-primary/20"
                       >
-                        <button 
-                          onClick={() => setSelectedSkill(null)}
-                          className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-dark-lighter text-gray-500 hover:bg-gray-200 dark:hover:bg-dark-secondary"
-                        >
-                          ×
-                        </button>
-                        <div className="flex flex-col tablet:flex-row gap-4 items-start">
-                          <div className="bg-white dark:bg-dark-secondary p-2 rounded-lg shadow-sm">
-                            <Image
-                              src={skillsDetails[selectedSkill].icon || "/Images/skill-default.png"}
-                              alt={selectedSkill}
-                              width={60}
-                              height={60}
-                              className="object-contain"
-                              loading="eager"
-                              quality={90}
-                            />
-                          </div>
-                          <div className="flex-grow">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{selectedSkill}</h3>
-                            <p className="text-gray-700 dark:text-gray-300 mb-4">
-                              {skillsDetails[selectedSkill].description}
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {skillsDetails[selectedSkill].tools.map((tool) => (
-                                <span 
-                                  key={tool} 
-                                  className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary bg-opacity-10 text-primary"
-                                >
-                                  <FiCheck className="mr-1" size={14} />
-                                  {tool}
-                                </span>
-                              ))}
+                        <div className="h-[2px] w-full" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
+                        <div className="p-5">
+                          <div className="flex flex-col tablet:flex-row gap-4 items-start">
+                            <div className="bg-white dark:bg-dark-secondary p-2.5 rounded-xl shadow-sm border border-gray-100 dark:border-dark-lighter">
+                              <Image
+                                src={details.icon || '/Images/skill-default.png'}
+                                alt={skill}
+                                width={64}
+                                height={64}
+                                className="object-contain"
+                                loading="eager"
+                                quality={90}
+                              />
+                            </div>
+                            <div className="flex-grow">
+                              <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">{skill}</h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
+                                {details.description}
+                              </p>
+                              <div className="flex flex-wrap gap-1.5">
+                                {details.tools.map((tool) => (
+                                  <span
+                                    key={tool}
+                                    className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                                  >
+                                    <FiCheck className="mr-1" size={11} />
+                                    {tool}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -361,23 +374,24 @@ function AboutContent({ language }) {
                     )}
                   </AnimatePresence>
                 </div>
-              ))}
-            </div>
+              );})}
+            </motion.div>
 
-            <motion.div 
-              className="mt-12"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+            {/* Languages section */}
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.3 } } }}
+              className="mt-4 pt-8 border-t border-gray-100 dark:border-dark-lighter"
             >
-              <div className="flex items-center mb-6">
-                <FiGlobe className="text-primary mr-2" size={24} />
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{isEnglish ? 'Languages' : 'Idiomas'}</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 tablet:grid-cols-2 gap-6">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary mb-1.5">
+                {t('about.skills.languages.eyebrow', language)}
+              </p>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                {isEnglish ? 'Languages' : 'Idiomas'}
+              </h3>
+              <div className="mb-5 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
+              <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                 {languageSkills.map((lang) => (
-                  <LanguageCard 
+                  <LanguageCard
                     key={lang.name}
                     name={lang.name}
                     level={lang.level}
@@ -396,11 +410,12 @@ function AboutContent({ language }) {
             {/* Header */}
             <div className="mb-8">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">
-                {isEnglish ? 'Academic Path' : 'Trajetória Acadêmica'}
+                {isEnglish ? '— Academic Path' : '— Trajetória Acadêmica'}
               </p>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {t('about.education.title', language)}
               </h2>
+              <div className="mt-2 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
             </div>
 
             <div className="grid grid-cols-1 tablet:grid-cols-2 gap-5">
@@ -505,13 +520,14 @@ function AboutContent({ language }) {
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1">
-                  {isEnglish ? 'Current Employer' : 'Empresa Atual'}
+                  {isEnglish ? '— Current Employer' : '— Empresa Atual'}
                 </p>
                 <h2 className="text-xl laptop:text-2xl font-bold text-gray-900 dark:text-white leading-tight">
                   {t('about.career.unimarka', language)}
                 </h2>
+                <div className="mt-1.5 mb-1 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  {isEnglish ? 'Feb 2023 – Present · ~2 years' : 'Fev 2023 – Atual · ~2 anos'}
+                  {isEnglish ? 'Feb 2023 – Present' : 'Fev 2023 – Atual'}
                 </p>
               </div>
             </div>
@@ -633,10 +649,11 @@ function AboutContent({ language }) {
           <motion.div variants={fadeIn} initial="hidden" animate="visible">
             {/* Header */}
             <div className="mb-8">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">2026</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">— 2026</p>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {isEnglish ? 'Personal Goals' : 'Metas Pessoais'}
               </h2>
+              <div className="mt-2 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
             </div>
 
             <div className="space-y-5">
