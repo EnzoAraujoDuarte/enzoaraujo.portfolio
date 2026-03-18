@@ -1,4 +1,4 @@
-const booksRead = [
+const booksReadPt = [
   { title: "A Única Coisa", author: "Gary Keller e Jay Papasan" },
   { title: "A Neurociência para Líderes", author: "Nikolaos Dimitriadis e Alexandros Psychogios" },
   { title: "Scrum: Guia prático", author: "J. J. Sutherland" },
@@ -6,8 +6,25 @@ const booksRead = [
   { title: "Lógica de Programação e Algoritmos com JavaScript", author: "Edécio Fernando Iepsen" },
   { title: "Liderança: Como conquistar a confiança, a lealdade e a admiração das pessoas", author: "Dale Carnegie" },
   { title: "Nada pode me ferir", author: "David Goggins" },
-  { title: "Nunca é hora de parar", author: "David Goggins" }
+  { title: "Nunca é hora de parar", author: "David Goggins" },
+  { title: "Arquitetura de Software: As Partes Difíceis", author: "Neal Ford, Mark Richards, Pramod Sadalage e Zhamak Dehghani" }
 ]
+
+const booksReadEn = [
+  { title: "The One Thing", author: "Gary Keller and Jay Papasan" },
+  { title: "Neuroscience for Leaders", author: "Nikolaos Dimitriadis and Alexandros Psychogios" },
+  { title: "Scrum: The Art of Doing Twice the Work in Half the Time", author: "J. J. Sutherland" },
+  { title: "14 Habits of Highly Productive Developers", author: "Zeno Rocha" },
+  { title: "Programming Logic and Algorithms with JavaScript", author: "Edécio Fernando Iepsen" },
+  { title: "Leadership: How to Win Friends and Influence People", author: "Dale Carnegie" },
+  { title: "Can't Hurt Me", author: "David Goggins" },
+  { title: "Never Finished", author: "David Goggins" },
+  { title: "Software Architecture: The Hard Parts", author: "Neal Ford, Mark Richards, Pramod Sadalage and Zhamak Dehghani" }
+]
+
+function getBooksRead(isEnglish) {
+  return isEnglish ? booksReadEn : booksReadPt;
+}
 
 
 export function getSkillsDetails(isEnglish) {
@@ -140,15 +157,16 @@ export function getCoursesDetails(isEnglish) {
 }
 
 export function getPersonalGoals(isEnglish) {
+  const booksRead = getBooksRead(isEnglish);
   return {
     reading: {
       title: isEnglish ? "Reading Goal 2026" : "Meta de Leitura 2026",
-      target: 48,
+      target: 38,
       progress: 10,
       current: booksNumber(isEnglish, booksRead),
       description: isEnglish ?
-        "Goal to read 48 books this year, focusing on soft skills, leadership and personal development." :
-        "Meta de ler 48 livros este ano, com foco em soft skills, liderança e desenvolvimento pessoal.",
+        "Goal to read 38 books this year, focusing on soft skills, leadership and personal development." :
+        "Meta de ler 38 livros este ano, com foco em soft skills, liderança e desenvolvimento pessoal.",
       booksRead: booksRead,
     },
     aiDevelopment: {
