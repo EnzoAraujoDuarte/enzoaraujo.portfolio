@@ -115,7 +115,7 @@ export function getLanguageSkills(isEnglish) {
       abilities: [
         { skill: isEnglish ? "Reading" : "Leitura", level: "85%" },
         { skill: isEnglish ? "Writing" : "Escrita", level: "70%" },
-        { skill: isEnglish ? "Speaking" : "Fala", level: "70%" },
+        { skill: isEnglish ? "Speaking" : "Fala", level: "55%" },
         { skill: isEnglish ? "Listening" : "Compreensão", level: "75%" }
       ]
     }
