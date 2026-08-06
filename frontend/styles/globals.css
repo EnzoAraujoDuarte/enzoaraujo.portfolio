@@ -19,10 +19,6 @@
 }
 
 @layer base {
-  * {
-    @apply transition-colors duration-200;
-  }
-
   html {
     @apply scroll-smooth;
   }
@@ -31,10 +27,29 @@
     @apply bg-white text-gray-900 dark:bg-dark dark:text-white;
   }
 
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-white rounded-sm dark:ring-offset-dark;
+  }
+
   /* Ensure hero section is always black */
   .hero-section,
   section.bg-black {
     background-color: #000000 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -45,12 +60,11 @@
 
   .btn {
     @apply px-5 py-2.5 font-medium rounded-full shadow-sm transition-all duration-300
-    focus:outline-none focus:ring-2 focus:ring-offset-2
-    transform hover:scale-[1.02] active:scale-[0.98];
+    hover:scale-[1.02] active:scale-[0.98];
   }
 
   .btn-primary {
-    @apply text-white bg-primary hover:bg-primary-dark focus:ring-primary
+    @apply text-white bg-primary hover:bg-primary-dark
     shadow-md hover:shadow-lg border border-primary hover:border-primary-dark;
   }
 

@@ -3,16 +3,16 @@ import Layout from '../components/layout/Layout';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../locales/translations';
-import { FiCode, FiDatabase, FiBook, FiTarget, FiUser, FiBriefcase, FiGlobe, FiCheck } from 'react-icons/fi';
+import { FiCode, FiBook, FiUser, FiBriefcase, FiCheck } from 'react-icons/fi';
 import Image from 'next/image';
 import Head from 'next/head';
 import { formatPeriod } from '../utils/dateUtils';
 
+import PageBackdrop from '../components/layout/PageBackdrop';
 import SkillCard from '../components/about/SkillCard';
 import LanguageCard from '../components/about/LanguageCard';
-import { TimelineItem, TimelineItemWithImage, CareerPosition } from '../components/about/TimelineItems';
 
-import { getSkillsDetails, getLanguageSkills, getPersonalGoals, getTabs } from '../components/about/data';
+import { getSkillsDetails, getLanguageSkills, getTabs } from '../components/about/data';
 
 export default function About() {
   const { language } = useLanguage();
@@ -43,28 +43,13 @@ export default function About() {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
-        
-        {/* Preload important images */}
-        <link rel="preload" as="image" href="/Images/novafotoperfil.png" />
-        <link rel="preload" as="image" href="/Images/Unesc.png" />
-        <link rel="preload" as="image" href="/Images/EEEFMHonorioFraga.webp" />
-        <link rel="preload" as="image" href="/Images/Logo_Unimarka.png" />
       </Head>
-      
+
       <div className="relative min-h-screen">
-        <div 
-          className="fixed inset-0 z-0 opacity-30 dark:opacity-20"
-          style={{
-            backgroundImage: 'url(/Images/griddistortion.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed'
-          }}
-        />
+        <PageBackdrop />
         <div className="relative z-10 container py-16">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl tablet:text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="font-display text-3xl tablet:text-4xl font-bold text-gray-900 dark:text-white tracking-[-0.025em]">
             {t('about.title', language)}
           </h1>
         </div>
@@ -113,14 +98,12 @@ function AboutContent({ language }) {
     user: <FiUser />,
     code: <FiCode />,
     book: <FiBook />,
-    briefcase: <FiBriefcase />,
-    target: <FiTarget />
+    briefcase: <FiBriefcase />
   }), []);
-  
+
   const tabs = useMemo(() => getTabs(isEnglish, icons), [isEnglish, icons]);
   const skillsDetails = useMemo(() => getSkillsDetails(isEnglish), [isEnglish]);
   const languageSkills = useMemo(() => getLanguageSkills(isEnglish), [isEnglish]);
-  const personalGoals = useMemo(() => getPersonalGoals(isEnglish), [isEnglish]);
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -241,15 +224,13 @@ function AboutContent({ language }) {
                   <div className="absolute inset-0 rounded-3xl overflow-hidden" style={{ padding: '6px', zIndex: 2 }}>
                     <div className="relative w-full h-full" style={{ backgroundColor: 'transparent' }}>
                       <Image
-                        src="/Images/novafotoperfil.png"
-                        alt="Profile Image"
+                        src="/Images/profile.webp"
+                        alt="Enzo Araujo Duarte"
                         fill
                         sizes="(max-width: 768px) 256px, (max-width: 1024px) 288px, 320px"
                         className="object-cover object-top"
                         priority
-                        loading="eager"
-                        style={{ backgroundColor: 'transparent' }}
-                        quality={100}
+                        quality={85}
                       />
                     </div>
                   </div>
@@ -638,180 +619,6 @@ function AboutContent({ language }) {
                     </p>
                   </div>
                 </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-
-        {/* Goals Tab */}
-        {activeTab === 'goals' && (
-          <motion.div variants={fadeIn} initial="hidden" animate="visible">
-            {/* Header */}
-            <div className="mb-8">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary mb-1.5">— 2026</p>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {isEnglish ? 'Personal Goals' : 'Metas Pessoais'}
-              </h2>
-              <div className="mt-2 h-px w-3/4" style={{ background: 'linear-gradient(90deg, rgb(147,51,234), transparent)' }} />
-            </div>
-
-            <div className="space-y-5">
-              {/* ── Reading Goal ── */}
-              <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden">
-                {/* Card header */}
-                <div className="flex items-start justify-between gap-4 p-6 pb-4">
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <FiBook className="text-primary" size={18} />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
-                        {personalGoals.reading.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                        {personalGoals.reading.description}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Counter */}
-                  <div className="text-right flex-shrink-0">
-                    <div className="flex items-baseline gap-0.5 justify-end">
-                      <span className="text-3xl font-black text-primary tabular-nums leading-none">
-                        {personalGoals.reading.booksRead.length}
-                      </span>
-                      <span className="text-base font-bold text-gray-400 leading-none">
-                        /{personalGoals.reading.target}
-                      </span>
-                    </div>
-                    <p className="text-[9px] font-semibold uppercase tracking-wider text-gray-400 mt-1">
-                      {isEnglish ? 'books' : 'livros'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Progress bar */}
-                <div className="px-6 pb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-1.5 bg-gray-200 dark:bg-dark-lighter rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full bg-gradient-to-r from-primary to-primary-light rounded-full"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(personalGoals.reading.booksRead.length / personalGoals.reading.target) * 100}%` }}
-                        transition={{ duration: 1.1, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      />
-                    </div>
-                    <span className="text-xs font-bold text-primary tabular-nums">
-                      {Math.round((personalGoals.reading.booksRead.length / personalGoals.reading.target) * 100)}%
-                    </span>
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div className="mx-6 h-px bg-gray-200 dark:bg-white/[0.05] mb-5" />
-
-                {/* Books list */}
-                <div className="px-6 pb-6">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-4">
-                    {isEnglish ? 'Books Read' : 'Livros Lidos'}
-                  </p>
-                  <div className="grid grid-cols-1 tablet:grid-cols-2 gap-2">
-                    {personalGoals.reading.booksRead.map((book, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.08 + index * 0.04, duration: 0.4 }}
-                        className="flex items-start gap-2.5 p-3 rounded-xl bg-white dark:bg-dark-secondary border border-gray-100 dark:border-white/[0.04]"
-                      >
-                        <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <FiCheck className="text-emerald-500" size={10} />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 leading-snug">
-                            {book.title}
-                          </p>
-                          <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-snug">
-                            {book.author}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* ── AI Development Goal ── */}
-              <div className="rounded-2xl border border-gray-200 dark:border-white/[0.06] bg-gray-50 dark:bg-dark overflow-hidden">
-                {/* Card header */}
-                <div className="flex items-start justify-between gap-4 p-6 pb-4">
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <FiCode className="text-primary" size={18} />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
-                        {personalGoals.aiDevelopment.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                        {personalGoals.aiDevelopment.description}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Progress % */}
-                  <div className="text-right flex-shrink-0">
-                    <div className="flex items-baseline gap-0.5 justify-end">
-                      <span className="text-3xl font-black text-primary tabular-nums leading-none">
-                        {personalGoals.aiDevelopment.progress}
-                      </span>
-                      <span className="text-base font-bold text-gray-400 leading-none">%</span>
-                    </div>
-                    <p className="text-[9px] font-semibold uppercase tracking-wider text-gray-400 mt-1">
-                      {isEnglish ? 'progress' : 'progresso'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Progress bar */}
-                <div className="px-6 pb-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-1.5 bg-gray-200 dark:bg-dark-lighter rounded-full overflow-hidden">
-                      <motion.div
-                        className="h-full bg-gradient-to-r from-primary to-primary-light rounded-full"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${personalGoals.aiDevelopment.progress}%` }}
-                        transition={{ duration: 1.1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      />
-                    </div>
-                    <span className="text-xs font-bold text-primary tabular-nums">
-                      {personalGoals.aiDevelopment.progress}%
-                    </span>
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div className="mx-6 h-px bg-gray-200 dark:bg-white/[0.05] mb-5" />
-
-                {/* Focus areas */}
-                <div className="px-6 pb-6">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-4">
-                    {isEnglish ? 'Focus Areas' : 'Áreas de Foco'}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {personalGoals.aiDevelopment.topics.map((topic, index) => (
-                      <motion.span
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.85 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.15 + index * 0.05, duration: 0.35 }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-dark-secondary border border-gray-100 dark:border-white/[0.06] text-gray-700 dark:text-gray-300"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                        {topic}
-                      </motion.span>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </motion.div>

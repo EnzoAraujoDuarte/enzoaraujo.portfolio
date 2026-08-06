@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 const vertexShader = `
@@ -40,22 +40,31 @@ const GridDistortion = ({
   const imageAspectRef = useRef(1);
   const animationIdRef = useRef(null);
   const resizeObserverRef = useRef(null);
+  const [isWebGLAvailable, setIsWebGLAvailable] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Scene setup
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      powerPreference: 'high-performance'
-    });
+    // Renderer setup — WebGL may be unavailable (old devices, disabled GPU),
+    // in which case the component degrades to a static backdrop
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
+    } catch {
+      setIsWebGLAvailable(false);
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
     rendererRef.current = renderer;
@@ -149,6 +158,9 @@ const GridDistortion = ({
       camera.updateProjectionMatrix();
 
       uniforms.resolution.value.set(width, height, 1, 1);
+
+      // The animation loop is idle under reduced motion, so repaint on resize
+      if (prefersReducedMotion) renderer.render(scene, camera);
     };
 
     // ResizeObserver
@@ -195,10 +207,38 @@ const GridDistortion = ({
       });
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    if (!prefersReducedMotion) {
+      container.addEventListener('mousemove', handleMouseMove, { passive: true });
+      container.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    }
 
     handleResize();
+
+    // Render only while the canvas is on-screen and the tab is visible
+    let isOnScreen = true;
+
+    const stopLoop = () => {
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
+      }
+    };
+
+    const startLoop = () => {
+      if (prefersReducedMotion) return;
+      if (animationIdRef.current === null && isOnScreen && !document.hidden) {
+        animationIdRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      isOnScreen = entry.isIntersecting;
+      isOnScreen ? startLoop() : stopLoop();
+    });
+    visibilityObserver.observe(container);
+
+    const handleVisibilityChange = () => (document.hidden ? stopLoop() : startLoop());
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Animation loop
     const animate = () => {
@@ -234,13 +274,17 @@ const GridDistortion = ({
       renderer.render(scene, camera);
     };
 
-    animate();
+    if (prefersReducedMotion) {
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
 
     // Cleanup
     return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
+      stopLoop();
+      visibilityObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       if (resizeObserverRef.current) {
         resizeObserverRef.current.disconnect();
@@ -269,6 +313,16 @@ const GridDistortion = ({
       planeRef.current = null;
     };
   }, [grid, mouse, strength, relaxation, imageSrc]);
+
+  if (!isWebGLAvailable) {
+    return (
+      <div
+        aria-hidden="true"
+        className={`w-full h-full bg-cover bg-center ${className}`}
+        style={{ backgroundImage: `url(${imageSrc})` }}
+      />
+    );
+  }
 
   return (
     <div

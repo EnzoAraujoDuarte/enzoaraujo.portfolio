@@ -1,32 +1,3 @@
-const booksReadPt = [
-  { title: "A Única Coisa", author: "Gary Keller e Jay Papasan" },
-  { title: "A Neurociência para Líderes", author: "Nikolaos Dimitriadis e Alexandros Psychogios" },
-  { title: "Scrum: Guia prático", author: "J. J. Sutherland" },
-  { title: "14 Hábitos de Desenvolvedores Altamente Produtivos", author: "Zeno Rocha" },
-  { title: "Lógica de Programação e Algoritmos com JavaScript", author: "Edécio Fernando Iepsen" },
-  { title: "Liderança: Como conquistar a confiança, a lealdade e a admiração das pessoas", author: "Dale Carnegie" },
-  { title: "Nada pode me ferir", author: "David Goggins" },
-  { title: "Nunca é hora de parar", author: "David Goggins" },
-  { title: "Arquitetura de Software: As Partes Difíceis", author: "Neal Ford, Mark Richards, Pramod Sadalage e Zhamak Dehghani" }
-]
-
-const booksReadEn = [
-  { title: "The One Thing", author: "Gary Keller and Jay Papasan" },
-  { title: "Neuroscience for Leaders", author: "Nikolaos Dimitriadis and Alexandros Psychogios" },
-  { title: "Scrum: The Art of Doing Twice the Work in Half the Time", author: "J. J. Sutherland" },
-  { title: "14 Habits of Highly Productive Developers", author: "Zeno Rocha" },
-  { title: "Programming Logic and Algorithms with JavaScript", author: "Edécio Fernando Iepsen" },
-  { title: "Leadership: How to Win Friends and Influence People", author: "Dale Carnegie" },
-  { title: "Can't Hurt Me", author: "David Goggins" },
-  { title: "Never Finished", author: "David Goggins" },
-  { title: "Software Architecture: The Hard Parts", author: "Neal Ford, Mark Richards, Pramod Sadalage and Zhamak Dehghani" }
-]
-
-function getBooksRead(isEnglish) {
-  return isEnglish ? booksReadEn : booksReadPt;
-}
-
-
 export function getSkillsDetails(isEnglish) {
   return {
 
@@ -122,81 +93,11 @@ export function getLanguageSkills(isEnglish) {
   ];
 }
 
-export function getCoursesDetails(isEnglish) {
-  return {
-    "Shopify": {
-      progress: 100,
-      description: isEnglish ?
-        "Completed intensive Shopify theme development bootcamp. Mastered e-commerce platforms and modern web development techniques." :
-        "Bootcamp intensivo de desenvolvimento de temas Shopify concluído. Domínio em plataformas de e-commerce e técnicas modernas de desenvolvimento web.",
-      topics: isEnglish ?
-        ["Liquid Template Language", "Theme Architecture", "Store Customization", "Modern JavaScript", "Advanced E-commerce Concepts"] :
-        ["Linguagem de template Liquid", "Arquitetura de temas", "Personalização de lojas", "JavaScript Moderno", "Conceitos Avançados de E-commerce"],
-      experience: isEnglish ?
-        "This bootcamp was an incredible experience. Beyond learning Shopify's technical aspects, I gained deep insights into e-commerce strategies and modern web development practices. The hands-on approach and expert guidance accelerated my growth as a developer and opened new career possibilities in the e-commerce sector." :
-        "Este bootcamp foi uma experiência incrível. Além de aprender os aspectos técnicos do Shopify, adquiri conhecimentos profundos sobre estratégias de e-commerce e práticas modernas de desenvolvimento web. A abordagem prática e a orientação especializada aceleraram meu crescimento como desenvolvedor e abriram novas possibilidades de carreira no setor de e-commerce.",
-      imageSrc: "/Images/DevRise.avif",
-      expandable: true,
-      completed: true
-    },
-    "SAP Advanced": {
-      progress: 30,
-      description: isEnglish ?
-        "Learning advanced SAP technologies including SAP HANA, ABAP RESTful Applications, and Fiori/UI5 development." :
-        "Aprendendo tecnologias SAP avançadas incluindo SAP HANA, aplicações ABAP RESTful e desenvolvimento Fiori/UI5.",
-      topics: isEnglish ?
-        ["SAP HANA", "ABAP RESTful Programming Model", "Fiori Elements", "UI5 Custom Apps", "OData Services"] :
-        ["SAP HANA", "Modelo de programação ABAP RESTful", "Elementos Fiori", "Apps personalizados UI5", "Serviços OData"],
-      benefits: isEnglish ?
-        "Enables the development of modern, responsive SAP applications with improved user experience and cloud integration capabilities." :
-        "Possibilita o desenvolvimento de aplicações SAP modernas e responsivas com melhor experiência de usuário e capacidades de integração com a nuvem.",
-      imageSrc: "/Images/Sap.png",
-      expandable: false
-    }
-  };
-}
-
-export function getPersonalGoals(isEnglish) {
-  const booksRead = getBooksRead(isEnglish);
-  return {
-    reading: {
-      title: isEnglish ? "Reading Goal 2026" : "Meta de Leitura 2026",
-      target: 38,
-      progress: 10,
-      current: booksNumber(isEnglish, booksRead),
-      description: isEnglish ?
-        "Goal to read 38 books this year, focusing on soft skills, leadership and personal development." :
-        "Meta de ler 38 livros este ano, com foco em soft skills, liderança e desenvolvimento pessoal.",
-      booksRead: booksRead,
-    },
-    aiDevelopment: {
-      title: isEnglish ? "AI-Integrated Systems Development" : "Desenvolvimento de Sistemas com IA",
-      progress: 35,
-      description: isEnglish ?
-        "Deepening knowledge in AI development, focusing on building complete systems with observability and scalability using LangChain, LangGraph and Python." :
-        "Aprofundamento em desenvolvimento de IA, com foco na construção de sistemas completos com observabilidade e escalabilidade usando LangChain, LangGraph e Python.",
-      topics: isEnglish ?
-        ["LangChain", "LangGraph", "Python", "LLMs", "Agents", "RAG", "Observability"] :
-        ["LangChain", "LangGraph", "Python", "LLMs", "Agentes", "RAG", "Observabilidade"]
-    }
-  };
-}
-
 export function getTabs(isEnglish, icons) {
   return [
     { id: 'intro', label: isEnglish ? 'Introduction' : 'Introdução', icon: icons.user },
     { id: 'skills', label: isEnglish ? 'Skills' : 'Habilidades', icon: icons.code },
     { id: 'education', label: isEnglish ? 'Education' : 'Formação', icon: icons.book },
     { id: 'career', label: isEnglish ? 'Career' : 'Carreira', icon: icons.briefcase },
-    { id: 'goals', label: isEnglish ? 'Goals' : 'Metas', icon: icons.target },
   ];
 }
-// 24.02.2026:
-export function booksNumber(isEnglish, booksRead){
-  if (isEnglish) {
-    return booksRead.length + " " + (booksRead.length === 1 ? "book" : "books");
-  } else {
-    return booksRead.length + " " + (booksRead.length === 1 ? "livro" : "livros");
-  }
-}
-// 24.02.2026.

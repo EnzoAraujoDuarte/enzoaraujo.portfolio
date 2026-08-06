@@ -4,19 +4,9 @@ export default function Document() {
   return (
     <Html lang="pt-BR" className="dark">
       <Head>
-        {/* Favicon */}
-        <link rel="icon" href="/Images/novafotoperfil.png" />
-        <link rel="apple-touch-icon" href="/Images/novafotoperfil.png" />
-
-        {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
-        {/* Fonts - Inter, Poppins and Space Grotesk */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
         {/* Global SEO Meta Tags */}
         <meta charSet="utf-8" />

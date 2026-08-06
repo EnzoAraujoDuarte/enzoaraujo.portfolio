@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { t } from '../locales/translations';
 import Head from 'next/head';
 import ContactForm from '../components/contact/ContactForm';
+import PageBackdrop from '../components/layout/PageBackdrop';
 
 export default function Contact() {
   const { language } = useLanguage();
@@ -65,17 +66,7 @@ export default function Contact() {
       </Head>
 
       <div className="relative min-h-screen">
-        {/* Background */}
-        <div
-          className="fixed inset-0 z-0 opacity-30 dark:opacity-20"
-          style={{
-            backgroundImage: 'url(/Images/griddistortion.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed'
-          }}
-        />
+        <PageBackdrop />
 
         {/* Content */}
         <div className="relative z-10 container py-24 tablet:py-32">

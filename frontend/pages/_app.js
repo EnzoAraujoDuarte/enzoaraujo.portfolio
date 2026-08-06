@@ -3,6 +3,7 @@ import { LanguageProvider } from '../context/LanguageContext';
 import { Analytics } from '@vercel/analytics/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import { fontVariables } from '../lib/fonts';
 
 const pageVariants = {
   initial: {
@@ -29,17 +30,19 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <LanguageProvider>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={router.asPath}
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Component {...pageProps} />
-        </motion.div>
-      </AnimatePresence>
+      <div className={`${fontVariables} font-sans`}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={router.asPath}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Component {...pageProps} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
       <Analytics />
     </LanguageProvider>
   );
