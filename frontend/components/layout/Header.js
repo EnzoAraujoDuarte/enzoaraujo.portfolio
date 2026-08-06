@@ -18,11 +18,23 @@ export default function Header() {
 
   // Detectar scroll para efeito sutil de backdrop
   useEffect(() => {
+    let frame = null;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 20);
+        frame = null;
+      });
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Fechar menu ao redimensionar para desktop
@@ -32,7 +44,7 @@ export default function Header() {
         setIsOpen(false);
       }
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -58,7 +70,7 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="relative z-10 text-xl tablet:text-2xl font-bold group flex items-center"
+            className="relative z-10 font-display text-xl tablet:text-2xl font-bold tracking-[-0.02em] group flex items-center"
           >
             <span className="text-primary transition-colors duration-300 group-hover:text-primary-light">
               Enzo

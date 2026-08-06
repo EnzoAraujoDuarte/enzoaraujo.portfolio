@@ -59,7 +59,8 @@ module.exports = {
         xl: 'calc(var(--radius) + 4px)',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-body)', 'sans-serif'],
       },
       animation: {
         'waving-hand': 'var(--animate-waving-hand)',

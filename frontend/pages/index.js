@@ -7,9 +7,8 @@ import { FiArrowRight, FiDownload } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../locales/translations';
 import Head from 'next/head';
-import EnzoIAChat from '../components/chat/EnzoIAChat';
 
-// Lazy load effects to optimize bundle size
+// Lazy load effects and the chat widget to keep the hero bundle small
 const GridDistortion = dynamic(
   () => import('../components/effects/GridDistortion'),
   { ssr: false }
@@ -17,6 +16,11 @@ const GridDistortion = dynamic(
 
 const DecryptedText = dynamic(
   () => import('../components/effects/DecryptedText'),
+  { ssr: false }
+);
+
+const EnzoIAChat = dynamic(
+  () => import('../components/chat/EnzoIAChat'),
   { ssr: false }
 );
 
@@ -158,7 +162,7 @@ export default function Home() {
         {/* Grid Distortion Background */}
         <div className="absolute inset-0 z-0 w-full h-full">
           <GridDistortion
-            imageSrc="/Images/griddistortion.png"
+            imageSrc="/Images/griddistortion.webp"
             grid={10}
             mouse={0.15}
             strength={0.2}
@@ -178,7 +182,7 @@ export default function Home() {
         >
           {/* Greeting */}
           <motion.div variants={itemVariants} className="mb-3 4k:mb-4">
-            <span className="text-base tablet:text-lg laptop:text-xl desktop:text-2xl ultrawide:text-4xl 4k:text-5xl text-gray-400 font-normal tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            <span className="font-display text-sm tablet:text-base laptop:text-lg desktop:text-xl ultrawide:text-3xl 4k:text-4xl text-gray-400 font-medium uppercase tracking-[0.28em]">
               {content.greeting}
             </span>
           </motion.div>
@@ -186,8 +190,7 @@ export default function Home() {
           {/* Name with Decrypted Text effect */}
           <motion.h1
             variants={itemVariants}
-            className="text-4xl tablet:text-5xl laptop:text-6xl desktop:text-7xl ultrawide:text-9xl 4k:text-[12rem] font-bold text-primary mb-4 4k:mb-6"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            className="font-display text-4xl tablet:text-5xl laptop:text-6xl desktop:text-7xl ultrawide:text-9xl 4k:text-[12rem] font-bold text-primary mb-4 4k:mb-6 tracking-[-0.035em] text-balance"
           >
             <DecryptedText
               text={content.name}
@@ -201,8 +204,7 @@ export default function Home() {
           {/* Subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-base tablet:text-lg laptop:text-xl desktop:text-2xl ultrawide:text-4xl 4k:text-5xl text-gray-300 leading-relaxed max-w-3xl ultrawide:max-w-5xl 4k:max-w-7xl mx-auto mb-8 4k:mb-12 font-normal"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            className="text-base tablet:text-lg laptop:text-xl desktop:text-2xl ultrawide:text-4xl 4k:text-5xl text-gray-300/90 leading-relaxed max-w-2xl ultrawide:max-w-4xl 4k:max-w-6xl mx-auto mb-8 4k:mb-12 font-normal text-pretty"
           >
             {content.subtitle}
           </motion.p>

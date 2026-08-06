@@ -6,6 +6,7 @@ import { t } from '../locales/translations';
 import Head from 'next/head';
 import Image from 'next/image';
 import { FiArrowUpRight, FiCode } from 'react-icons/fi';
+import PageBackdrop from '../components/layout/PageBackdrop';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Featured project card – large, editorial horizontal layout
@@ -351,17 +352,7 @@ export default function Projects() {
       </Head>
 
       <div className="relative min-h-screen">
-        {/* Background */}
-        <div
-          className="fixed inset-0 z-0 opacity-30 dark:opacity-20"
-          style={{
-            backgroundImage: 'url(/Images/griddistortion.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'fixed',
-          }}
-        />
+        <PageBackdrop />
 
         <div className="relative z-10">
 
