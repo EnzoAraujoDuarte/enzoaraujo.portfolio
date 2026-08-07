@@ -1,7 +1,7 @@
 import Layout from '../components/layout/Layout';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiArrowUpRight } from 'react-icons/fi';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import Head from 'next/head';
 import ContactForm from '../components/contact/ContactForm';
@@ -12,12 +12,12 @@ export default function Contact() {
   const isEnglish = language === 'en-US';
 
   const pageTitle = isEnglish
-    ? 'Contact | Enzo Araujo Duarte - SAP Developer & AI Engineer'
-    : 'Contato | Enzo Araujo Duarte - Desenvolvedor SAP e Engenheiro de IA';
+    ? 'Contact | Enzo Araujo Duarte — Software Developer'
+    : 'Contato | Enzo Araujo Duarte — Desenvolvedor de Software';
 
   const pageDescription = isEnglish
-    ? 'Get in touch with Enzo Araujo Duarte. SAP ABAP Developer, AI Engineer with Python and Shopify Developer available for projects and opportunities.'
-    : 'Entre em contato com Enzo Araujo Duarte. Desenvolvedor SAP ABAP, Engenheiro de IA com Python e Desenvolvedor Shopify disponível para projetos e oportunidades.';
+    ? 'Get in touch with Enzo Araujo Duarte. Software Developer working with Shopify, Laravel, React and Next.js, available for projects and opportunities.'
+    : 'Entre em contato com Enzo Araujo Duarte. Desenvolvedor de software com Shopify, Laravel, React e Next.js, disponível para projetos e oportunidades.';
 
   const contactLinks = [
     {
@@ -25,8 +25,8 @@ export default function Contact() {
       title: 'GitHub',
       description: t('contact.github', language),
       link: 'https://github.com/EnzoAraujoDuarte',
-      color: 'group-hover:text-gray-900 dark:group-hover:text-white',
-      bgColor: 'group-hover:bg-gray-100 dark:group-hover:bg-white/10',
+      color: 'group-hover:text-white',
+      bgColor: 'group-hover:bg-white/10',
     },
     {
       icon: <FiLinkedin />,
@@ -34,7 +34,7 @@ export default function Contact() {
       description: t('contact.linkedin', language),
       link: 'https://www.linkedin.com/in/enzo-araujo-duarte/',
       color: 'group-hover:text-blue-600',
-      bgColor: 'group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20',
+      bgColor: 'group-hover:bg-blue-900/20',
     },
     {
       icon: <FiMail />,
@@ -42,7 +42,7 @@ export default function Contact() {
       description: t('contact.email', language),
       link: 'mailto:araujoduarteenzo@gmail.com',
       color: 'group-hover:text-primary',
-      bgColor: 'group-hover:bg-primary/5 dark:group-hover:bg-primary/10',
+      bgColor: 'group-hover:bg-primary/10',
     },
   ];
 
@@ -77,10 +77,10 @@ export default function Contact() {
             transition={{ duration: 0.5 }}
             className="text-center mb-12 tablet:mb-16"
           >
-            <h1 className="text-4xl tablet:text-5xl laptop:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-4xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-4">
               {t('contact.title', language)}
             </h1>
-            <p className="text-lg tablet:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg tablet:text-xl text-gray-400 max-w-2xl mx-auto">
               {t('contact.subtitle', language)}
             </p>
           </motion.div>
@@ -95,12 +95,12 @@ export default function Contact() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="laptop:col-span-3"
               >
-                <div className="bg-white/80 dark:bg-dark-secondary/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 tablet:p-8 border border-gray-100 dark:border-gray-800">
+                <div className="bg-dark-secondary/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 tablet:p-8 border border-gray-800">
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h2 className="text-2xl font-bold text-white mb-2">
                       {t('contact.form.title', language)}
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-gray-400">
                       {t('contact.form.subtitle', language)}
                     </p>
                   </div>
@@ -116,7 +116,7 @@ export default function Contact() {
                 className="laptop:col-span-2 space-y-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                  <h2 className="text-2xl font-bold text-white mb-6">
                     {isEnglish ? 'Connect with me' : 'Conecte-se comigo'}
                   </h2>
 
@@ -130,16 +130,16 @@ export default function Contact() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                        className={`group flex items-center gap-4 p-4 bg-white/60 dark:bg-dark-secondary/60 backdrop-blur-sm rounded-xl border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:shadow-lg hover:border-transparent ${item.bgColor}`}
+                        className={`group flex items-center gap-4 p-4 bg-dark-secondary/60 backdrop-blur-sm rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-lg hover:border-transparent ${item.bgColor}`}
                       >
-                        <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-dark-lighter text-gray-600 dark:text-gray-400 text-2xl transition-colors duration-300 ${item.color}`}>
+                        <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-dark-lighter text-gray-400 text-2xl transition-colors duration-300 ${item.color}`}>
                           {item.icon}
                         </div>
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-semibold text-gray-900 dark:text-white mb-0.5">
+                          <h3 className="font-semibold text-white mb-0.5">
                             {item.title}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                          <p className="text-sm text-gray-400 truncate">
                             {item.description}
                           </p>
                         </div>
@@ -154,12 +154,12 @@ export default function Contact() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.7 }}
-                  className="p-6 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent dark:from-primary/20 dark:via-primary/10 rounded-2xl border border-primary/20"
+                  className="p-6 bg-gradient-to-br to-transparent from-primary/20 via-primary/10 rounded-2xl border border-primary/20"
                 >
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  <h3 className="font-semibold text-white mb-2">
                     {isEnglish ? 'Available for' : 'Disponível para'}
                   </h3>
-                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                  <ul className="space-y-2 text-sm text-gray-400">
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                       {isEnglish ? 'Freelance' : 'Freelance'} 

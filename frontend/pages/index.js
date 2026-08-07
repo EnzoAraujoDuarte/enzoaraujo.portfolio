@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiDownload } from 'react-icons/fi';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import Head from 'next/head';
 
@@ -47,8 +47,8 @@ export default function Home() {
     ctaAbout: t('home.cta.about', language),
     ctaCv: t('home.cta.cv', language),
     metaTitle: language === 'pt-BR'
-      ? 'Enzo Araujo Duarte | Desenvolvedor ABAP, Shopify e IA com Python'
-      : 'Enzo Araujo Duarte | ABAP Developer, Shopify & Python',
+      ? 'Enzo Araujo Duarte | Desenvolvedor de Software, Shopify e Web'
+      : 'Enzo Araujo Duarte | Software Developer, Shopify & Web',
     metaDescription: t('home.meta.description', language),
   }), [language]);
 
@@ -56,28 +56,28 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Enzo Araujo Duarte",
-    "jobTitle": language === 'pt-BR' ? "Programador de Sistemas" : "Systems Programmer",
+    "jobTitle": "Software Developer",
     "url": "https://enzoaraujo.site",
     "sameAs": [
       "https://github.com/EnzoAraujoDuarte",
       "https://linkedin.com/in/enzo-araujo-duarte"
     ],
     "knowsAbout": [
-      "ABAP",
-      "SAP ERP",
-      "Python",
-      "LangChain",
-      "LangGraph",
-      "SQL Server",
       "Shopify",
+      "Liquid",
+      "GraphQL",
+      "PHP",
+      "Laravel",
+      "JavaScript",
       "React",
       "Next.js",
-      "CDS Views",
-      "OData"
+      "SQL Server",
+      "ABAP",
+      "SAP ERP"
     ],
     "worksFor": {
       "@type": "Organization",
-      "name": "Unimarka Distribuidora"
+      "name": "260 Sample Sale"
     },
     "alumniOf": {
       "@type": "EducationalOrganization",
@@ -134,7 +134,7 @@ export default function Home() {
         <title>{content.metaTitle}</title>
         <meta name="description" content={content.metaDescription} />
         <meta name="author" content="Enzo Araujo Duarte" />
-        <meta name="keywords" content="Desenvolvedor ABAP, SAP Developer, Shopify Developer, IA com Python, LangChain, LangGraph, Engenheiro de IA, CDS Views, OData" />
+        <meta name="keywords" content="Software Developer, Shopify Developer, Desenvolvedor Shopify, Liquid, Laravel, PHP, React, Next.js, GraphQL, E-commerce" />
         <link rel="canonical" href="https://enzoaraujo.site" />
 
         {/* Open Graph */}
@@ -158,7 +158,7 @@ export default function Home() {
       </Head>
 
       {/* Hero Section - Full viewport with centered content */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black dark:bg-black pt-0 pb-20 sm:pb-0">
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-0 pb-20 sm:pb-0">
         {/* Grid Distortion Background */}
         <div className="absolute inset-0 z-0 w-full h-full">
           <GridDistortion

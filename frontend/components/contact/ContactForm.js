@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSend, FiCheck, FiAlertCircle, FiUser, FiMail, FiMessageSquare, FiFileText } from 'react-icons/fi';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage } from '../../hooks/useLanguage';
 import { t } from '../../locales/translations';
 
 export default function ContactForm() {
@@ -96,15 +96,14 @@ export default function ContactForm() {
 
   const inputClasses = (fieldName) => `
     w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all duration-300
-    bg-gray-50 dark:bg-dark/50
-    text-gray-900 dark:text-white
-    placeholder:text-gray-400 dark:placeholder:text-gray-500
-    focus:outline-none focus:bg-white dark:focus:bg-dark
+    bg-dark/50 text-white
+    placeholder:text-gray-500
+    focus:outline-none focus:bg-dark
     ${errors[fieldName]
-      ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
+      ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
       : focusedField === fieldName
         ? 'border-primary focus:border-primary focus:ring-4 focus:ring-primary/10'
-        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+        : 'border-gray-700 hover:border-gray-600'
     }
   `;
 
@@ -114,7 +113,7 @@ export default function ContactForm() {
       ? 'text-red-400'
       : focusedField === fieldName
         ? 'text-primary'
-        : 'text-gray-400 dark:text-gray-500'
+        : 'text-gray-500'
     }
   `;
 
@@ -122,7 +121,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Name Field */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
           {t('contact.form.name', language)} <span className="text-primary">*</span>
         </label>
         <div className="relative">
@@ -156,7 +155,7 @@ export default function ContactForm() {
 
       {/* Email Field */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
           {t('contact.form.email', language)} <span className="text-primary">*</span>
         </label>
         <div className="relative">
@@ -190,7 +189,7 @@ export default function ContactForm() {
 
       {/* Subject Field */}
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
           {t('contact.form.subject', language)} <span className="text-primary">*</span>
         </label>
         <div className="relative">
@@ -224,7 +223,7 @@ export default function ContactForm() {
 
       {/* Message Field */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
           {t('contact.form.message', language)} <span className="text-primary">*</span>
         </label>
         <div className="relative">
@@ -233,7 +232,7 @@ export default function ContactForm() {
               ? 'text-red-400'
               : focusedField === 'message'
                 ? 'text-primary'
-                : 'text-gray-400 dark:text-gray-500'
+                : 'text-gray-500'
           }`} size={18} />
           <textarea
             id="message"
@@ -245,15 +244,14 @@ export default function ContactForm() {
             rows={5}
             className={`
               w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all duration-300
-              bg-gray-50 dark:bg-dark/50
-              text-gray-900 dark:text-white
-              placeholder:text-gray-400 dark:placeholder:text-gray-500
-              focus:outline-none focus:bg-white dark:focus:bg-dark resize-none
+              bg-dark/50 text-white
+              placeholder:text-gray-500
+              focus:outline-none focus:bg-dark resize-none
               ${errors.message
-                ? 'border-red-400 dark:border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
+                ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
                 : focusedField === 'message'
                   ? 'border-primary focus:border-primary focus:ring-4 focus:ring-primary/10'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                  : 'border-gray-700 hover:border-gray-600'
               }
             `}
             placeholder={isEnglish ? 'Your message...' : 'Sua mensagem...'}
@@ -281,12 +279,12 @@ export default function ContactForm() {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center gap-3"
+            className="p-4 bg-green-900/20 border border-green-800 rounded-xl flex items-center gap-3"
           >
-            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-800/30">
-              <FiCheck className="text-green-600 dark:text-green-400" size={18} />
+            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-green-800/30">
+              <FiCheck className="text-green-400" size={18} />
             </div>
-            <p className="text-sm font-medium text-green-700 dark:text-green-400">
+            <p className="text-sm font-medium text-green-400">
               {t('contact.form.success', language)}
             </p>
           </motion.div>
@@ -297,12 +295,12 @@ export default function ContactForm() {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3"
+            className="p-4 bg-red-900/20 border border-red-800 rounded-xl flex items-center gap-3"
           >
-            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-100 dark:bg-red-800/30">
-              <FiAlertCircle className="text-red-600 dark:text-red-400" size={18} />
+            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-800/30">
+              <FiAlertCircle className="text-red-400" size={18} />
             </div>
-            <p className="text-sm font-medium text-red-700 dark:text-red-400">
+            <p className="text-sm font-medium text-red-400">
               {t('contact.form.error', language)}
             </p>
           </motion.div>

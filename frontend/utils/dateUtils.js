@@ -1,21 +1,21 @@
+export function formatArticleDate(isoDate, isEnglish = false) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString(
+    isEnglish ? 'en-US' : 'pt-BR',
+    { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }
+  );
+}
+
+// Counts the start month itself, matching how LinkedIn reports tenure
 export function calculateMonthsSince(startYear, startMonth) {
   const startDate = new Date(startYear, startMonth - 1, 1);
   const now = new Date();
-  
+
   const yearsDiff = now.getFullYear() - startDate.getFullYear();
   const monthsDiff = now.getMonth() - startDate.getMonth();
-  
-  let totalMonths = yearsDiff * 12 + monthsDiff;
-  
-  if (totalMonths < 0) {
-    totalMonths = 0;
-  }
-  
-  if (totalMonths === 0) {
-    totalMonths = 1;
-  }
-  
-  return totalMonths;
+
+  return Math.max(1, yearsDiff * 12 + monthsDiff + 1);
 }
 
 export function formatPeriod(startYear, startMonth, isEnglish = false) {
@@ -52,5 +52,5 @@ export function formatPeriod(startYear, startMonth, isEnglish = false) {
     }
   }
   
-  return `${startMonthName} ${startYear} - ${presentText} (${durationText})`;
+  return `${startMonthName} ${startYear} — ${presentText} · ${durationText}`;
 }
