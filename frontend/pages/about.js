@@ -67,11 +67,11 @@ function AboutHero({ language, isEnglish }) {
         className="relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 rounded-3xl overflow-hidden border border-white/[0.08] flex-shrink-0"
       >
         <Image
-          src="/Images/profile.webp"
+          src="/Images/enzo-profile.webp"
           alt="Enzo Araujo Duarte"
           fill
           sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
-          className="object-cover object-top"
+          className="object-cover object-center"
           priority
           quality={85}
         />
