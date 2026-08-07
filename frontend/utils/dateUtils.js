@@ -1,3 +1,12 @@
+export function formatArticleDate(isoDate, isEnglish = false) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString(
+    isEnglish ? 'en-US' : 'pt-BR',
+    { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }
+  );
+}
+
 // Counts the start month itself, matching how LinkedIn reports tenure
 export function calculateMonthsSince(startYear, startMonth) {
   const startDate = new Date(startYear, startMonth - 1, 1);

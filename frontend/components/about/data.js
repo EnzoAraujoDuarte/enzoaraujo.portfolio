@@ -105,9 +105,10 @@ export function getSkillDomains(isEnglish) {
     {
       id: 'enterprise',
       name: isEnglish ? 'Enterprise / SAP' : 'Sistemas Corporativos / SAP',
+      note: isEnglish ? 'Previous experience' : 'Experiência anterior',
       description: isEnglish
-        ? 'Enterprise background: custom ABAP solutions and integrations between SAP and external platforms.'
-        : 'Base corporativa: soluções ABAP customizadas e integrações entre o SAP e plataformas externas.',
+        ? 'Three years building custom ABAP solutions and SAP-to-e-commerce integrations. Not my day-to-day anymore, but it is where I learned business process, data consistency and reliability at scale.'
+        : 'Três anos construindo soluções ABAP customizadas e integrações entre SAP e e-commerce. Não é mais o meu dia a dia, mas foi onde aprendi processo de negócio, consistência de dados e confiabilidade em escala.',
       tools: ['ABAP', 'ABAP OO', 'CDS Views', 'OData', 'SAP ERP', 'ALV'],
     },
   ];

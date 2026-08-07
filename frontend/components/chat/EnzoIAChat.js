@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BotMessageSquare, FastForward } from 'lucide-react';
 import { FiX, FiSend } from 'react-icons/fi';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage } from '../../hooks/useLanguage';
 
 const getInitializationCode = (language) => {
   const isEnglish = language === 'en-US';
@@ -438,23 +438,23 @@ export default function EnzoIAChat() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white dark:bg-dark-secondary shadow-2xl flex flex-col"
+                className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-dark-secondary shadow-2xl flex flex-col"
               >
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between p-4 border-b border-gray-700">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                       <span className="text-primary font-bold">EA</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">EnzoIA</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Online</p>
+                      <h3 className="font-semibold text-white">EnzoIA</h3>
+                      <p className="text-xs text-gray-400">Online</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-dark rounded-full transition-colors"
+                    className="p-2 hover:bg-dark rounded-full transition-colors"
                   >
-                    <FiX className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    <FiX className="w-5 h-5 text-gray-400" />
                   </button>
                 </div>
 
@@ -465,7 +465,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1, y: 0 }}
                       className="space-y-2 mb-4"
                     >
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 font-medium">
+                      <p className="text-sm text-gray-400 mb-3 font-medium">
                         {isEnglish ? 'Suggested questions:' : 'Perguntas sugeridas:'}
                       </p>
                       {SUGGESTED_QUESTIONS.map((question, index) => (
@@ -475,7 +475,7 @@ export default function EnzoIAChat() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
                           onClick={() => handleQuestionClick(question)}
-                          className="w-full text-left p-3 rounded-lg bg-gray-100 dark:bg-dark hover:bg-gray-200 dark:hover:bg-dark-lighter transition-colors text-sm text-gray-700 dark:text-gray-300 border border-transparent hover:border-primary/20"
+                          className="w-full text-left p-3 rounded-lg bg-dark hover:bg-dark-lighter transition-colors text-sm text-gray-300 border border-transparent hover:border-primary/20"
                         >
                           {question}
                         </motion.button>
@@ -496,7 +496,7 @@ export default function EnzoIAChat() {
                         className={`max-w-[80%] rounded-lg p-3 ${
                           message.type === 'user'
                             ? 'bg-primary text-white'
-                            : 'bg-gray-100 dark:bg-dark text-gray-900 dark:text-white'
+                            : 'bg-dark text-white'
                         }`}
                       >
                         <p className="text-sm whitespace-pre-wrap">{message.text}</p>
@@ -510,7 +510,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1, y: 0 }}
                       className="flex justify-start"
                     >
-                      <div className="max-w-[80%] rounded-lg p-3 bg-gray-100 dark:bg-dark text-gray-900 dark:text-white">
+                      <div className="max-w-[80%] rounded-lg p-3 bg-dark text-white">
                         <p className="text-sm whitespace-pre-wrap">{streamingText}</p>
                       </div>
                     </motion.div>
@@ -522,7 +522,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1 }}
                       className="flex justify-start"
                     >
-                      <div className="bg-gray-100 dark:bg-dark rounded-lg p-3">
+                      <div className="bg-dark rounded-lg p-3">
                         <div className="flex gap-1">
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -534,7 +534,7 @@ export default function EnzoIAChat() {
                   <div ref={messagesEndRef} />
                 </div>
 
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-4 border-t border-gray-700">
                   <div className="flex items-center gap-2">
                     <input
                       ref={inputRef}
@@ -543,7 +543,7 @@ export default function EnzoIAChat() {
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder={isEnglish ? 'Type your message...' : 'Digite sua mensagem...'}
-                      className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-dark text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="flex-1 px-4 py-2 border border-gray-600 rounded-lg bg-dark text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                     <button
                       onClick={() => handleSendMessage()}

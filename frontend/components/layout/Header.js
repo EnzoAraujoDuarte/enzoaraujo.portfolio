@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiGlobe } from 'react-icons/fi';
-import { useLanguage } from '../../context/LanguageContext';
+import { useLanguage } from '../../hooks/useLanguage';
 import { t } from '../../locales/translations';
 
 export default function Header() {
@@ -51,11 +51,12 @@ export default function Header() {
   const navItems = useMemo(() => [
     { name: t('nav.home', language), href: '/' },
     { name: t('nav.about', language), href: '/about' },
-    { name: t('nav.projects', language), href: '/projects' },
+    { name: t('nav.blog', language), href: '/blog' },
     { name: t('nav.contact', language), href: '/contact' },
   ], [language]);
 
-  const isActive = (href) => router.pathname === href;
+  const isActive = (href) =>
+    href === '/' ? router.pathname === href : router.pathname.startsWith(href);
 
   return (
     <header

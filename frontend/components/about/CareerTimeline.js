@@ -3,7 +3,7 @@ import { formatPeriod } from '../../utils/dateUtils';
 
 function TechTag({ children }) {
   return (
-    <span className="px-2.5 py-1 rounded-lg text-xs font-medium bg-gray-100 dark:bg-dark-lighter text-gray-600 dark:text-gray-300">
+    <span className="px-2.5 py-1 rounded-lg text-xs font-medium bg-dark-lighter text-gray-300">
       {children}
     </span>
   );
@@ -15,18 +15,18 @@ function Role({ role, isCurrent, isEnglish }) {
   return (
     <div className="relative pl-8 tablet:pl-10 pb-10 last:pb-0">
       {/* Rail */}
-      <div className="absolute left-[5px] top-3 bottom-0 w-px bg-gray-200 dark:bg-white/[0.08]" />
+      <div className="absolute left-[5px] top-3 bottom-0 w-px bg-white/[0.08]" />
 
       {/* Node */}
       <div
         className={`absolute left-0 top-[7px] w-[11px] h-[11px] rounded-full border-2 ${
           isCurrent
             ? 'bg-primary border-primary shadow-[0_0_0_4px_rgba(147,51,234,0.15)]'
-            : 'bg-white dark:bg-dark border-gray-300 dark:border-white/20'
+            : 'bg-dark border-white/20'
         }`}
       />
 
-      <h4 className="font-display text-lg tablet:text-xl font-bold text-gray-900 dark:text-white leading-snug tracking-[-0.015em]">
+      <h4 className="font-display text-lg tablet:text-xl font-bold text-white leading-snug tracking-[-0.015em]">
         {role.title}
       </h4>
 
@@ -36,8 +36,7 @@ function Role({ role, isCurrent, isEnglish }) {
         {role.highlights.map((highlight) => (
           <li
             key={highlight}
-            className="relative pl-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed text-pretty
-              before:absolute before:left-0 before:top-[0.6em] before:w-1 before:h-1 before:rounded-full before:bg-primary/50"
+            className="relative pl-4 text-sm text-gray-400 leading-relaxed text-pretty before:absolute before:left-0 before:top-[0.6em] before:w-1 before:h-1 before:rounded-full before:bg-primary/50"
           >
             {highlight}
           </li>
@@ -70,22 +69,22 @@ export default function CareerTimeline({ career, isEnglish }) {
           {/* Company column — sticky on desktop so it anchors the roles beside it */}
           <div className="laptop:sticky laptop:top-28 laptop:self-start">
             {company.isCurrent && (
-              <span className="inline-flex items-center gap-1.5 mb-3 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 mb-3 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 {isEnglish ? 'Current' : 'Atual'}
               </span>
             )}
 
-            <h3 className="font-display text-xl tablet:text-2xl font-bold text-gray-900 dark:text-white leading-tight tracking-[-0.02em]">
+            <h3 className="font-display text-xl tablet:text-2xl font-bold text-white leading-tight tracking-[-0.02em]">
               {company.company}
             </h3>
 
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-500 leading-relaxed">
+            <p className="mt-2 text-xs text-gray-500 leading-relaxed">
               {company.location}
             </p>
 
             {company.duration && (
-              <p className="mt-1 text-xs text-gray-400 dark:text-gray-600">{company.duration}</p>
+              <p className="mt-1 text-xs text-gray-600">{company.duration}</p>
             )}
           </div>
 

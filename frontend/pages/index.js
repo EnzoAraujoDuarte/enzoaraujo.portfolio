@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiDownload } from 'react-icons/fi';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import Head from 'next/head';
 
@@ -158,7 +158,7 @@ export default function Home() {
       </Head>
 
       {/* Hero Section - Full viewport with centered content */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black dark:bg-black pt-0 pb-20 sm:pb-0">
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-0 pb-20 sm:pb-0">
         {/* Grid Distortion Background */}
         <div className="absolute inset-0 z-0 w-full h-full">
           <GridDistortion

@@ -3,7 +3,7 @@ const translations = {
     // Header navigation
     'nav.home': 'Início',
     'nav.about': 'Sobre',
-    'nav.projects': 'Projetos',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contato',
 
     // Home page
@@ -25,6 +25,8 @@ const translations = {
     'about.approach.content': 'Minha experiência passa por sistemas corporativos e desenvolvimento web moderno. Não por colecionar stacks, mas porque cada problema exigiu uma abordagem, uma arquitetura e um conjunto de ferramentas diferente.\n\nA base em SAP ERP e ABAP me deu leitura de processo de negócio, consistência de dados e confiabilidade em escala. O trabalho com e-commerce e web me deu o outro lado: interface, performance percebida e o detalhe que o usuário sente.\n\nAo longo da carreira, entrei em desafios que exigiram adaptação rápida e senso de dono. O que define meu trabalho não é a stack, e sim entender o problema a fundo, escolher a ferramenta certa e entregar algo prático, escalável e alinhado ao negócio.',
 
     'about.career.title': 'Trajetória',
+    'about.projects.title': 'Coisas que eu construí',
+    'about.projects.lead': 'Projetos pessoais e experimentos onde testo ideias sem cliente, sem prazo e sem desculpa.',
     'about.skills.title': 'O que eu uso',
     'about.skills.lead': 'As ferramentas do meu dia a dia, agrupadas pelo tipo de problema que resolvem.',
     'about.education.title': 'Formação',
@@ -52,8 +54,13 @@ const translations = {
     'contact.form.subjectRequired': 'Assunto é obrigatório',
     'contact.form.messageRequired': 'Mensagem é obrigatória',
 
-    // Projects page
-    'projects.title': 'Projetos',
+    // Blog
+    'blog.title': 'Escrita',
+    'blog.lead': 'Notas sobre as decisões técnicas que tomo, o que quebrou no caminho e o que eu faria diferente.',
+    'blog.meta.description': 'Artigos de Enzo Araujo Duarte sobre desenvolvimento web, e-commerce, performance e as decisões por trás do código.',
+    'blog.empty': 'Ainda não publiquei nada por aqui. Em breve.',
+    'blog.readingTime': 'min de leitura',
+    'blog.backToList': 'Voltar para a escrita',
 
     // 404 page
     '404.title': 'Página não encontrada',
@@ -64,7 +71,7 @@ const translations = {
     // Header navigation
     'nav.home': 'Home',
     'nav.about': 'About',
-    'nav.projects': 'Projects',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
 
     // Home page
@@ -86,6 +93,8 @@ const translations = {
     'about.approach.content': 'My experience spans enterprise systems and modern web development. Not because I collected stacks, but because each problem demanded a different approach, architecture and set of tools.\n\nThe SAP ERP and ABAP foundation gave me a reading of business process, data consistency and reliability at scale. E-commerce and web work gave me the other side: interface, perceived performance and the detail a user actually feels.\n\nThroughout my career I have stepped into challenges that required quick adaptation and ownership. What defines my work is not the stack, but understanding the problem deeply, choosing the right tool and delivering something practical, scalable and aligned with the business.',
 
     'about.career.title': 'Career',
+    'about.projects.title': 'Things I have built',
+    'about.projects.lead': 'Side projects and experiments where I test ideas with no client, no deadline and no excuses.',
     'about.skills.title': 'What I work with',
     'about.skills.lead': 'The tools I use day to day, grouped by the kind of problem they solve.',
     'about.education.title': 'Education',
@@ -113,8 +122,13 @@ const translations = {
     'contact.form.subjectRequired': 'Subject is required',
     'contact.form.messageRequired': 'Message is required',
 
-    // Projects page
-    'projects.title': 'Projects',
+    // Blog
+    'blog.title': 'Writing',
+    'blog.lead': 'Notes on the technical decisions I make, what broke along the way and what I would do differently.',
+    'blog.meta.description': 'Articles by Enzo Araujo Duarte on web development, e-commerce, performance and the decisions behind the code.',
+    'blog.empty': 'Nothing published here yet. Soon.',
+    'blog.readingTime': 'min read',
+    'blog.backToList': 'Back to writing',
 
     // 404 page
     '404.title': 'Page not found',
