@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
+import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 
 export default function SectionHeading({ index, label, title, lead }) {
   return (
     <motion.header
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      viewport={viewportOnce}
+      transition={{ duration: DURATION.base, ease: EASE.out }}
       className="mb-10 tablet:mb-14"
     >
       <div className="flex items-center gap-4 mb-6">

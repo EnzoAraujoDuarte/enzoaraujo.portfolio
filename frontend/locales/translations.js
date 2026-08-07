@@ -13,6 +13,27 @@ const translations = {
     'home.cta.about': 'Saiba mais',
     'home.cta.cv': 'Baixar CV',
     'home.meta.description': 'Software Developer na 260 Sample Sale. Desenvolvimento Shopify, sistemas internos e aplicações web com PHP, Laravel, React, Next.js, Liquid e GraphQL.',
+    'home.scroll': 'Role para ver mais',
+
+    'home.now.eyebrow': 'No momento',
+    'home.now.title': 'O que estou construindo',
+    'home.now.focus1.title': 'Lojas Shopify',
+    'home.now.focus1.text': 'Temas, Liquid e as integrações que sustentam a operação de um varejo de alto tráfego.',
+    'home.now.focus2.title': 'Sistemas internos',
+    'home.now.focus2.text': 'Ferramentas que o time usa todo dia, com PHP, Laravel e as regras de negócio por trás delas.',
+    'home.now.focus3.title': 'Aplicações web',
+    'home.now.focus3.text': 'Interfaces em React e Next.js, com atenção a performance e ao detalhe que o usuário sente.',
+    'home.now.cta': 'Conheça minha trajetória',
+
+    'home.statement.eyebrow': 'O que me guia',
+    'home.statement': 'Entender o problema a fundo, escolher a ferramenta certa e entregar algo prático, escalável e alinhado ao negócio.',
+
+    'home.writing.eyebrow': 'Escrita recente',
+    'home.writing.all': 'Ver tudo que escrevi',
+
+    'home.cta.title': 'Tem um problema interessante?',
+    'home.cta.text': 'Estou disponível para freelance e consultoria técnica. Me conta o que você precisa resolver.',
+    'home.cta.button': 'Falar comigo',
 
     // About page
     'about.eyebrow': 'Sobre mim',
@@ -62,6 +83,12 @@ const translations = {
     'blog.readingTime': 'min de leitura',
     'blog.backToList': 'Voltar para a escrita',
 
+    // Footer
+    'footer.eyebrow': 'Vamos trabalhar juntos',
+    'footer.title': 'Conta o problema. Eu cuido do código.',
+    'footer.cta': 'Iniciar uma conversa',
+    'footer.builtWith': 'Feito com Next.js — e reescrito algumas vezes',
+
     // 404 page
     '404.title': 'Página não encontrada',
     '404.description': 'A página que você está procurando não existe ou foi movida.',
@@ -81,6 +108,27 @@ const translations = {
     'home.cta.about': 'Learn more',
     'home.cta.cv': 'Download CV',
     'home.meta.description': 'Software Developer at 260 Sample Sale. Shopify development, internal systems and web applications with PHP, Laravel, React, Next.js, Liquid and GraphQL.',
+    'home.scroll': 'Scroll to see more',
+
+    'home.now.eyebrow': 'Right now',
+    'home.now.title': 'What I am building',
+    'home.now.focus1.title': 'Shopify storefronts',
+    'home.now.focus1.text': 'Themes, Liquid and the integrations that keep a high-traffic retail operation running.',
+    'home.now.focus2.title': 'Internal systems',
+    'home.now.focus2.text': 'Tools the team uses every day, with PHP, Laravel and the business logic behind them.',
+    'home.now.focus3.title': 'Web applications',
+    'home.now.focus3.text': 'Interfaces in React and Next.js, with an eye on performance and the detail a user feels.',
+    'home.now.cta': 'See my career',
+
+    'home.statement.eyebrow': 'What drives me',
+    'home.statement': 'Understand the problem deeply, choose the right tool and deliver something practical, scalable and aligned with the business.',
+
+    'home.writing.eyebrow': 'Latest writing',
+    'home.writing.all': 'See everything I have written',
+
+    'home.cta.title': 'Got an interesting problem?',
+    'home.cta.text': 'I am available for freelance and technical consulting. Tell me what you need to solve.',
+    'home.cta.button': 'Get in touch',
 
     // About page
     'about.eyebrow': 'About me',
@@ -129,6 +177,12 @@ const translations = {
     'blog.empty': 'Nothing published here yet. Soon.',
     'blog.readingTime': 'min read',
     'blog.backToList': 'Back to writing',
+
+    // Footer
+    'footer.eyebrow': "Let's work together",
+    'footer.title': 'Tell me the problem. I will handle the code.',
+    'footer.cta': 'Start a conversation',
+    'footer.builtWith': 'Built with Next.js — and rewritten a few times',
 
     // 404 page
     '404.title': 'Page not found',

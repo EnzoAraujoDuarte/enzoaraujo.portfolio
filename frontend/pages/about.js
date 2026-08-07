@@ -15,10 +15,11 @@ import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import { getCareer, getSkillDomains, getEducation, getLanguages } from '../components/about/data';
 import { getProjects } from '../components/about/projects';
+import { EASE, DURATION, viewportOnce } from '../lib/motion';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.out } },
 };
 
 function AboutHero({ language, isEnglish }) {
@@ -64,17 +65,34 @@ function AboutHero({ language, isEnglish }) {
 
       <motion.div
         variants={fadeUp}
-        className="relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 rounded-3xl overflow-hidden border border-white/[0.08] flex-shrink-0"
+        className="group relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 flex-shrink-0"
       >
-        <Image
-          src="/Images/profile.webp"
-          alt="Enzo Araujo Duarte"
-          fill
-          sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
-          className="object-cover object-top"
-          priority
-          quality={85}
-        />
+        {/* Soft bloom so the portrait sits in the page rather than on top of it */}
+        <div className="absolute -inset-6 rounded-full bg-primary/20 blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
+
+        <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/[0.08]">
+          <Image
+            src="/Images/enzo-profile.webp"
+            alt="Enzo Araujo Duarte"
+            fill
+            sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
+            className="object-cover object-center saturate-[0.75] contrast-[1.05] transition-[filter,transform] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:saturate-100 group-hover:scale-[1.04]"
+            priority
+            quality={85}
+          />
+
+          {/* Grain inside the frame, matching the page texture */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 opacity-[0.14] mix-blend-overlay pointer-events-none"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E\")",
+            }}
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent pointer-events-none" />
+        </div>
       </motion.div>
     </motion.section>
   );
@@ -95,8 +113,8 @@ function ApproachSection({ language, isEnglish }) {
         <motion.blockquote
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          viewport={viewportOnce}
+          transition={{ duration: DURATION.base, ease: EASE.out }}
           className="relative pl-6 border-l-2 border-primary"
         >
           <p className="font-display text-xl tablet:text-2xl laptop:text-[1.75rem] font-medium text-gray-100 leading-[1.35] tracking-[-0.02em] text-balance">
@@ -110,8 +128,8 @@ function ApproachSection({ language, isEnglish }) {
               key={paragraph}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              viewport={viewportOnce}
+              transition={{ duration: DURATION.base, delay: index * 0.08 }}
               className="text-base text-gray-400 leading-relaxed text-pretty"
             >
               {paragraph}
@@ -135,31 +153,29 @@ function EducationSection({ language, isEnglish }) {
         title={t('about.education.title', language)}
       />
 
-      <div className="grid grid-cols-1 laptop:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 laptop:gap-8">
-        <div className="space-y-4">
+      <div className="grid grid-cols-1 laptop:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 laptop:gap-20">
+        <div>
           {education.map((item, index) => (
             <motion.article
               key={item.institution}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.55, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="flex items-start gap-5 p-5 laptop:p-6 rounded-2xl border border-white/[0.06] bg-dark-secondary"
+              viewport={viewportOnce}
+              transition={{ duration: DURATION.base, delay: index * 0.08, ease: EASE.out }}
+              className="flex items-start gap-5 py-7 border-t border-white/10 last:border-b"
             >
-              <div className="relative w-16 h-16 flex-shrink-0 rounded-xl bg-dark border border-white/[0.06]">
-                <Image src={item.logo} alt={item.institution} fill className="object-contain p-2.5" />
+              <div className="relative w-11 h-11 flex-shrink-0 mt-0.5 opacity-80">
+                <Image src={item.logo} alt={item.institution} fill className="object-contain" />
               </div>
 
               <div className="min-w-0 flex-grow">
-                <div className="flex items-center gap-2 flex-wrap mb-1.5">
+                <div className="flex items-center gap-2.5 flex-wrap mb-2">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
                     {item.institution} — {item.period}
                   </p>
                   <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                      item.isOngoing
-                        ? 'bg-primary/10 text-primary border-primary/20'
-                        : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                    className={`inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                      item.isOngoing ? 'text-primary' : 'text-emerald-400'
                     }`}
                   >
                     {item.isOngoing ? (
@@ -171,7 +187,7 @@ function EducationSection({ language, isEnglish }) {
                   </span>
                 </div>
 
-                <h3 className="font-display text-base laptop:text-lg font-bold text-white leading-snug tracking-[-0.015em]">
+                <h3 className="font-display text-lg laptop:text-xl font-bold text-white leading-snug tracking-[-0.02em]">
                   {item.degree}
                 </h3>
               </div>
@@ -182,24 +198,24 @@ function EducationSection({ language, isEnglish }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.55, delay: 0.16, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="laptop:self-start p-6 rounded-2xl border border-white/[0.06] bg-dark-secondary"
+          viewport={viewportOnce}
+          transition={{ duration: DURATION.base, delay: 0.16, ease: EASE.out }}
+          className="laptop:self-start"
         >
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-400 mb-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500 mb-2">
             {isEnglish ? 'Languages' : 'Idiomas'}
           </p>
 
-          <dl className="space-y-4">
+          <dl>
             {languages.map((item) => (
               <div
                 key={item.name}
-                className="flex items-baseline justify-between gap-4 pb-4 border-b border-white/[0.05] last:border-0 last:pb-0"
+                className="flex items-baseline justify-between gap-4 py-5 border-t border-white/10 last:border-b"
               >
-                <dt className="font-display text-base font-bold text-white">
-                  {item.name}
-                </dt>
-                <dd className="text-xs font-semibold text-primary">{item.level}</dd>
+                <dt className="font-display text-lg font-bold text-white">{item.name}</dt>
+                <dd className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                  {item.level}
+                </dd>
               </div>
             ))}
           </dl>
@@ -214,8 +230,8 @@ function ClosingCallToAction({ language, isEnglish }) {
     <motion.section
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      viewport={viewportOnce}
+      transition={{ duration: DURATION.base, ease: EASE.out }}
       className="pt-4"
     >
       <div className="h-px bg-white/10 mb-10 tablet:mb-14" />
@@ -304,7 +320,7 @@ export default function About() {
                 title={t('about.projects.title', language)}
                 lead={t('about.projects.lead', language)}
               />
-              <div className="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-5 laptop:gap-6">
+              <div className="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-x-8 gap-y-14 laptop:gap-x-10">
                 {projects.map((project, index) => (
                   <ProjectCard
                     key={project.id}

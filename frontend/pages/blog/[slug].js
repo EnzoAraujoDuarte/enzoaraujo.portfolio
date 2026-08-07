@@ -5,10 +5,12 @@ import { FiArrowLeft } from 'react-icons/fi';
 
 import Layout from '../../components/layout/Layout';
 import PageBackdrop from '../../components/layout/PageBackdrop';
+import ReadingProgress from '../../components/blog/ReadingProgress';
 import { useLanguage } from '../../hooks/useLanguage';
 import { t } from '../../locales/translations';
 import { getArticle, getArticleSlugs } from '../../lib/articles';
 import { formatArticleDate } from '../../utils/dateUtils';
+import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 
 export default function Article({ article }) {
   const { language } = useLanguage();
@@ -46,6 +48,8 @@ export default function Article({ article }) {
         />
       </Head>
 
+      <ReadingProgress />
+
       <div className="relative min-h-screen">
         <PageBackdrop />
 
@@ -62,7 +66,7 @@ export default function Article({ article }) {
             <motion.header
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: DURATION.base, ease: EASE.out }}
               className="mt-10"
             >
               <div className="flex items-center gap-3 flex-wrap text-xs">
@@ -105,7 +109,7 @@ export default function Article({ article }) {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: DURATION.base, delay: 0.12, ease: EASE.out }}
               className="prose-article mt-12"
               dangerouslySetInnerHTML={{ __html: article.html }}
             />

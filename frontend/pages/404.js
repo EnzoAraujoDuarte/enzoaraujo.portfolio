@@ -18,7 +18,7 @@ export default function Custom404() {
           className="text-center max-w-xl"
         >
           <h1 className="text-9xl font-bold text-primary mb-4">404</h1>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+          <h2 className="text-2xl tablet:text-3xl font-bold text-white mb-6">
             {t('404.title', language)}
           </h2>
           <p className="text-gray-300 mb-8">
