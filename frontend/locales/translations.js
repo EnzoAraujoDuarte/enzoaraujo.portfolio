@@ -80,6 +80,12 @@ const translations = {
     'blog.readingTime': 'min de leitura',
     'blog.backToList': 'Voltar para a escrita',
 
+    // Footer
+    'footer.eyebrow': 'Vamos trabalhar juntos',
+    'footer.title': 'Conta o problema. Eu cuido do código.',
+    'footer.cta': 'Iniciar uma conversa',
+    'footer.builtWith': 'Feito com Next.js — e reescrito algumas vezes',
+
     // 404 page
     '404.title': 'Página não encontrada',
     '404.description': 'A página que você está procurando não existe ou foi movida.',
@@ -165,6 +171,12 @@ const translations = {
     'blog.empty': 'Nothing published here yet. Soon.',
     'blog.readingTime': 'min read',
     'blog.backToList': 'Back to writing',
+
+    // Footer
+    'footer.eyebrow': "Let's work together",
+    'footer.title': 'Tell me the problem. I will handle the code.',
+    'footer.cta': 'Start a conversation',
+    'footer.builtWith': 'Built with Next.js — and rewritten a few times',
 
     // 404 page
     '404.title': 'Page not found',

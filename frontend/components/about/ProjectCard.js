@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { FiArrowUpRight, FiCode } from 'react-icons/fi';
 
+import { EASE, DURATION, viewportOnce, clipReveal } from '../../lib/motion';
+
 export default function ProjectCard({ project, index, isEnglish }) {
   const Wrapper = project.url ? 'a' : 'div';
   const linkProps = project.url
@@ -10,17 +12,20 @@ export default function ProjectCard({ project, index, isEnglish }) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 26 }}
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, delay: (index % 3) * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+      viewport={viewportOnce}
+      transition={{ duration: DURATION.base, delay: (index % 3) * 0.08, ease: EASE.out }}
       className="h-full"
     >
-      <Wrapper
-        {...linkProps}
-        className="group flex flex-col h-full overflow-hidden rounded-2xl bg-dark-secondary border border-white/[0.06] hover:border-primary/30 transition-colors duration-500"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden bg-dark-lighter flex-shrink-0">
+      <Wrapper {...linkProps} className="group flex flex-col h-full">
+        <motion.div
+          variants={clipReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="relative aspect-[16/10] overflow-hidden rounded-xl bg-dark-lighter"
+        >
           {project.images?.[0] ? (
             <>
               <Image
@@ -28,7 +33,7 @@ export default function ProjectCard({ project, index, isEnglish }) {
                 alt={project.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
               />
               {project.images?.[1] && (
                 <Image
@@ -56,34 +61,31 @@ export default function ProjectCard({ project, index, isEnglish }) {
             {project.status === 'Online' && <span className="w-1 h-1 rounded-full bg-emerald-400" />}
             {project.status}
           </span>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col flex-grow p-5 laptop:p-6">
-          <h3 className="font-display text-base laptop:text-lg font-bold text-white mb-2 leading-snug tracking-[-0.015em] group-hover:text-primary transition-colors duration-300">
+        <div className="flex flex-col flex-grow pt-5">
+          <h3 className="font-display text-base laptop:text-lg font-bold text-white leading-snug tracking-[-0.015em] group-hover:text-primary transition-colors duration-300">
             {project.title}
           </h3>
 
-          <p className="text-[0.8125rem] text-gray-400 leading-relaxed mb-4 line-clamp-4 text-pretty">
+          <p className="mt-2.5 text-[0.8125rem] text-gray-400 leading-relaxed line-clamp-3 text-pretty">
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-1 mb-4">
+          <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5">
             {project.tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 rounded text-[11px] font-medium bg-dark-lighter text-gray-300"
-              >
+              <span key={tag} className="text-[11px] font-medium text-gray-500">
                 {tag}
               </span>
             ))}
             {project.tags.length > 3 && (
-              <span className="px-2 py-0.5 rounded text-[11px] font-medium text-gray-500">
+              <span className="text-[11px] font-medium text-gray-600">
                 +{project.tags.length - 3}
               </span>
             )}
           </div>
 
-          <div className="mt-auto">
+          <div className="mt-5 pt-4 border-t border-white/[0.07] group-hover:border-primary/30 transition-colors duration-500">
             {project.url ? (
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
                 {isEnglish ? 'View project' : 'Ver projeto'}

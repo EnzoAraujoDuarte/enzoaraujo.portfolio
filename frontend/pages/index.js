@@ -11,6 +11,7 @@ import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import { getArticleSummaries } from '../lib/articles';
 import { formatArticleDate } from '../utils/dateUtils';
+import { EASE, DURATION, viewportOnce } from '../lib/motion';
 
 // Lazy load effects and the chat widget to keep the hero bundle small
 const GridDistortion = dynamic(
@@ -26,7 +27,7 @@ const EnzoIAChat = dynamic(
 const stagger = { visible: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } } };
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.slow, ease: EASE.expressive } },
 };
 
 function Hero({ language, cvFile }) {
@@ -118,8 +119,8 @@ function NowSection({ language }) {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        viewport={viewportOnce}
+        transition={{ duration: DURATION.base, ease: EASE.out }}
       >
         <div className="flex items-center gap-4 mb-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400 whitespace-nowrap">
@@ -144,8 +145,8 @@ function NowSection({ language }) {
             key={area.index}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+            viewport={viewportOnce}
+            transition={{ duration: DURATION.base, delay: index * 0.08, ease: EASE.out }}
             className="border-t border-white/10 pt-6"
           >
             <span className="font-display text-xs font-bold text-primary tabular-nums">
@@ -163,7 +164,7 @@ function NowSection({ language }) {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: DURATION.base, delay: 0.2 }}
         className="mt-12"
       >
         <Link
@@ -184,8 +185,8 @@ function LatestWriting({ article, language, isEnglish }) {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        viewport={viewportOnce}
+        transition={{ duration: DURATION.base, ease: EASE.out }}
       >
         <div className="flex items-center gap-4 mb-10">
           <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400 whitespace-nowrap">
@@ -246,8 +247,8 @@ function ClosingCallToAction({ language }) {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        viewport={viewportOnce}
+        transition={{ duration: DURATION.base, ease: EASE.out }}
         className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-dark-secondary px-8 py-14 tablet:px-14 tablet:py-20"
       >
         <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-primary/15 blur-3xl pointer-events-none" />

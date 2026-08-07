@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
+import { EASE, DURATION } from '../../lib/motion';
 
 const rise = {
   hidden: { y: '110%' },
-  visible: { y: '0%', transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] } },
+  visible: { y: '0%', transition: { duration: DURATION.slow, ease: EASE.expressive } },
 };
 
 /**

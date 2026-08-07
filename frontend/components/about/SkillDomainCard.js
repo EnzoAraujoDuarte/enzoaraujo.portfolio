@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
+import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 
 export default function SkillDomainCard({ domain, index }) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+      viewport={viewportOnce}
+      transition={{ duration: DURATION.base, delay: index * 0.07, ease: EASE.out }}
       className="group relative flex flex-col h-full pl-6 pr-1 py-1 border-l-2 border-white/10 hover:border-primary transition-colors duration-500"
     >
       <div className="flex items-center gap-3 flex-wrap">

@@ -9,6 +9,7 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { t } from '../../locales/translations';
 import { getArticleSummaries } from '../../lib/articles';
 import { formatArticleDate } from '../../utils/dateUtils';
+import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 
 export default function Blog({ articles }) {
   const { language } = useLanguage();
@@ -40,7 +41,7 @@ export default function Blog({ articles }) {
           <motion.header
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: DURATION.base, ease: EASE.out }}
             className="max-w-3xl"
           >
             <p className="font-display text-xs font-medium uppercase tracking-[0.28em] text-primary mb-6">
@@ -65,8 +66,8 @@ export default function Blog({ articles }) {
                   key={article.slug}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.5, delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={viewportOnce}
+                  transition={{ duration: DURATION.base, delay: index * 0.06, ease: EASE.out }}
                 >
                   <Link
                     href={`/blog/${article.slug}`}

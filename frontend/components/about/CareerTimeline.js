@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 import { formatPeriod } from '../../utils/dateUtils';
 
 function TechTag({ children }) {
@@ -62,8 +63,8 @@ export default function CareerTimeline({ career, isEnglish }) {
           key={company.company}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, delay: companyIndex * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+          viewport={viewportOnce}
+          transition={{ duration: DURATION.base, delay: companyIndex * 0.08, ease: EASE.out }}
           className="grid grid-cols-1 laptop:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] gap-6 laptop:gap-12"
         >
           {/* Company column — sticky on desktop so it anchors the roles beside it */}

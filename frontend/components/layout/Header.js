@@ -93,7 +93,19 @@ export default function Header() {
                     : 'text-white/70 hover:text-white'
                 }`}
               >
-                {item.name}
+                {/* Clipped swap: the label slides out while its twin slides in */}
+                <span className="relative block overflow-hidden">
+                  <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
+                    {item.name}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 block translate-y-full transition-transform duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0"
+                  >
+                    {item.name}
+                  </span>
+                </span>
+
                 {/* Indicador de página ativa */}
                 <span
                   className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary rounded-full transition-all duration-300 ${
