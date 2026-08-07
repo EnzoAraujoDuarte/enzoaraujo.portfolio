@@ -12,12 +12,12 @@ export default function Contact() {
   const isEnglish = language === 'en-US';
 
   const pageTitle = isEnglish
-    ? 'Contact | Enzo Araujo Duarte - SAP Developer & AI Engineer'
-    : 'Contato | Enzo Araujo Duarte - Desenvolvedor SAP e Engenheiro de IA';
+    ? 'Contact | Enzo Araujo Duarte — Software Developer'
+    : 'Contato | Enzo Araujo Duarte — Desenvolvedor de Software';
 
   const pageDescription = isEnglish
-    ? 'Get in touch with Enzo Araujo Duarte. SAP ABAP Developer, AI Engineer with Python and Shopify Developer available for projects and opportunities.'
-    : 'Entre em contato com Enzo Araujo Duarte. Desenvolvedor SAP ABAP, Engenheiro de IA com Python e Desenvolvedor Shopify disponível para projetos e oportunidades.';
+    ? 'Get in touch with Enzo Araujo Duarte. Software Developer working with Shopify, Laravel, React and Next.js, available for projects and opportunities.'
+    : 'Entre em contato com Enzo Araujo Duarte. Desenvolvedor de software com Shopify, Laravel, React e Next.js, disponível para projetos e oportunidades.';
 
   const contactLinks = [
     {
