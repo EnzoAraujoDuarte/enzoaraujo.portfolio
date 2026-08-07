@@ -1,21 +1,20 @@
 import { useMemo } from 'react';
-import Layout from '../components/layout/Layout';
+import Head from 'next/head';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiDownload } from 'react-icons/fi';
+import { FiArrowRight, FiArrowUpRight, FiDownload } from 'react-icons/fi';
+
+import Layout from '../components/layout/Layout';
+import RevealLine from '../components/home/RevealLine';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
-import Head from 'next/head';
+import { getArticleSummaries } from '../lib/articles';
+import { formatArticleDate } from '../utils/dateUtils';
 
 // Lazy load effects and the chat widget to keep the hero bundle small
 const GridDistortion = dynamic(
   () => import('../components/effects/GridDistortion'),
-  { ssr: false }
-);
-
-const DecryptedText = dynamic(
-  () => import('../components/effects/DecryptedText'),
   { ssr: false }
 );
 
@@ -24,232 +23,338 @@ const EnzoIAChat = dynamic(
   { ssr: false }
 );
 
-/**
- * Homepage component with modern hero section
- * Features: Grid distortion background, decrypted text animation, centered layout
- * @returns {JSX.Element} Homepage with hero section
- */
-export default function Home() {
+const stagger = { visible: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } } };
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+};
+
+function Hero({ language, cvFile }) {
+  return (
+    <section className="relative min-h-[100svh] w-full flex items-center overflow-hidden bg-black">
+      <div className="absolute inset-0 z-0">
+        <GridDistortion
+          imageSrc="/Images/griddistortion.webp"
+          grid={10}
+          mouse={0.15}
+          strength={0.2}
+          relaxation={0.9}
+        />
+      </div>
+
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/50 via-transparent to-dark pointer-events-none" />
+
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={stagger}
+        className="relative z-20 container py-32 tablet:py-40"
+      >
+        <RevealLine className="font-display text-xs tablet:text-sm font-medium uppercase tracking-[0.3em] text-primary mb-6 tablet:mb-8">
+          {t('home.greeting', language)}
+        </RevealLine>
+
+        <RevealLine
+          as="h1"
+          className="font-display text-[clamp(2.5rem,9vw,7.5rem)] ultrawide:text-[8.5rem] font-bold text-white leading-[0.92] tracking-[-0.045em]"
+        >
+          {t('home.title', language)}
+        </RevealLine>
+
+        <motion.p
+          variants={fadeUp}
+          className="mt-8 tablet:mt-10 max-w-xl laptop:max-w-2xl text-base tablet:text-lg laptop:text-xl text-gray-300/85 leading-relaxed text-pretty"
+        >
+          {t('home.subtitle', language)}
+        </motion.p>
+
+        <motion.div
+          variants={fadeUp}
+          className="mt-10 tablet:mt-12 flex flex-col largemobile:flex-row largemobile:items-center gap-4"
+        >
+          <Link
+            href="/about"
+            className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
+          >
+            {t('home.cta.about', language)}
+            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+
+          <a
+            href={cvFile}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white/[0.06] backdrop-blur-sm border border-white/15 text-white text-sm tablet:text-base font-semibold hover:bg-white/[0.12] transition-colors duration-200"
+          >
+            <FiDownload className="w-4 h-4" />
+            {t('home.cta.cv', language)}
+          </a>
+        </motion.div>
+      </motion.div>
+
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden tablet:flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40"
+      >
+        {t('home.scroll', language)}
+        <span className="block w-10 h-px bg-white/25" />
+      </motion.span>
+    </section>
+  );
+}
+
+function NowSection({ language }) {
+  const focusAreas = [1, 2, 3].map((index) => ({
+    index,
+    title: t(`home.now.focus${index}.title`, language),
+    text: t(`home.now.focus${index}.text`, language),
+  }));
+
+  return (
+    <section className="container py-24 tablet:py-32">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <div className="flex items-center gap-4 mb-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400 whitespace-nowrap">
+            {t('home.now.eyebrow', language)}
+          </p>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
+
+        <h2 className="font-display text-3xl tablet:text-4xl laptop:text-5xl font-bold text-white tracking-[-0.03em] leading-[1.05] text-balance">
+          {t('home.now.title', language)}
+        </h2>
+
+        <p className="mt-5 inline-flex items-center gap-2 text-sm text-gray-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          {t('about.currentRole', language)}
+        </p>
+      </motion.div>
+
+      <div className="mt-14 grid grid-cols-1 tablet:grid-cols-3 gap-x-10 gap-y-10 laptop:gap-x-14">
+        {focusAreas.map((area, index) => (
+          <motion.div
+            key={area.index}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="border-t border-white/10 pt-6"
+          >
+            <span className="font-display text-xs font-bold text-primary tabular-nums">
+              0{area.index}
+            </span>
+            <h3 className="mt-3 font-display text-lg laptop:text-xl font-bold text-white leading-snug tracking-[-0.02em]">
+              {area.title}
+            </h3>
+            <p className="mt-3 text-sm text-gray-400 leading-relaxed text-pretty">{area.text}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-12"
+      >
+        <Link
+          href="/about"
+          className="group inline-flex items-center gap-2 text-sm font-semibold text-primary"
+        >
+          {t('home.now.cta', language)}
+          <FiArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </Link>
+      </motion.div>
+    </section>
+  );
+}
+
+function LatestWriting({ article, language, isEnglish }) {
+  return (
+    <section className="container pb-24 tablet:pb-32">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <div className="flex items-center gap-4 mb-10">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400 whitespace-nowrap">
+            {t('home.writing.eyebrow', language)}
+          </p>
+          <div className="flex-1 h-px bg-white/10" />
+        </div>
+
+        <Link
+          href={`/blog/${article.slug}`}
+          className="group grid grid-cols-1 laptop:grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-4 laptop:gap-10"
+        >
+          <div className="flex laptop:flex-col items-baseline laptop:items-start gap-3 laptop:gap-2">
+            <time
+              dateTime={article.date}
+              className="text-xs font-semibold uppercase tracking-[0.14em] text-primary tabular-nums"
+            >
+              {formatArticleDate(article.date, isEnglish)}
+            </time>
+            <span className="text-xs text-gray-600">
+              {article.readingMinutes} {t('blog.readingTime', language)}
+            </span>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl tablet:text-3xl laptop:text-4xl font-bold text-white leading-[1.1] tracking-[-0.03em] group-hover:text-primary transition-colors duration-300 text-balance">
+              {article.title}
+            </h2>
+
+            <p className="mt-4 max-w-2xl text-sm tablet:text-base text-gray-400 leading-relaxed text-pretty">
+              {article.description}
+            </p>
+
+            <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold text-primary">
+              {isEnglish ? 'Read' : 'Ler'}
+              <FiArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </div>
+        </Link>
+
+        <div className="mt-10 pt-8 border-t border-white/[0.07]">
+          <Link
+            href="/blog"
+            className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-primary transition-colors duration-200"
+          >
+            {t('home.writing.all', language)}
+            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function ClosingCallToAction({ language }) {
+  return (
+    <section className="container pb-28 tablet:pb-36">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-dark-secondary px-8 py-14 tablet:px-14 tablet:py-20"
+      >
+        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-2xl">
+          <h2 className="font-display text-3xl tablet:text-4xl laptop:text-5xl font-bold text-white tracking-[-0.035em] leading-[1.05] text-balance">
+            {t('home.cta.title', language)}
+          </h2>
+
+          <p className="mt-5 text-base tablet:text-lg text-gray-400 leading-relaxed text-pretty">
+            {t('home.cta.text', language)}
+          </p>
+
+          <Link
+            href="/contact"
+            className="group mt-9 inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
+          >
+            {t('home.cta.button', language)}
+            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+export default function Home({ latestArticle }) {
   const { language } = useLanguage();
+  const isEnglish = language === 'en-US';
 
-  // Determine which CV file to download based on current language
-  const cvFile = useMemo(() => {
-    return language === 'en-US'
-      ? '/Images/Curriculo EN-US.pdf'
-      : '/Images/Curriculo PT-BR.pdf';
-  }, [language]);
+  const cvFile = isEnglish ? '/Images/Curriculo EN-US.pdf' : '/Images/Curriculo PT-BR.pdf';
 
-  // Get translated content
-  const content = useMemo(() => ({
-    greeting: t('home.greeting', language),
-    name: t('home.title', language),
-    subtitle: t('home.subtitle', language),
-    ctaAbout: t('home.cta.about', language),
-    ctaCv: t('home.cta.cv', language),
-    metaTitle: language === 'pt-BR'
-      ? 'Enzo Araujo Duarte | Desenvolvedor de Software, Shopify e Web'
-      : 'Enzo Araujo Duarte | Software Developer, Shopify & Web',
-    metaDescription: t('home.meta.description', language),
-  }), [language]);
+  const metaTitle = isEnglish
+    ? 'Enzo Araujo Duarte | Software Developer, Shopify & Web'
+    : 'Enzo Araujo Duarte | Desenvolvedor de Software, Shopify e Web';
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Enzo Araujo Duarte",
-    "jobTitle": "Software Developer",
-    "url": "https://enzoaraujo.site",
-    "sameAs": [
-      "https://github.com/EnzoAraujoDuarte",
-      "https://linkedin.com/in/enzo-araujo-duarte"
-    ],
-    "knowsAbout": [
-      "Shopify",
-      "Liquid",
-      "GraphQL",
-      "PHP",
-      "Laravel",
-      "JavaScript",
-      "React",
-      "Next.js",
-      "SQL Server",
-      "ABAP",
-      "SAP ERP"
-    ],
-    "worksFor": {
-      "@type": "Organization",
-      "name": "260 Sample Sale"
-    },
-    "alumniOf": {
-      "@type": "EducationalOrganization",
-      "name": "UNESC"
-    }
-  };
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    },
-    hover: {
-      scale: 1.02,
-      transition: { duration: 0.2 },
-    },
-    tap: {
-      scale: 0.98,
-    },
-  };
+  const structuredData = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Enzo Araujo Duarte',
+      jobTitle: 'Software Developer',
+      url: 'https://enzoaraujo.site',
+      sameAs: [
+        'https://github.com/EnzoAraujoDuarte',
+        'https://linkedin.com/in/enzo-araujo-duarte',
+      ],
+      knowsAbout: [
+        'Shopify',
+        'Liquid',
+        'GraphQL',
+        'PHP',
+        'Laravel',
+        'JavaScript',
+        'React',
+        'Next.js',
+        'SQL Server',
+        'ABAP',
+        'SAP ERP',
+      ],
+      worksFor: { '@type': 'Organization', name: '260 Sample Sale' },
+      alumniOf: { '@type': 'EducationalOrganization', name: 'UNESC' },
+    }),
+    []
+  );
 
   return (
     <Layout>
       <Head>
-        <title>{content.metaTitle}</title>
-        <meta name="description" content={content.metaDescription} />
+        <title>{metaTitle}</title>
+        <meta name="description" content={t('home.meta.description', language)} />
         <meta name="author" content="Enzo Araujo Duarte" />
-        <meta name="keywords" content="Software Developer, Shopify Developer, Desenvolvedor Shopify, Liquid, Laravel, PHP, React, Next.js, GraphQL, E-commerce" />
         <link rel="canonical" href="https://enzoaraujo.site" />
 
-        {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={content.metaTitle} />
-        <meta property="og:description" content={content.metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={t('home.meta.description', language)} />
         <meta property="og:url" content="https://enzoaraujo.site" />
         <meta property="og:site_name" content="Enzo Araujo Duarte" />
-        <meta property="og:locale" content={language === 'pt-BR' ? 'pt_BR' : 'en_US'} />
+        <meta property="og:locale" content={isEnglish ? 'en_US' : 'pt_BR'} />
 
-        {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={content.metaTitle} />
-        <meta name="twitter:description" content={content.metaDescription} />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={t('home.meta.description', language)} />
 
-        {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </Head>
 
-      {/* Hero Section - Full viewport with centered content */}
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black pt-0 pb-20 sm:pb-0">
-        {/* Grid Distortion Background */}
-        <div className="absolute inset-0 z-0 w-full h-full">
-          <GridDistortion
-            imageSrc="/Images/griddistortion.webp"
-            grid={10}
-            mouse={0.15}
-            strength={0.2}
-            relaxation={0.9}
-          />
-        </div>
+      <Hero language={language} cvFile={cvFile} />
 
-        {/* Gradient overlay for better text readability */}
-        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-transparent to-black/60 pointer-events-none" />
+      <div className="relative bg-dark">
+        <NowSection language={language} />
+        {latestArticle && (
+          <LatestWriting article={latestArticle} language={language} isEnglish={isEnglish} />
+        )}
+        <ClosingCallToAction language={language} />
+      </div>
 
-        {/* Content */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="relative z-20 container px-6 ultrawide:px-8 4k:px-12 text-center max-w-4xl ultrawide:max-w-6xl 4k:max-w-[90rem] mx-auto pt-0 sm:pt-20 desktop:pt-32 ultrawide:pt-24 4k:pt-28"
-        >
-          {/* Greeting */}
-          <motion.div variants={itemVariants} className="mb-3 4k:mb-4">
-            <span className="font-display text-sm tablet:text-base laptop:text-lg desktop:text-xl ultrawide:text-3xl 4k:text-4xl text-gray-400 font-medium uppercase tracking-[0.28em]">
-              {content.greeting}
-            </span>
-          </motion.div>
-
-          {/* Name with Decrypted Text effect */}
-          <motion.h1
-            variants={itemVariants}
-            className="font-display text-4xl tablet:text-5xl laptop:text-6xl desktop:text-7xl ultrawide:text-9xl 4k:text-[12rem] font-bold text-primary mb-4 4k:mb-6 tracking-[-0.035em] text-balance"
-          >
-            <DecryptedText
-              text={content.name}
-              speed={20}
-              delay={200}
-              id="hero-name"
-              className="text-primary"
-            />
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            variants={itemVariants}
-            className="text-base tablet:text-lg laptop:text-xl desktop:text-2xl ultrawide:text-4xl 4k:text-5xl text-gray-300/90 leading-relaxed max-w-2xl ultrawide:max-w-4xl 4k:max-w-6xl mx-auto mb-8 4k:mb-12 font-normal text-pretty"
-          >
-            {content.subtitle}
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 ultrawide:gap-6 4k:gap-8"
-          >
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <Link
-                href="/about"
-                className="inline-flex items-center px-8 py-4 ultrawide:px-10 ultrawide:py-5 4k:px-14 4k:py-7 bg-primary hover:bg-primary-dark text-white text-base ultrawide:text-lg 4k:text-2xl font-semibold rounded-2xl 4k:rounded-3xl transition-colors duration-200 shadow-lg shadow-primary/25"
-              >
-                {content.ctaAbout}
-                <FiArrowRight className="ml-2 w-5 h-5 ultrawide:w-6 ultrawide:h-6 4k:w-8 4k:h-8" />
-              </Link>
-            </motion.div>
-
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <a
-                href={cvFile}
-                className="inline-flex items-center px-8 py-4 ultrawide:px-10 ultrawide:py-5 4k:px-14 4k:py-7 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white text-base ultrawide:text-lg 4k:text-2xl font-semibold rounded-2xl 4k:rounded-3xl border border-white/20 transition-colors duration-200"
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-              >
-                <FiDownload className="mr-2 w-5 h-5 ultrawide:w-6 ultrawide:h-6 4k:w-8 4k:h-8" />
-                {content.ctaCv}
-              </a>
-            </motion.div>
-          </motion.div>
-
-        </motion.div>
-      </section>
-      
       <EnzoIAChat />
     </Layout>
   );
+}
+
+export function getStaticProps({ locale }) {
+  const [latestArticle = null] = getArticleSummaries(locale);
+  return { props: { latestArticle } };
 }

@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { fontVariables } from '../lib/fonts';
 
@@ -28,20 +28,22 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   return (
-    <div className={`${fontVariables} font-sans`}>
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={router.asPath}
-          variants={pageVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Component {...pageProps} />
-        </motion.div>
-      </AnimatePresence>
-      <Analytics />
-    </div>
+    <MotionConfig reducedMotion='user'>
+      <div className={`${fontVariables} font-sans`}>
+        <AnimatePresence mode='wait' initial={false}>
+          <motion.div
+            key={router.asPath}
+            variants={pageVariants}
+            initial='initial'
+            animate='animate'
+            exit='exit'
+          >
+            <Component {...pageProps} />
+          </motion.div>
+        </AnimatePresence>
+        <Analytics />
+      </div>
+    </MotionConfig>
   );
 }
 
