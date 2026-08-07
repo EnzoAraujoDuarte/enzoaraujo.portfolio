@@ -3,8 +3,10 @@ import Image from 'next/image';
 import { FiArrowUpRight, FiCode } from 'react-icons/fi';
 
 import { EASE, DURATION, viewportOnce, clipReveal } from '../../lib/motion';
+import { useParallax } from '../../hooks/useParallax';
 
 export default function ProjectCard({ project, index, isEnglish }) {
+  const { ref: parallaxRef, y: imageY } = useParallax(14);
   const Wrapper = project.url ? 'a' : 'div';
   const linkProps = project.url
     ? { href: project.url, target: '_blank', rel: 'noopener noreferrer' }
@@ -16,6 +18,7 @@ export default function ProjectCard({ project, index, isEnglish }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
       transition={{ duration: DURATION.base, delay: (index % 3) * 0.08, ease: EASE.out }}
+      ref={parallaxRef}
       className="h-full"
     >
       <Wrapper {...linkProps} className="group flex flex-col h-full">
@@ -26,6 +29,7 @@ export default function ProjectCard({ project, index, isEnglish }) {
           viewport={viewportOnce}
           className="relative aspect-[16/10] overflow-hidden rounded-xl bg-dark-lighter"
         >
+          <motion.div style={{ y: imageY }} className="absolute -inset-y-[9%] inset-x-0">
           {project.images?.[0] ? (
             <>
               <Image
@@ -50,6 +54,7 @@ export default function ProjectCard({ project, index, isEnglish }) {
               <FiCode className="w-10 h-10 text-primary/25" />
             </div>
           )}
+          </motion.div>
 
           <span
             className={`absolute top-3 left-3 z-10 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold backdrop-blur-sm border ${

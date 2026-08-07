@@ -7,11 +7,14 @@ import { FiArrowRight, FiArrowUpRight, FiDownload } from 'react-icons/fi';
 
 import Layout from '../components/layout/Layout';
 import RevealLine from '../components/home/RevealLine';
+import ScrollRevealStatement from '../components/home/ScrollRevealStatement';
+import MagneticButton from '../components/ui/MagneticButton';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import { getArticleSummaries } from '../lib/articles';
 import { formatArticleDate } from '../utils/dateUtils';
 import { EASE, DURATION, viewportOnce } from '../lib/motion';
+import { useParallax } from '../hooks/useParallax';
 
 // Lazy load effects and the chat widget to keep the hero bundle small
 const GridDistortion = dynamic(
@@ -31,8 +34,13 @@ const fadeUp = {
 };
 
 function Hero({ language, cvFile }) {
+  const { ref: heroRef, y: contentY } = useParallax(-70, ['start start', 'end start']);
+
   return (
-    <section className="relative min-h-[100svh] w-full flex items-center overflow-hidden bg-black">
+    <section
+      ref={heroRef}
+      className="relative min-h-[100svh] w-full flex items-center overflow-hidden bg-black"
+    >
       <div className="absolute inset-0 z-0">
         <GridDistortion
           imageSrc="/Images/griddistortion.webp"
@@ -49,6 +57,7 @@ function Hero({ language, cvFile }) {
         initial="hidden"
         animate="visible"
         variants={stagger}
+        style={{ y: contentY }}
         className="relative z-20 container py-32 tablet:py-40"
       >
         <RevealLine className="font-display text-xs tablet:text-sm font-medium uppercase tracking-[0.3em] text-primary mb-6 tablet:mb-8">
@@ -73,13 +82,15 @@ function Hero({ language, cvFile }) {
           variants={fadeUp}
           className="mt-10 tablet:mt-12 flex flex-col largemobile:flex-row largemobile:items-center gap-4"
         >
-          <Link
-            href="/about"
-            className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
-          >
-            {t('home.cta.about', language)}
-            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          <MagneticButton>
+            <Link
+              href="/about"
+              className="group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
+            >
+              {t('home.cta.about', language)}
+              <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </MagneticButton>
 
           <a
             href={cvFile}
@@ -262,13 +273,15 @@ function ClosingCallToAction({ language }) {
             {t('home.cta.text', language)}
           </p>
 
-          <Link
-            href="/contact"
-            className="group mt-9 inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
-          >
-            {t('home.cta.button', language)}
-            <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          <MagneticButton className="mt-9">
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-2 px-7 py-4 rounded-xl bg-primary text-white text-sm tablet:text-base font-semibold hover:bg-primary-dark transition-colors duration-200"
+            >
+              {t('home.cta.button', language)}
+              <FiArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </MagneticButton>
         </div>
       </motion.div>
     </section>
@@ -344,6 +357,11 @@ export default function Home({ latestArticle }) {
 
       <div className="relative bg-dark">
         <NowSection language={language} />
+
+        <ScrollRevealStatement
+          eyebrow={t('home.statement.eyebrow', language)}
+          text={t('home.statement', language)}
+        />
         {latestArticle && (
           <LatestWriting article={latestArticle} language={language} isEnglish={isEnglish} />
         )}

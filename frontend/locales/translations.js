@@ -25,6 +25,9 @@ const translations = {
     'home.now.focus3.text': 'Interfaces em React e Next.js, com atenção a performance e ao detalhe que o usuário sente.',
     'home.now.cta': 'Conheça minha trajetória',
 
+    'home.statement.eyebrow': 'O que me guia',
+    'home.statement': 'Entender o problema a fundo, escolher a ferramenta certa e entregar algo prático, escalável e alinhado ao negócio.',
+
     'home.writing.eyebrow': 'Escrita recente',
     'home.writing.all': 'Ver tudo que escrevi',
 
@@ -116,6 +119,9 @@ const translations = {
     'home.now.focus3.title': 'Web applications',
     'home.now.focus3.text': 'Interfaces in React and Next.js, with an eye on performance and the detail a user feels.',
     'home.now.cta': 'See my career',
+
+    'home.statement.eyebrow': 'What drives me',
+    'home.statement': 'Understand the problem deeply, choose the right tool and deliver something practical, scalable and aligned with the business.',
 
     'home.writing.eyebrow': 'Latest writing',
     'home.writing.all': 'See everything I have written',

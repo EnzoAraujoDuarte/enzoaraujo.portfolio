@@ -65,17 +65,34 @@ function AboutHero({ language, isEnglish }) {
 
       <motion.div
         variants={fadeUp}
-        className="relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 rounded-3xl overflow-hidden border border-white/[0.08] flex-shrink-0"
+        className="group relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 flex-shrink-0"
       >
-        <Image
-          src="/Images/enzo-profile.webp"
-          alt="Enzo Araujo Duarte"
-          fill
-          sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
-          className="object-cover object-center"
-          priority
-          quality={85}
-        />
+        {/* Soft bloom so the portrait sits in the page rather than on top of it */}
+        <div className="absolute -inset-6 rounded-full bg-primary/20 blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
+
+        <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/[0.08]">
+          <Image
+            src="/Images/enzo-profile.webp"
+            alt="Enzo Araujo Duarte"
+            fill
+            sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
+            className="object-cover object-center saturate-[0.75] contrast-[1.05] transition-[filter,transform] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:saturate-100 group-hover:scale-[1.04]"
+            priority
+            quality={85}
+          />
+
+          {/* Grain inside the frame, matching the page texture */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 opacity-[0.14] mix-blend-overlay pointer-events-none"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E\")",
+            }}
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent pointer-events-none" />
+        </div>
       </motion.div>
     </motion.section>
   );
