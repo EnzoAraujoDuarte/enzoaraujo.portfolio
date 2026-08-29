@@ -1,49 +1,52 @@
-import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
+import { gsap, useGSAP } from '../../lib/gsap';
+import { EASE, prefersReducedMotion } from '../../lib/motion';
 
-const SPRING = { stiffness: 260, damping: 22, mass: 0.4 };
+const PULL = 0.28;
 
 /**
- * Pulls its child a little toward the pointer. Skipped for coarse pointers and
- * for visitors who asked for reduced motion, so it never affects tap targets.
+ * The button leans toward the pointer while it is nearby and springs back when
+ * it leaves. Positions go straight into the transform via quickTo — a spring
+ * per pointer event through React state costs far more than the effect is worth.
  */
-export default function MagneticButton({ children, strength = 0.28, className = '' }) {
+export default function MagneticButton({ children, className = '' }) {
   const ref = useRef(null);
-  const [isEnabled, setIsEnabled] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
 
-  const x = useSpring(useMotionValue(0), SPRING);
-  const y = useSpring(useMotionValue(0), SPRING);
+  useGSAP(
+    () => {
+      const el = ref.current;
+      if (!el || prefersReducedMotion() || window.matchMedia('(hover: none)').matches) {
+        return undefined;
+      }
 
-  const handleEnter = () => {
-    setIsEnabled(
-      !prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    );
-  };
+      const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: EASE.follow });
+      const y = gsap.quickTo(el, 'y', { duration: 0.5, ease: EASE.follow });
 
-  const handleMove = (event) => {
-    if (!isEnabled || !ref.current) return;
+      const onMove = (event) => {
+        const rect = el.getBoundingClientRect();
+        x((event.clientX - (rect.left + rect.width / 2)) * PULL);
+        y((event.clientY - (rect.top + rect.height / 2)) * PULL);
+      };
 
-    const rect = ref.current.getBoundingClientRect();
-    x.set((event.clientX - (rect.left + rect.width / 2)) * strength);
-    y.set((event.clientY - (rect.top + rect.height / 2)) * strength);
-  };
+      const onLeave = () => {
+        x(0);
+        y(0);
+      };
 
-  const handleLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+      el.addEventListener('pointermove', onMove);
+      el.addEventListener('pointerleave', onLeave);
+
+      return () => {
+        el.removeEventListener('pointermove', onMove);
+        el.removeEventListener('pointerleave', onLeave);
+      };
+    },
+    { scope: ref }
+  );
 
   return (
-    <motion.div
-      ref={ref}
-      style={{ x, y }}
-      onMouseEnter={handleEnter}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      className={`inline-block ${className}`}
-    >
+    <div ref={ref} className={`inline-block will-change-transform ${className}`}>
       {children}
-    </motion.div>
+    </div>
   );
 }

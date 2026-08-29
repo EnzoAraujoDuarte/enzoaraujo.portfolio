@@ -326,7 +326,7 @@ export default function EnzoIAChat() {
     <>
       <motion.button
         onClick={handleButtonClick}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary hover:bg-primary-dark text-white shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-ember hover:bg-ember-dim text-bone shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 20 }}
@@ -334,7 +334,7 @@ export default function EnzoIAChat() {
         transition={{ delay: 1 }}
       >
         <BotMessageSquare className="w-6 h-6" />
-        <span className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+        <span className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-bone text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
           {isEnglish ? 'Chat with my AI version' : 'Converse com minha versão IA'}
         </span>
       </motion.button>
@@ -347,7 +347,7 @@ export default function EnzoIAChat() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+                className="fixed inset-0 z-50 bg-ink/95 flex items-center justify-center"
                 onClick={() => {
                   if (codeComplete) {
                     setShowCodeAnimation(false);
@@ -366,7 +366,7 @@ export default function EnzoIAChat() {
                       setShowCodeAnimation(false);
                       setCodeComplete(true);
                     }}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                    className="absolute top-4 right-4 p-2 text-bone/55 hover:text-bone hover:bg-gray-800 rounded-lg transition-colors"
                     title={isEnglish ? 'Skip animation' : 'Pular animação'}
                   >
                     <FastForward className="w-5 h-5" />
@@ -377,14 +377,14 @@ export default function EnzoIAChat() {
                       <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     </div>
-                    <span className="text-gray-400 ml-2 font-mono text-sm">terminal</span>
+                    <span className="text-bone/55 ml-2 font-mono text-sm">terminal</span>
                   </div>
                   <div 
                     ref={animationScrollRef}
-                    className="bg-black/50 rounded p-4 h-96 overflow-auto font-mono text-sm hide-scrollbar"
+                    className="bg-ink/60 rounded p-4 h-96 overflow-auto font-mono text-sm hide-scrollbar"
                   >
                     {displayedCode.map((line, index) => (
-                      <div key={index} className="mb-1 text-gray-300">
+                      <div key={index} className="mb-1 text-bone/70">
                         {line === '' ? (
                           <span>&nbsp;</span>
                         ) : (
@@ -392,16 +392,16 @@ export default function EnzoIAChat() {
                             {line.includes('console.log') ? (
                               <>
                                 <span className="text-blue-400">console</span>
-                                <span className="text-gray-400">.</span>
+                                <span className="text-bone/55">.</span>
                                 <span className="text-yellow-400">log</span>
-                                <span className="text-gray-400">(</span>
+                                <span className="text-bone/55">(</span>
                                 <span className="text-green-400">{line.match(/'([^']+)'/)?.[0] || ''}</span>
-                                <span className="text-gray-400">)</span>
+                                <span className="text-bone/55">)</span>
                               </>
                             ) : line.includes('//') ? (
                               <>
                                 <span>{line.split('//')[0]}</span>
-                                <span className="text-gray-500">//{line.split('//')[1]}</span>
+                                <span className="text-ash">//{line.split('//')[1]}</span>
                               </>
                             ) : (
                               <span>{line}</span>
@@ -411,12 +411,12 @@ export default function EnzoIAChat() {
                         {index === displayedCode.length - 1 &&
                          currentLine < getInitializationCode(language).length &&
                          currentChar < (getInitializationCode(language)[currentLine]?.length || 0) && (
-                          <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse"></span>
+                          <span className="inline-block w-2 h-4 bg-ember ml-1 animate-pulse"></span>
                         )}
                       </div>
                     ))}
                     {currentLine >= getInitializationCode(language).length && !codeComplete && (
-                      <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse"></span>
+                      <span className="inline-block w-2 h-4 bg-ember ml-1 animate-pulse"></span>
                     )}
                     {codeComplete && (
                       <motion.div
@@ -438,23 +438,23 @@ export default function EnzoIAChat() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-dark-secondary shadow-2xl flex flex-col"
+                className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-graphite shadow-2xl flex flex-col"
               >
                 <div className="flex items-center justify-between p-4 border-b border-gray-700">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-primary font-bold">EA</span>
+                    <div className="w-10 h-10 rounded-full bg-ember/20 flex items-center justify-center">
+                      <span className="text-ember font-bold">EA</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white">EnzoIA</h3>
-                      <p className="text-xs text-gray-400">Online</p>
+                      <h3 className="font-semibold text-bone">EnzoIA</h3>
+                      <p className="text-xs text-bone/55">Online</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-dark rounded-full transition-colors"
+                    className="p-2 hover:bg-ink rounded-full transition-colors"
                   >
-                    <FiX className="w-5 h-5 text-gray-400" />
+                    <FiX className="w-5 h-5 text-bone/55" />
                   </button>
                 </div>
 
@@ -465,7 +465,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1, y: 0 }}
                       className="space-y-2 mb-4"
                     >
-                      <p className="text-sm text-gray-400 mb-3 font-medium">
+                      <p className="text-sm text-bone/55 mb-3 font-medium">
                         {isEnglish ? 'Suggested questions:' : 'Perguntas sugeridas:'}
                       </p>
                       {SUGGESTED_QUESTIONS.map((question, index) => (
@@ -475,7 +475,7 @@ export default function EnzoIAChat() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.1 }}
                           onClick={() => handleQuestionClick(question)}
-                          className="w-full text-left p-3 rounded-lg bg-dark hover:bg-dark-lighter transition-colors text-sm text-gray-300 border border-transparent hover:border-primary/20"
+                          className="w-full text-left p-3 rounded-lg bg-ink hover:bg-graphite transition-colors text-sm text-bone/70 border border-transparent hover:border-ember/20"
                         >
                           {question}
                         </motion.button>
@@ -495,8 +495,8 @@ export default function EnzoIAChat() {
                         animate={{ opacity: 1, scale: 1 }}
                         className={`max-w-[80%] rounded-lg p-3 ${
                           message.type === 'user'
-                            ? 'bg-primary text-white'
-                            : 'bg-dark text-white'
+                            ? 'bg-ember text-ink'
+                            : 'bg-graphite text-bone'
                         }`}
                       >
                         <p className="text-sm whitespace-pre-wrap">{message.text}</p>
@@ -510,7 +510,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1, y: 0 }}
                       className="flex justify-start"
                     >
-                      <div className="max-w-[80%] rounded-lg p-3 bg-dark text-white">
+                      <div className="max-w-[80%] rounded-lg p-3 bg-ink text-bone">
                         <p className="text-sm whitespace-pre-wrap">{streamingText}</p>
                       </div>
                     </motion.div>
@@ -522,7 +522,7 @@ export default function EnzoIAChat() {
                       animate={{ opacity: 1 }}
                       className="flex justify-start"
                     >
-                      <div className="bg-dark rounded-lg p-3">
+                      <div className="bg-ink rounded-lg p-3">
                         <div className="flex gap-1">
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -543,15 +543,15 @@ export default function EnzoIAChat() {
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder={isEnglish ? 'Type your message...' : 'Digite sua mensagem...'}
-                      className="flex-1 px-4 py-2 border border-gray-600 rounded-lg bg-dark text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="flex-1 px-4 py-2 border border-gray-600 rounded-lg bg-ink text-bone placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ember"
                     />
                     <button
                       onClick={() => handleSendMessage()}
                       disabled={!inputValue.trim() || isLoading}
-                      className="p-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      className="p-2 bg-ember text-ink rounded-lg hover:bg-ember-dim disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {isLoading ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-5 h-5 border-2 border-ink border-t-transparent rounded-full animate-spin"></div>
                       ) : (
                         <FiSend className="w-5 h-5" />
                       )}

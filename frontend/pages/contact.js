@@ -1,5 +1,6 @@
+import { useRef } from 'react';
 import Layout from '../components/layout/Layout';
-import { motion } from 'framer-motion';
+import { useReveal } from '../hooks/useReveal';
 import { FiGithub, FiLinkedin, FiMail, FiArrowUpRight } from 'react-icons/fi';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
@@ -8,6 +9,8 @@ import ContactForm from '../components/contact/ContactForm';
 import PageBackdrop from '../components/layout/PageBackdrop';
 
 export default function Contact() {
+  const rootRef = useRef(null);
+  useReveal(rootRef);
   const { language } = useLanguage();
   const isEnglish = language === 'en-US';
 
@@ -25,8 +28,8 @@ export default function Contact() {
       title: 'GitHub',
       description: t('contact.github', language),
       link: 'https://github.com/EnzoAraujoDuarte',
-      color: 'group-hover:text-white',
-      bgColor: 'group-hover:bg-white/10',
+      color: 'group-hover:text-bone',
+      bgColor: 'group-hover:bg-bone/10',
     },
     {
       icon: <FiLinkedin />,
@@ -41,13 +44,14 @@ export default function Contact() {
       title: 'Email',
       description: t('contact.email', language),
       link: 'mailto:araujoduarteenzo@gmail.com',
-      color: 'group-hover:text-primary',
-      bgColor: 'group-hover:bg-primary/10',
+      color: 'group-hover:text-ember',
+      bgColor: 'group-hover:bg-ember/10',
     },
   ];
 
   return (
     <Layout>
+      <div ref={rootRef}>
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -58,6 +62,10 @@ export default function Contact() {
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content="https://enzoaraujo.site/contact" />
+        <meta property="og:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary" />
@@ -71,110 +79,96 @@ export default function Contact() {
         {/* Content */}
         <div className="relative z-10 container py-24 tablet:py-32">
           {/* Header Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12 tablet:mb-16"
-          >
-            <h1 className="text-4xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-4">
+          <div data-reveal-group className="mb-12 tablet:mb-16">
+            <p data-reveal className="meta mb-6 text-ember">
+              {isEnglish ? 'Get in touch' : 'Fale comigo'}
+            </p>
+            <h1
+              data-reveal
+              className="font-display text-4xl tablet:text-5xl laptop:text-6xl font-semibold text-bone tracking-[-0.04em] leading-[0.98] text-balance"
+            >
               {t('contact.title', language)}
             </h1>
-            <p className="text-lg tablet:text-xl text-gray-400 max-w-2xl mx-auto">
+            <p data-reveal className="mt-6 max-w-2xl text-base tablet:text-lg text-bone/55 text-pretty">
               {t('contact.subtitle', language)}
             </p>
-          </motion.div>
+          </div>
 
           {/* Main Content Grid */}
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 laptop:grid-cols-5 gap-8 laptop:gap-12">
               {/* Form Section - Takes 3 columns */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="laptop:col-span-3"
-              >
-                <div className="bg-dark-secondary/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 tablet:p-8 border border-gray-800">
+              <div data-reveal
+                className="laptop:col-span-3">
+                <div className="bg-graphite/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 tablet:p-8 border border-gray-800">
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-white mb-2">
+                    <h2 className="text-2xl font-bold text-bone mb-2">
                       {t('contact.form.title', language)}
                     </h2>
-                    <p className="text-gray-400">
+                    <p className="text-bone/55">
                       {t('contact.form.subtitle', language)}
                     </p>
                   </div>
                   <ContactForm />
                 </div>
-              </motion.div>
+              </div>
 
               {/* Contact Links Section - Takes 2 columns */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="laptop:col-span-2 space-y-6"
-              >
+              <div data-reveal
+                className="laptop:col-span-2 space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">
+                  <h2 className="text-2xl font-bold text-bone mb-6">
                     {isEnglish ? 'Connect with me' : 'Conecte-se comigo'}
                   </h2>
 
                   <div className="space-y-4">
                     {contactLinks.map((item, index) => (
-                      <motion.a
+                      <a data-reveal
                         key={item.title}
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                        className={`group flex items-center gap-4 p-4 bg-dark-secondary/60 backdrop-blur-sm rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-lg hover:border-transparent ${item.bgColor}`}
-                      >
-                        <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-dark-lighter text-gray-400 text-2xl transition-colors duration-300 ${item.color}`}>
+                        className={`group flex items-center gap-4 p-4 bg-graphite/60 backdrop-blur-sm rounded-xl border border-gray-800 transition-all duration-300 hover:shadow-lg hover:border-transparent ${item.bgColor}`}>
+                        <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-graphite text-bone/55 text-2xl transition-colors duration-300 ${item.color}`}>
                           {item.icon}
                         </div>
                         <div className="flex-grow min-w-0">
-                          <h3 className="font-semibold text-white mb-0.5">
+                          <h3 className="font-semibold text-bone mb-0.5">
                             {item.title}
                           </h3>
-                          <p className="text-sm text-gray-400 truncate">
+                          <p className="text-sm text-bone/55 truncate">
                             {item.description}
                           </p>
                         </div>
-                        <FiArrowUpRight className="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-300" />
-                      </motion.a>
+                        <FiArrowUpRight className="flex-shrink-0 w-5 h-5 text-bone/55 group-hover:text-ember transition-colors duration-300" />
+                      </a>
                     ))}
                   </div>
                 </div>
 
                 {/* Additional Info Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.7 }}
-                  className="p-6 bg-gradient-to-br to-transparent from-primary/20 via-primary/10 rounded-2xl border border-primary/20"
-                >
-                  <h3 className="font-semibold text-white mb-2">
+                <div data-reveal
+                  className="rounded-2xl border border-bone/[0.08] bg-graphite/60 p-6">
+                  <h3 className="mb-3 font-display font-semibold text-bone">
                     {isEnglish ? 'Available for' : 'Disponível para'}
                   </h3>
-                  <ul className="space-y-2 text-sm text-gray-400">
+                  <ul className="space-y-2 text-sm text-bone/55">
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <span className="h-1 w-1 rounded-full bg-ember" />
                       {isEnglish ? 'Freelance' : 'Freelance'} 
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <span className="h-1 w-1 rounded-full bg-ember" />
                       {isEnglish ? 'Technical consulting' : 'Consultoria técnica'}
                     </li>
                   </ul>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     </Layout>
   );
 }

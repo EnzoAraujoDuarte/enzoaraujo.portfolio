@@ -96,13 +96,13 @@ export default function ContactForm() {
 
   const inputClasses = (fieldName) => `
     w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all duration-300
-    bg-dark/50 text-white
-    placeholder:text-gray-500
-    focus:outline-none focus:bg-dark
+    bg-graphite/60 text-bone
+    placeholder:text-ash
+    focus:outline-none focus:bg-graphite
     ${errors[fieldName]
       ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
       : focusedField === fieldName
-        ? 'border-primary focus:border-primary focus:ring-4 focus:ring-primary/10'
+        ? 'border-ember focus:border-ember focus:ring-4 focus:ring-ember/10'
         : 'border-gray-700 hover:border-gray-600'
     }
   `;
@@ -112,8 +112,8 @@ export default function ContactForm() {
     ${errors[fieldName]
       ? 'text-red-400'
       : focusedField === fieldName
-        ? 'text-primary'
-        : 'text-gray-500'
+        ? 'text-ember'
+        : 'text-ash'
     }
   `;
 
@@ -121,8 +121,8 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Name Field */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-          {t('contact.form.name', language)} <span className="text-primary">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-bone/70 mb-2">
+          {t('contact.form.name', language)} <span className="text-ember">*</span>
         </label>
         <div className="relative">
           <FiUser className={iconClasses('name')} size={18} />
@@ -155,8 +155,8 @@ export default function ContactForm() {
 
       {/* Email Field */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-          {t('contact.form.email', language)} <span className="text-primary">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-bone/70 mb-2">
+          {t('contact.form.email', language)} <span className="text-ember">*</span>
         </label>
         <div className="relative">
           <FiMail className={iconClasses('email')} size={18} />
@@ -189,8 +189,8 @@ export default function ContactForm() {
 
       {/* Subject Field */}
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
-          {t('contact.form.subject', language)} <span className="text-primary">*</span>
+        <label htmlFor="subject" className="block text-sm font-medium text-bone/70 mb-2">
+          {t('contact.form.subject', language)} <span className="text-ember">*</span>
         </label>
         <div className="relative">
           <FiFileText className={iconClasses('subject')} size={18} />
@@ -223,16 +223,16 @@ export default function ContactForm() {
 
       {/* Message Field */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-          {t('contact.form.message', language)} <span className="text-primary">*</span>
+        <label htmlFor="message" className="block text-sm font-medium text-bone/70 mb-2">
+          {t('contact.form.message', language)} <span className="text-ember">*</span>
         </label>
         <div className="relative">
           <FiMessageSquare className={`absolute left-4 top-4 transition-colors duration-300 ${
             errors.message
               ? 'text-red-400'
               : focusedField === 'message'
-                ? 'text-primary'
-                : 'text-gray-500'
+                ? 'text-ember'
+                : 'text-ash'
           }`} size={18} />
           <textarea
             id="message"
@@ -244,13 +244,13 @@ export default function ContactForm() {
             rows={5}
             className={`
               w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all duration-300
-              bg-dark/50 text-white
-              placeholder:text-gray-500
-              focus:outline-none focus:bg-dark resize-none
+              bg-graphite/60 text-bone
+              placeholder:text-ash
+              focus:outline-none focus:bg-ink resize-none
               ${errors.message
                 ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
                 : focusedField === 'message'
-                  ? 'border-primary focus:border-primary focus:ring-4 focus:ring-primary/10'
+                  ? 'border-ember focus:border-ember focus:ring-4 focus:ring-ember/10'
                   : 'border-gray-700 hover:border-gray-600'
               }
             `}
@@ -314,18 +314,18 @@ export default function ContactForm() {
         whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
         whileTap={{ scale: isSubmitting ? 1 : 0.99 }}
         className={`
-          w-full py-4 px-6 rounded-xl font-semibold text-white
+          w-full py-4 px-6 rounded-xl font-semibold text-ink
           flex items-center justify-center gap-2.5
           transition-all duration-300
           ${isSubmitting
-            ? 'bg-primary/70 cursor-not-allowed'
-            : 'bg-primary hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25'
+            ? 'bg-ember/70 cursor-not-allowed'
+            : 'bg-ember hover:bg-ember-dim hover:shadow-lg hover:shadow-ember/25'
           }
         `}
       >
         {isSubmitting ? (
           <>
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />
             <span>{t('contact.form.sending', language)}</span>
           </>
         ) : (
