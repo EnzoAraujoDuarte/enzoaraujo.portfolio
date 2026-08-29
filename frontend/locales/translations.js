@@ -9,7 +9,7 @@ const translations = {
     // Home page
     'home.greeting': 'Olá, eu sou',
     'home.title': 'Enzo Araujo Duarte',
-    'home.subtitle': 'Desenvolvedor de software focado em e-commerce e sistemas web. Uso a tecnologia como ferramenta para resolver problemas reais de negócio — não o contrário.',
+    'home.subtitle': 'Desenvolvedor de software focado em *e-commerce* e sistemas web. Uso a tecnologia como ferramenta para resolver problemas reais de negócio — não o contrário.',
     'home.cta.about': 'Saiba mais',
     'home.cta.cv': 'Baixar CV',
     'home.meta.description': 'Software Developer na 260 Sample Sale. Desenvolvimento Shopify, sistemas internos e aplicações web com PHP, Laravel, React, Next.js, Liquid e GraphQL.',
@@ -26,7 +26,7 @@ const translations = {
     'home.now.cta': 'Conheça minha trajetória',
 
     'home.statement.eyebrow': 'O que me guia',
-    'home.statement': 'Entender o problema a fundo, escolher a ferramenta certa e entregar algo prático, escalável e alinhado ao negócio.',
+    'home.statement': 'Entender o *problema* a fundo, escolher a ferramenta certa e entregar algo prático, escalável e alinhado ao negócio.',
 
     'home.writing.eyebrow': 'Escrita recente',
     'home.writing.all': 'Ver tudo que escrevi',
@@ -104,7 +104,7 @@ const translations = {
     // Home page
     'home.greeting': "Hi, I'm",
     'home.title': 'Enzo Araujo Duarte',
-    'home.subtitle': 'Software developer focused on e-commerce and web systems. I use technology as a tool to solve real business problems — not the other way around.',
+    'home.subtitle': 'Software developer focused on *e-commerce* and web systems. I use technology as a tool to solve real business problems — not the other way around.',
     'home.cta.about': 'Learn more',
     'home.cta.cv': 'Download CV',
     'home.meta.description': 'Software Developer at 260 Sample Sale. Shopify development, internal systems and web applications with PHP, Laravel, React, Next.js, Liquid and GraphQL.',
@@ -121,7 +121,7 @@ const translations = {
     'home.now.cta': 'See my career',
 
     'home.statement.eyebrow': 'What drives me',
-    'home.statement': 'Understand the problem deeply, choose the right tool and deliver something practical, scalable and aligned with the business.',
+    'home.statement': 'Understand the *problem* deeply, choose the right tool and deliver something practical, scalable and aligned with the business.',
 
     'home.writing.eyebrow': 'Latest writing',
     'home.writing.all': 'See everything I have written',
