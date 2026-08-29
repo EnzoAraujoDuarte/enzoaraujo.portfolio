@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { FiArrowUpRight, FiCheck } from 'react-icons/fi';
 
 import Layout from '../components/layout/Layout';
+import { useReveal } from '../hooks/useReveal';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import PageBackdrop from '../components/layout/PageBackdrop';
 import SectionHeading from '../components/about/SectionHeading';
 import CareerTimeline from '../components/about/CareerTimeline';
@@ -15,86 +17,77 @@ import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
 import { getCareer, getSkillDomains, getEducation, getLanguages } from '../components/about/data';
 import { getProjects } from '../components/about/projects';
-import { EASE, DURATION, viewportOnce } from '../lib/motion';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE.out } },
-};
+const DepthPortrait = dynamic(() => import('../components/effects/DepthPortrait'), { ssr: false });
 
 function AboutHero({ language, isEnglish }) {
+  // A depth-displaced plane is a pointer effect; a phone has no pointer.
+  const withDepth = useMediaQuery('(min-width: 768px) and (hover: hover)');
+
   return (
-    <motion.section
-      initial="hidden"
-      animate="visible"
-      variants={{ visible: { transition: { staggerChildren: 0.09 } } }}
-      className="grid grid-cols-1 tablet:grid-cols-[minmax(0,1fr)_auto] tablet:items-end gap-10 tablet:gap-14"
-    >
+    <section
+      data-reveal-group
+      className="grid grid-cols-1 tablet:grid-cols-[minmax(0,1fr)_auto] tablet:items-end gap-10 tablet:gap-14">
       <div>
-        <motion.p
-          variants={fadeUp}
-          className="font-display text-xs font-medium uppercase tracking-[0.28em] text-primary mb-6"
-        >
+        <p data-reveal className="meta mb-6 text-ember">
           {t('about.eyebrow', language)}
-        </motion.p>
+        </p>
 
-        <motion.h1
-          variants={fadeUp}
-          className="font-display text-4xl tablet:text-5xl laptop:text-6xl desktop:text-7xl font-bold text-white leading-[0.98] tracking-[-0.04em] text-balance"
-        >
+        <h1 data-reveal className="font-display text-4xl tablet:text-5xl laptop:text-6xl desktop:text-7xl font-semibold text-bone leading-[0.98] tracking-[-0.04em] text-balance">
           {t('about.headline', language)}
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          variants={fadeUp}
-          className="mt-7 max-w-xl text-base tablet:text-lg text-gray-400 leading-relaxed text-pretty"
-        >
+        <p data-reveal className="mt-7 max-w-xl text-base tablet:text-lg text-bone/55 leading-relaxed text-pretty">
           {t('about.lead', language)}
-        </motion.p>
+        </p>
 
-        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <div data-reveal className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-ember/20 bg-ember/10 px-3 py-1.5 text-xs font-medium text-ember">
+            <span className="h-1.5 w-1.5 rounded-full bg-ember" />
             {t('about.currentRole', language)}
           </span>
-          <span className="text-xs text-gray-600">
+          <span className="text-xs text-ash/70">
             {isEnglish ? 'New York · Remote' : 'Nova York · Remoto'}
           </span>
-        </motion.div>
+        </div>
       </div>
 
-      <motion.div
-        variants={fadeUp}
-        className="group relative w-44 tablet:w-52 laptop:w-60 aspect-square mx-auto tablet:mx-0 flex-shrink-0"
+      <div
+        data-reveal
+        className="group relative mx-auto aspect-square w-52 flex-shrink-0 tablet:mx-0 tablet:w-64 laptop:w-80"
       >
         {/* Soft bloom so the portrait sits in the page rather than on top of it */}
-        <div className="absolute -inset-6 rounded-full bg-primary/20 blur-3xl opacity-60 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
+        <div className="pointer-events-none absolute -inset-6 rounded-full bg-ember/15 opacity-60 blur-3xl transition-opacity duration-700 group-hover:opacity-90" />
 
-        <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/[0.08]">
-          <Image
-            src="/Images/enzo-profile.webp"
-            alt="Enzo Araujo Duarte"
-            fill
-            sizes="(max-width: 768px) 176px, (max-width: 1024px) 208px, 240px"
-            className="object-cover object-center saturate-[0.75] contrast-[1.05] transition-[filter,transform] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:saturate-100 group-hover:scale-[1.04]"
-            priority
-            quality={85}
-          />
+        <div className="relative h-full w-full overflow-hidden rounded-3xl border border-bone/[0.08]">
+          {withDepth ? (
+            <DepthPortrait
+              imageSrc="/Images/enzo-profile.webp"
+              depthSrc="/Images/art/enzo-depth.png"
+            />
+          ) : (
+            <Image
+              src="/Images/enzo-profile.webp"
+              alt="Enzo Araujo Duarte"
+              fill
+              sizes="(max-width: 768px) 208px, (max-width: 1024px) 256px, 320px"
+              className="object-cover object-center saturate-[0.75] contrast-[1.05]"
+              priority
+              quality={85}
+            />
+          )}
 
           {/* Grain inside the frame, matching the page texture */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 opacity-[0.14] mix-blend-overlay pointer-events-none"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E\")",
-            }}
+            className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay"
+            style={{ backgroundImage: 'url(/Images/art/grain-256.png)' }}
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-dark/50 via-transparent to-transparent pointer-events-none" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
         </div>
-      </motion.div>
-    </motion.section>
+      </div>
+    </section>
   );
 }
 
@@ -110,30 +103,20 @@ function ApproachSection({ language, isEnglish }) {
       />
 
       <div className="grid grid-cols-1 laptop:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-8 laptop:gap-14">
-        <motion.blockquote
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: DURATION.base, ease: EASE.out }}
-          className="relative pl-6 border-l-2 border-primary"
-        >
-          <p className="font-display text-xl tablet:text-2xl laptop:text-[1.75rem] font-medium text-gray-100 leading-[1.35] tracking-[-0.02em] text-balance">
+        <blockquote data-reveal
+          className="relative pl-6 border-l-2 border-ember">
+          <p className="font-display text-xl tablet:text-2xl laptop:text-[1.75rem] font-medium text-bone/90 leading-[1.35] tracking-[-0.02em] text-balance">
             {t('about.approach.quote', language)}
           </p>
-        </motion.blockquote>
+        </blockquote>
 
         <div className="space-y-5">
           {paragraphs.map((paragraph, index) => (
-            <motion.p
+            <p data-reveal
               key={paragraph}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: DURATION.base, delay: index * 0.08 }}
-              className="text-base text-gray-400 leading-relaxed text-pretty"
-            >
+              className="text-base text-bone/55 leading-relaxed text-pretty">
               {paragraph}
-            </motion.p>
+            </p>
           ))}
         </div>
       </div>
@@ -156,30 +139,25 @@ function EducationSection({ language, isEnglish }) {
       <div className="grid grid-cols-1 laptop:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 laptop:gap-20">
         <div>
           {education.map((item, index) => (
-            <motion.article
+            <article data-reveal
               key={item.institution}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={viewportOnce}
-              transition={{ duration: DURATION.base, delay: index * 0.08, ease: EASE.out }}
-              className="flex items-start gap-5 py-7 border-t border-white/10 last:border-b"
-            >
+              className="flex items-start gap-5 py-7 border-t border-bone/10 last:border-b">
               <div className="relative w-11 h-11 flex-shrink-0 mt-0.5 opacity-80">
                 <Image src={item.logo} alt={item.institution} fill className="object-contain" />
               </div>
 
               <div className="min-w-0 flex-grow">
                 <div className="flex items-center gap-2.5 flex-wrap mb-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ember">
                     {item.institution} — {item.period}
                   </p>
                   <span
                     className={`inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                      item.isOngoing ? 'text-primary' : 'text-emerald-400'
+                      item.isOngoing ? 'text-ember' : 'text-emerald-400'
                     }`}
                   >
                     {item.isOngoing ? (
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-ember animate-pulse" />
                     ) : (
                       <FiCheck size={9} />
                     )}
@@ -187,22 +165,17 @@ function EducationSection({ language, isEnglish }) {
                   </span>
                 </div>
 
-                <h3 className="font-display text-lg laptop:text-xl font-bold text-white leading-snug tracking-[-0.02em]">
+                <h3 className="font-display text-lg laptop:text-xl font-bold text-bone leading-snug tracking-[-0.02em]">
                   {item.degree}
                 </h3>
               </div>
-            </motion.article>
+            </article>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewportOnce}
-          transition={{ duration: DURATION.base, delay: 0.16, ease: EASE.out }}
-          className="laptop:self-start"
-        >
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500 mb-2">
+        <div data-reveal
+          className="laptop:self-start">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-ash mb-2">
             {isEnglish ? 'Languages' : 'Idiomas'}
           </p>
 
@@ -210,16 +183,16 @@ function EducationSection({ language, isEnglish }) {
             {languages.map((item) => (
               <div
                 key={item.name}
-                className="flex items-baseline justify-between gap-4 py-5 border-t border-white/10 last:border-b"
+                className="flex items-baseline justify-between gap-4 py-5 border-t border-bone/10 last:border-b"
               >
-                <dt className="font-display text-lg font-bold text-white">{item.name}</dt>
-                <dd className="text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                <dt className="font-display text-lg font-bold text-bone">{item.name}</dt>
+                <dd className="text-xs font-semibold uppercase tracking-[0.12em] text-ember">
                   {item.level}
                 </dd>
               </div>
             ))}
           </dl>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -227,24 +200,19 @@ function EducationSection({ language, isEnglish }) {
 
 function ClosingCallToAction({ language, isEnglish }) {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={viewportOnce}
-      transition={{ duration: DURATION.base, ease: EASE.out }}
-      className="pt-4"
-    >
-      <div className="h-px bg-white/10 mb-10 tablet:mb-14" />
+    <section data-reveal
+      className="pt-4">
+      <div className="h-px bg-bone/10 mb-10 tablet:mb-14" />
 
       <div className="flex flex-col tablet:flex-row tablet:items-end tablet:justify-between gap-8">
-        <h2 className="font-display text-2xl tablet:text-3xl laptop:text-4xl font-bold text-white tracking-[-0.03em] leading-tight max-w-lg text-balance">
+        <h2 className="font-display text-2xl tablet:text-3xl laptop:text-4xl font-bold text-bone tracking-[-0.03em] leading-tight max-w-lg text-balance">
           {t('about.cta.title', language)}
         </h2>
 
         <div className="flex flex-wrap gap-3 flex-shrink-0">
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-primary text-white hover:bg-primary-dark transition-colors duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-ember text-ink hover:bg-ember-dim transition-colors duration-200"
           >
             {isEnglish ? 'Get in touch' : 'Falar comigo'}
             <FiArrowUpRight className="w-4 h-4" />
@@ -252,23 +220,26 @@ function ClosingCallToAction({ language, isEnglish }) {
 
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-gray-200 hover:border-primary hover:text-primary transition-colors duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-bone/15 text-bone/80 hover:border-ember hover:text-ember transition-colors duration-200"
           >
             {isEnglish ? 'Read the blog' : 'Ler o blog'}
           </Link>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
 export default function About() {
+  const rootRef = useRef(null);
   const { language } = useLanguage();
   const isEnglish = language === 'en-US';
 
   const career = useMemo(() => getCareer(isEnglish), [isEnglish]);
   const skillDomains = useMemo(() => getSkillDomains(isEnglish), [isEnglish]);
   const projects = useMemo(() => getProjects(isEnglish), [isEnglish]);
+
+  useReveal(rootRef, [isEnglish]);
 
   const pageTitle = isEnglish
     ? 'About | Enzo Araujo Duarte — Software Developer'
@@ -290,12 +261,16 @@ export default function About() {
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content="https://enzoaraujo.site/about" />
 
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
       </Head>
 
-      <div className="relative min-h-screen">
+      <div ref={rootRef} className="relative min-h-screen">
         <PageBackdrop />
 
         <div className="relative z-10 container pt-28 tablet:pt-36 pb-24 tablet:pb-32">
