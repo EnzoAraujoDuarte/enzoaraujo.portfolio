@@ -58,3 +58,6 @@ out/
 # Backup files
 *.bak
 *.backup
+
+# Reference images for asset generation — not shipped
+refs/
