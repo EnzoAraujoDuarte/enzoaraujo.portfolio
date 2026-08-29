@@ -3,26 +3,61 @@
 @tailwind utilities;
 
 :root {
-  --primary: 147, 51, 234;
-  --primary-dark: 126, 34, 206;
-  --primary-light: 168, 85, 247;
-  --dark: 17, 17, 17;
-  --dark-secondary: 31, 31, 31;
-  --dark-lighter: 45, 45, 45;
+  /* Ink & Ember */
+  --ink: 11, 11, 12;
+  --graphite: 22, 22, 26;
+  --bone: 237, 234, 227;
+  --ash: 139, 136, 128;
+  --ember: 255, 77, 28;
+
   color-scheme: dark;
 }
 
 @layer base {
   html {
-    @apply scroll-smooth bg-dark;
+    @apply bg-ink;
   }
 
   body {
-    @apply bg-dark text-white;
+    @apply bg-ink text-bone;
+    /* Warm off-white on ink needs a touch less weight to read the same. */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: rgb(var(--ember));
+    color: rgb(var(--ink));
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-dark rounded-sm;
+    @apply outline-none ring-2 ring-ember ring-offset-2 ring-offset-ink rounded-sm;
+  }
+
+  /* The custom cursor replaces the native one only where there is a real
+     pointer. Text fields keep their caret affordance. */
+  @media (hover: hover) and (pointer: fine) {
+    html {
+      cursor: none;
+    }
+
+    a,
+    button,
+    [data-cursor='target'] {
+      cursor: none;
+    }
+
+    input,
+    textarea,
+    select,
+    [contenteditable] {
+      cursor: auto;
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .cursor-layer {
+      display: none;
+    }
   }
 }
 
@@ -46,30 +81,40 @@
     @apply px-4 mx-auto max-w-7xl largemobile:px-6 laptop:px-8;
   }
 
+  /* Meta rows, section indices, counters. */
+  .meta {
+    @apply font-mono text-[10px] font-medium uppercase tracking-meta text-ash;
+  }
+
+  /* The signature move: one italic serif word inside a grotesk headline. */
+  .accent {
+    @apply font-serif italic font-normal tracking-[-0.01em];
+  }
+
   .btn {
     @apply px-5 py-2.5 font-medium rounded-full shadow-sm transition-all duration-300
     hover:scale-[1.02] active:scale-[0.98];
   }
 
   .btn-primary {
-    @apply text-white bg-primary hover:bg-primary-dark
-    shadow-md hover:shadow-lg border border-primary hover:border-primary-dark;
+    @apply text-ink bg-ember hover:bg-ember-dim
+    shadow-md hover:shadow-lg border border-ember hover:border-ember-dim;
   }
 
   .hide-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
   }
 }
 
 /* Rendered markdown coming from the article pipeline */
 @layer components {
   .prose-article {
-    @apply text-[1.0625rem] leading-[1.75] text-gray-300;
+    @apply text-[1.0625rem] leading-[1.75] text-bone/70;
   }
 
   .prose-article > * + * {
@@ -77,19 +122,19 @@
   }
 
   .prose-article h2 {
-    @apply font-display text-2xl tablet:text-3xl font-bold text-white tracking-[-0.025em] mt-14 mb-5 scroll-mt-28;
+    @apply font-display text-2xl tablet:text-3xl font-semibold text-bone tracking-[-0.025em] mt-14 mb-5 scroll-mt-28;
   }
 
   .prose-article h3 {
-    @apply font-display text-xl font-bold text-white tracking-[-0.02em] mt-10 mb-4 scroll-mt-28;
+    @apply font-display text-xl font-semibold text-bone tracking-[-0.02em] mt-10 mb-4 scroll-mt-28;
   }
 
   .prose-article a {
-    @apply text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-colors;
+    @apply text-ember underline underline-offset-4 decoration-ember/40 hover:decoration-ember transition-colors;
   }
 
   .prose-article strong {
-    @apply text-white font-semibold;
+    @apply text-bone font-medium;
   }
 
   .prose-article ul,
@@ -102,7 +147,7 @@
   }
 
   .prose-article ul > li::before {
-    @apply absolute left-0 top-[0.7em] w-1 h-1 rounded-full bg-primary/60 content-[''];
+    @apply absolute left-0 top-[0.7em] w-1 h-1 rounded-full bg-ember/60 content-[''];
   }
 
   .prose-article ol {
@@ -114,19 +159,19 @@
   }
 
   .prose-article blockquote {
-    @apply border-l-2 border-primary pl-6 my-8 text-lg text-gray-200 italic;
+    @apply border-l-2 border-ember pl-6 my-8 text-lg text-bone/90 italic;
   }
 
   .prose-article code {
-    @apply font-mono text-[0.875em] px-1.5 py-0.5 rounded-md bg-dark-lighter text-primary-light;
+    @apply font-mono text-[0.875em] px-1.5 py-0.5 rounded-md bg-dark-lighter text-ember;
   }
 
   .prose-article pre {
-    @apply my-8 p-5 rounded-2xl bg-dark-secondary border border-white/[0.06] overflow-x-auto text-sm leading-relaxed;
+    @apply my-8 p-5 rounded-2xl bg-graphite border border-bone/[0.06] overflow-x-auto text-sm leading-relaxed;
   }
 
   .prose-article pre code {
-    @apply p-0 bg-transparent text-gray-200 font-mono;
+    @apply p-0 bg-transparent text-bone/80 font-mono;
   }
 
   .prose-article table {
@@ -134,18 +179,18 @@
   }
 
   .prose-article th {
-    @apply text-left font-display font-bold text-white py-3 px-4 border-b border-white/10;
+    @apply text-left font-display font-semibold text-bone py-3 px-4 border-b border-bone/10;
   }
 
   .prose-article td {
-    @apply py-3 px-4 border-b border-white/[0.05] text-gray-400;
+    @apply py-3 px-4 border-b border-bone/[0.05] text-bone/60;
   }
 
   .prose-article hr {
-    @apply my-12 border-white/10;
+    @apply my-12 border-bone/10;
   }
 
   .prose-article img {
-    @apply rounded-2xl border border-white/[0.06] my-8;
+    @apply rounded-2xl border border-bone/[0.06] my-8;
   }
 }
