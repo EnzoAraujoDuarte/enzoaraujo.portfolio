@@ -1,18 +1,20 @@
+import { useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import Layout from '../../components/layout/Layout';
+import { useReveal } from '../../hooks/useReveal';
 import PageBackdrop from '../../components/layout/PageBackdrop';
 import ReadingProgress from '../../components/blog/ReadingProgress';
 import { useLanguage } from '../../hooks/useLanguage';
 import { t } from '../../locales/translations';
 import { getArticle, getArticleSlugs } from '../../lib/articles';
 import { formatArticleDate } from '../../utils/dateUtils';
-import { EASE, DURATION, viewportOnce } from '../../lib/motion';
 
 export default function Article({ article }) {
+  const rootRef = useRef(null);
+  useReveal(rootRef);
   const { language } = useLanguage();
   const isEnglish = language === 'en-US';
 
@@ -30,6 +32,7 @@ export default function Article({ article }) {
 
   return (
     <Layout>
+      <div ref={rootRef}>
       <Head>
         <title>{`${article.title} | Enzo Araujo Duarte`}</title>
         <meta name="description" content={article.description} />
@@ -38,6 +41,10 @@ export default function Article({ article }) {
         <meta property="og:title" content={article.title} />
         <meta property="og:description" content={article.description} />
         <meta property="og:url" content={canonical} />
+        <meta property="og:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:image" content="https://enzoaraujo.site/Images/art/og.jpg" />
         <meta property="article:published_time" content={article.date} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={article.title} />
@@ -57,36 +64,32 @@ export default function Article({ article }) {
           <div className="max-w-3xl mx-auto">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 hover:text-primary transition-colors duration-200"
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-ash hover:text-ember transition-colors duration-200"
             >
               <FiArrowLeft className="w-3.5 h-3.5" />
               {t('blog.backToList', language)}
             </Link>
 
-            <motion.header
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: DURATION.base, ease: EASE.out }}
-              className="mt-10"
-            >
+            <header data-reveal
+              className="mt-10">
               <div className="flex items-center gap-3 flex-wrap text-xs">
                 <time
                   dateTime={article.date}
-                  className="font-semibold uppercase tracking-[0.14em] text-primary tabular-nums"
+                  className="font-semibold uppercase tracking-[0.14em] text-ember tabular-nums"
                 >
                   {formatArticleDate(article.date, isEnglish)}
                 </time>
-                <span className="text-gray-600">·</span>
-                <span className="text-gray-500">
+                <span className="text-ash/70">·</span>
+                <span className="text-ash">
                   {article.readingMinutes} {t('blog.readingTime', language)}
                 </span>
               </div>
 
-              <h1 className="mt-5 font-display text-3xl tablet:text-4xl laptop:text-5xl font-bold text-white leading-[1.05] tracking-[-0.035em] text-balance">
+              <h1 className="mt-5 font-display text-3xl tablet:text-4xl laptop:text-5xl font-bold text-bone leading-[1.05] tracking-[-0.035em] text-balance">
                 {article.title}
               </h1>
 
-              <p className="mt-6 text-lg text-gray-400 leading-relaxed text-pretty">
+              <p className="mt-6 text-lg text-bone/55 leading-relaxed text-pretty">
                 {article.description}
               </p>
 
@@ -95,7 +98,7 @@ export default function Article({ article }) {
                   {article.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-1 rounded-lg text-xs font-medium bg-dark-lighter text-gray-300"
+                      className="px-2.5 py-1 rounded-lg text-xs font-medium bg-graphite text-bone/70"
                     >
                       {tag}
                     </span>
@@ -103,24 +106,21 @@ export default function Article({ article }) {
                 </div>
               )}
 
-              <div className="mt-10 h-px bg-white/10" />
-            </motion.header>
+              <div className="mt-10 h-px bg-bone/10" />
+            </header>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: DURATION.base, delay: 0.12, ease: EASE.out }}
+            <div data-reveal
               className="prose-article mt-12"
               dangerouslySetInnerHTML={{ __html: article.html }}
             />
 
-            <div className="mt-16 pt-10 border-t border-white/10 flex flex-wrap items-center justify-between gap-6">
-              <p className="text-sm text-gray-500">
+            <div className="mt-16 pt-10 border-t border-bone/10 flex flex-wrap items-center justify-between gap-6">
+              <p className="text-sm text-ash">
                 {isEnglish ? 'Written by Enzo Araujo Duarte' : 'Escrito por Enzo Araujo Duarte'}
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-white/15 text-gray-200 hover:border-primary hover:text-primary transition-colors duration-200"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-bone/15 text-bone/80 hover:border-ember hover:text-ember transition-colors duration-200"
               >
                 {isEnglish ? 'Get in touch' : 'Falar comigo'}
               </Link>
@@ -128,6 +128,7 @@ export default function Article({ article }) {
           </div>
         </div>
       </div>
+    </div>
     </Layout>
   );
 }

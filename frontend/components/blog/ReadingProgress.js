@@ -1,14 +1,31 @@
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import { gsap, useGSAP } from '../../lib/gsap';
 
 export default function ReadingProgress() {
-  const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 220, damping: 40, restDelta: 0.001 });
+  const ref = useRef(null);
+
+  useGSAP(
+    () => {
+      // scrub carries the easing, so the bar lags the scroll slightly instead
+      // of snapping — the same job the spring was doing.
+      gsap.fromTo(
+        ref.current,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
+        }
+      );
+    },
+    { scope: ref }
+  );
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       aria-hidden="true"
-      style={{ scaleX: progress }}
-      className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-primary"
+      className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left scale-x-0 bg-ember"
     />
   );
 }
