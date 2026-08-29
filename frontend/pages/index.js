@@ -6,7 +6,7 @@ import { FiArrowRight, FiArrowUpRight, FiDownload } from 'react-icons/fi';
 
 import Layout from '../components/layout/Layout';
 import ScrollRevealStatement from '../components/home/ScrollRevealStatement';
-import PracticeRail from '../components/home/PracticeRail';
+import PracticeSection from '../components/home/PracticeSection';
 import MagneticButton from '../components/ui/MagneticButton';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../locales/translations';
@@ -32,19 +32,42 @@ function Hero({ language, cvFile }) {
     () => {
       const root = rootRef.current;
       const heading = root.querySelector('[data-hero-heading]');
+      const eyebrow = root.querySelector('[data-hero-eyebrow]');
+      const copy = root.querySelectorAll('[data-hero-copy]');
+      const scrollCue = root.querySelector('[data-hero-scroll]');
+
       let split;
+      let intro;
+      let cancelled = false;
 
       // Splitting before the webfont lands measures the fallback and breaks
-      // the lines in the wrong places.
+      // the lines in the wrong places — so the build is async, and async work
+      // inside an effect has to survive being torn down mid-flight. Under
+      // StrictMode this callback fires twice; without the guard the second
+      // pass reads the first one's in-progress values.
       const build = () => {
+        if (cancelled || !heading) return;
+
         split = SplitText.create(heading, { type: 'lines', mask: 'lines' });
 
-        gsap
+        // set + to, never from: a `from` that runs twice records whatever the
+        // element happens to be showing as its destination, which is how the
+        // eyebrow, copy and buttons ended up stranded at opacity 0.
+        gsap.set(split.lines, { yPercent: 115 });
+        gsap.set(eyebrow, { yPercent: 110 });
+        gsap.set(copy, { opacity: 0, y: 22 });
+        gsap.set(scrollCue, { opacity: 0 });
+
+        intro = gsap
           .timeline({ defaults: { ease: M.EASE.expressive } })
-          .from(split.lines, { yPercent: 115, duration: M.DURATION.slow, stagger: M.STAGGER.base })
-          .from('[data-hero-eyebrow]', { yPercent: 110, duration: M.DURATION.base }, 0.1)
-          .fadeUp('[data-hero-copy]', { duration: M.DURATION.base, stagger: M.STAGGER.loose }, '-=0.55')
-          .from('[data-hero-scroll]', { opacity: 0, duration: M.DURATION.base }, '-=0.2');
+          .to(split.lines, { yPercent: 0, duration: M.DURATION.slow, stagger: M.STAGGER.base })
+          .to(eyebrow, { yPercent: 0, duration: M.DURATION.base }, 0.1)
+          .to(
+            copy,
+            { opacity: 1, y: 0, duration: M.DURATION.base, stagger: M.STAGGER.loose, ease: M.EASE.out },
+            '-=0.55'
+          )
+          .to(scrollCue, { opacity: 1, duration: M.DURATION.base }, '-=0.2');
       };
 
       document.fonts.ready.then(build);
@@ -58,7 +81,11 @@ function Hero({ language, cvFile }) {
         });
       }
 
-      return () => split?.revert();
+      return () => {
+        cancelled = true;
+        intro?.kill();
+        split?.revert();
+      };
     },
     { scope: rootRef }
   );
@@ -381,7 +408,7 @@ export default function Home({ latestArticle }) {
       <div ref={rootRef} className="relative bg-ink">
         <NowSection language={language} />
 
-        <PracticeRail isEnglish={isEnglish} />
+        <PracticeSection isEnglish={isEnglish} />
 
         <ScrollRevealStatement
           eyebrow={t('home.statement.eyebrow', language)}
