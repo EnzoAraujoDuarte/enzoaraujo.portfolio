@@ -1,3 +1,18 @@
+/* Plain numbers: gsap tweens the value, css applies the unit. Registering
+   these as <length> would mean gsap had to write "123px" and a bare number
+   would silently fall back to the initial value. */
+@property --x {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --y {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

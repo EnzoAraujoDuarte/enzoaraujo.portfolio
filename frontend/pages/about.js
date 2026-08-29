@@ -1,13 +1,12 @@
 import { useMemo, useRef } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { FiArrowUpRight, FiCheck } from 'react-icons/fi';
 
 import Layout from '../components/layout/Layout';
 import { useReveal } from '../hooks/useReveal';
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import { usePointerMask } from '../hooks/usePointerMask';
 import PageBackdrop from '../components/layout/PageBackdrop';
 import SectionHeading from '../components/about/SectionHeading';
 import CareerTimeline from '../components/about/CareerTimeline';
@@ -18,11 +17,10 @@ import { t } from '../locales/translations';
 import { getCareer, getSkillDomains, getEducation, getLanguages } from '../components/about/data';
 import { getProjects } from '../components/about/projects';
 
-const DepthPortrait = dynamic(() => import('../components/effects/DepthPortrait'), { ssr: false });
-
 function AboutHero({ language, isEnglish }) {
-  // A depth-displaced plane is a pointer effect; a phone has no pointer.
-  const withDepth = useMediaQuery('(min-width: 768px) and (hover: hover)');
+  const plateRef = useRef(null);
+
+  usePointerMask(plateRef);
 
   return (
     <section
@@ -52,41 +50,75 @@ function AboutHero({ language, isEnglish }) {
         </div>
       </div>
 
-      <div
+      {/* Editorial plate, not an avatar. No rounded cutout floating on the
+          page: a 4:5 frame that bleeds into the ink through a gradient mask,
+          with an ember rule sitting on the headline's baseline. The one
+          interaction is a light the cursor carries across it — the page is
+          ink, the person is underneath. */}
+      <figure
         data-reveal
-        className="group relative mx-auto aspect-square w-52 flex-shrink-0 tablet:mx-0 tablet:w-64 laptop:w-80"
+        ref={plateRef}
+        className="group relative mx-auto w-full max-w-[19rem] flex-shrink-0 tablet:mx-0 tablet:max-w-[17rem] laptop:max-w-[21rem]"
       >
-        {/* Soft bloom so the portrait sits in the page rather than on top of it */}
-        <div className="pointer-events-none absolute -inset-6 rounded-full bg-ember/15 opacity-60 blur-3xl transition-opacity duration-700 group-hover:opacity-90" />
+        <div className="relative aspect-[4/5] overflow-hidden">
+          <Image
+            src="/Images/enzo-profile.webp"
+            alt="Enzo Araujo Duarte"
+            fill
+            sizes="(max-width: 768px) 304px, (max-width: 1024px) 272px, 336px"
+            className="object-cover object-[center_18%]"
+            priority
+            quality={88}
+          />
 
-        <div className="relative h-full w-full overflow-hidden rounded-3xl border border-bone/[0.08]">
-          {withDepth ? (
-            <DepthPortrait
-              imageSrc="/Images/enzo-profile.webp"
-              depthSrc="/Images/art/enzo-depth.png"
-            />
-          ) : (
+          {/* The same frame in black and white, revealed only where the cursor
+              is. Nothing regenerates per frame: the mask gradient is fixed and
+              only its position moves. */}
+          <div
+            data-pointer-mask
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out"
+            style={{
+              maskImage: 'radial-gradient(circle closest-side, #000 42%, transparent 100%)',
+              WebkitMaskImage: 'radial-gradient(circle closest-side, #000 42%, transparent 100%)',
+              maskSize: '20rem 20rem',
+              WebkitMaskSize: '20rem 20rem',
+              maskRepeat: 'no-repeat',
+              WebkitMaskRepeat: 'no-repeat',
+              maskPosition: 'calc(var(--x) * 1px - 10rem) calc(var(--y) * 1px - 10rem)',
+              WebkitMaskPosition: 'calc(var(--x) * 1px - 10rem) calc(var(--y) * 1px - 10rem)',
+            }}
+          >
             <Image
               src="/Images/enzo-profile.webp"
-              alt="Enzo Araujo Duarte"
+              alt=""
               fill
-              sizes="(max-width: 768px) 208px, (max-width: 1024px) 256px, 320px"
-              className="object-cover object-center saturate-[0.75] contrast-[1.05]"
-              priority
-              quality={85}
+              sizes="(max-width: 768px) 304px, (max-width: 1024px) 272px, 336px"
+              className="object-cover object-[center_18%] grayscale contrast-[1.18] brightness-[0.95]"
+              quality={88}
             />
-          )}
+          </div>
 
-          {/* Grain inside the frame, matching the page texture */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay"
+            className="pointer-events-none absolute inset-0 opacity-[0.16] mix-blend-overlay"
             style={{ backgroundImage: 'url(/Images/art/grain-256.png)' }}
           />
 
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
+          {/* Bleeds into the page instead of ending at an edge. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent"
+          />
         </div>
-      </div>
+
+        <div className="mt-4 flex items-baseline justify-between gap-4 border-t border-ember/70 pt-3">
+          <figcaption className="meta">Enzo Araujo Duarte</figcaption>
+          <span className="font-mono text-[10px] text-ash/60">
+            {isEnglish ? 'New York · Remote' : 'Nova York · Remoto'}
+          </span>
+        </div>
+      </figure>
     </section>
   );
 }
