@@ -1,0 +1,18 @@
+# The build context is this directory, so the frontend is already outside it.
+.dockerignore
+Dockerfile
+fly.toml
+
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+venv/
+
+start.bat
+vercel.json
+README.md
+Procfile
+run.py
