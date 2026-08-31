@@ -225,10 +225,20 @@ export default function PracticeCorridor({ images, onBeat }) {
         scrub: 0.8,
         invalidateOnRefresh: true,
         anticipatePin: 1,
+        // Pinning here adds several viewports of scroll to everything below,
+        // so this trigger has to be measured before they are. Without the
+        // priority, whichever mounted first won — and the statement further
+        // down ended up fully revealed before it ever reached the screen.
+        refreshPriority: 1,
         onUpdate: (self) => apply(self.progress),
       });
 
       apply(0);
+
+      // This component arrives through a dynamic import, so its pin can be
+      // created after the triggers further down the page have already measured
+      // themselves. Recompute everything now that the pin exists.
+      ScrollTrigger.refresh();
     };
 
     const resizeObserver = new ResizeObserver(() => {

@@ -64,7 +64,9 @@ export default function ScrollRevealStatement({ text, eyebrow }) {
         split?.revert();
       };
     },
-    { scope: rootRef }
+    // Same reason as the hero: the paragraph's children belong to SplitText,
+    // so a change of copy has to tear the split down first.
+    { scope: rootRef, dependencies: [text] }
   );
 
   return (
@@ -73,6 +75,7 @@ export default function ScrollRevealStatement({ text, eyebrow }) {
         {eyebrow && <p className="meta mb-10 text-ember">{eyebrow}</p>}
 
         <p
+          key={text}
           data-statement
           className="font-display text-[clamp(1.75rem,5.2vw,4.25rem)] font-semibold text-bone leading-[1.12] tracking-[-0.035em] max-w-5xl text-pretty"
         >

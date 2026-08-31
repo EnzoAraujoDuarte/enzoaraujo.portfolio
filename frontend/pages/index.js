@@ -87,7 +87,10 @@ function Hero({ language, cvFile }) {
         split?.revert();
       };
     },
-    { scope: rootRef }
+    // Language is a dependency because SplitText rewrites the heading's
+    // children. Without the rebuild, switching locale leaves React patching
+    // nodes that SplitText replaced, and the page dies with NotFoundError.
+    { scope: rootRef, dependencies: [language] }
   );
 
   return (
@@ -120,6 +123,7 @@ function Hero({ language, cvFile }) {
         </p>
 
         <h1
+          key={language}
           data-hero-heading
           className="font-display text-[clamp(2.5rem,9vw,7.5rem)] ultrawide:text-[8.5rem] font-semibold text-bone leading-[0.92] tracking-[-0.045em]"
         >
