@@ -1,5 +1,13 @@
 import { BACKEND_URL } from '../../../../lib/config';
 
+// Without this the backend sees Vercel's egress IP for every visitor, and
+// per-visitor limits silently become limits on the whole site.
+function forwardedFor(req) {
+  const chain = req.headers['x-forwarded-for'];
+  const first = Array.isArray(chain) ? chain[0] : chain;
+  return (first || req.socket?.remoteAddress || '').split(',')[0].trim();
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -43,7 +51,7 @@ export default async function handler(req, res) {
 
     const response = await fetch(`${backendUrl}/threads/${threadId}/runs/stream`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-forwarded-for': forwardedFor(req) },
       body: JSON.stringify(payload),
     });
 
