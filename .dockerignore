@@ -1,0 +1,18 @@
+# The build context is the repository root, and the frontend is not part of
+# this image. Without this, every deploy uploads node_modules and .next.
+frontend/
+refs/
+
+.git/
+.gitignore
+**/.env
+**/.env.*
+**/__pycache__/
+**/*.pyc
+**/.DS_Store
+**/.venv/
+**/venv/
+
+backend/start.bat
+backend/vercel.json
+backend/README.md
