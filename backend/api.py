@@ -2,9 +2,7 @@ import json
 import os
 import uuid
 from typing import Any, Dict, List
-from collections import defaultdict
 from datetime import datetime, timedelta
-import threading
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,13 +11,9 @@ from pydantic import BaseModel
 
 from langchain_core.messages import HumanMessage, AIMessage, AIMessageChunk, BaseMessage
 from src.agent import create_agent
+from src import limits
 
 app = FastAPI(title="EnzoIA API", version="1.0.0")
-
-RATE_LIMIT_REQUESTS = 10
-RATE_LIMIT_WINDOW = 60
-rate_limit_store = defaultdict(list)
-rate_limit_lock = threading.Lock()
 
 threads_store: Dict[str, Dict[str, Any]] = {}
 agents_cache: Dict[str, Any] = {}
@@ -61,27 +55,6 @@ class ThreadObj(BaseModel):
     thread_id: str
     created_at: str = None
     values: Dict[str, Any] = None
-
-
-def get_client_ip(request: Request) -> str:
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    return request.client.host if request.client else "unknown"
-
-
-def check_rate_limit(client_ip: str) -> bool:
-    now = datetime.now()
-    window_start = now - timedelta(seconds=RATE_LIMIT_WINDOW)
-    with rate_limit_lock:
-        rate_limit_store[client_ip] = [
-            req_time for req_time in rate_limit_store[client_ip]
-            if req_time > window_start
-        ]
-        if len(rate_limit_store[client_ip]) >= RATE_LIMIT_REQUESTS:
-            return False
-        rate_limit_store[client_ip].append(now)
-        return True
 
 
 def lc_messages_to_list(messages: List[BaseMessage]) -> List[Dict[str, Any]]:
@@ -133,7 +106,11 @@ async def health():
 
 
 @app.post("/threads")
-async def create_thread() -> Dict[str, Any]:
+async def create_thread(request: Request) -> Dict[str, Any]:
+    refused = limits.check_new_thread(limits.client_ip(request))
+    if refused:
+        raise HTTPException(status_code=429, detail=refused)
+
     thread_id = str(uuid.uuid4())
     created_at = datetime.utcnow().isoformat() + "Z"
     threads_store[thread_id] = {
@@ -170,12 +147,9 @@ async def get_thread(thread_id: str) -> Dict[str, Any]:
 
 @app.post("/threads/{thread_id}/runs/stream")
 async def run_and_stream(thread_id: str, body: RunRequest, request: Request):
-    client_ip = get_client_ip(request)
-    if not check_rate_limit(client_ip):
-        raise HTTPException(
-            status_code=429,
-            detail="Muitas requisições. Por favor, aguarde um momento."
-        )
+    refused = limits.check(limits.client_ip(request))
+    if refused:
+        raise HTTPException(status_code=429, detail=refused)
 
     if thread_id not in threads_store:
         threads_store[thread_id] = {
@@ -196,7 +170,7 @@ async def run_and_stream(thread_id: str, body: RunRequest, request: Request):
             except:
                 pass
         elif msg.role == "user":
-            user_content = msg.content
+            user_content = limits.clean_message(msg.content)
 
     if body.config and body.config.configurable:
         if body.config.configurable.get("language"):
@@ -204,7 +178,7 @@ async def run_and_stream(thread_id: str, body: RunRequest, request: Request):
 
     agent = get_or_create_agent(thread_id, language)
 
-    stored_messages = threads_store[thread_id].get("messages", [])
+    stored_messages = limits.trim_history(threads_store[thread_id].get("messages", []))
     history_msgs = []
     for m in stored_messages:
         if m.get("type") == "human":
