@@ -145,8 +145,12 @@ def create_agent(language: str = "pt-BR"):
     if not api_key:
         raise ValueError("GROQ_API_KEY não encontrada no .env")
 
+    # Groq retires models on its own schedule — llama-3.3-70b-versatile was
+    # deprecated in June 2026 and started answering model_not_found. Reading it
+    # from the environment means the next retirement is a secret away, not a
+    # redeploy.
     llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         groq_api_key=api_key,
         temperature=0.7
     )
