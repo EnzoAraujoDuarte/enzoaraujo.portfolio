@@ -2,6 +2,7 @@ app = "enzoaraujo-portfolio"
 primary_region = "ams"
 
 [build]
+  # Relative to this file, which is also the build context.
   dockerfile = "Dockerfile"
 
 [env]
