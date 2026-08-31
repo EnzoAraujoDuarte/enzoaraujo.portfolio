@@ -1,14 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Enzo Araujo Duarte">
-  <defs>
-    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#a855f7" />
-      <stop offset="1" stop-color="#7e22ce" />
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="15" fill="url(#mark)" />
-  <g fill="#fff">
-    <rect x="19" y="17" width="27" height="7" rx="3.5" />
-    <rect x="19" y="28.5" width="19" height="7" rx="3.5" />
-    <rect x="19" y="40" width="27" height="7" rx="3.5" />
+  <title>Enzo Araujo Duarte</title>
+  <!-- Graphite rather than ink: a near-black square disappears against a dark
+       browser tab, and the mark has to hold its own silhouette there. -->
+  <rect width="64" height="64" rx="15" fill="#16161A" />
+  <g>
+    <rect x="19" y="17" width="27" height="7" rx="3.5" fill="#EDEAE3" />
+    <!-- The short bar carries the ember. The element out of line with the rest
+         is the one that reads first — which is the argument the site makes. -->
+    <rect x="19" y="28.5" width="19" height="7" rx="3.5" fill="#FF4D1C" />
+    <rect x="19" y="40" width="27" height="7" rx="3.5" fill="#EDEAE3" />
   </g>
 </svg>
