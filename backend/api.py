@@ -193,18 +193,33 @@ async def run_and_stream(thread_id: str, body: RunRequest, request: Request):
         try:
             full_response = ""
 
+            # A model turn that also asks for a tool often writes a sentence
+            # alongside the call — a guess made before it had the facts. Sent
+            # straight through, that guess reaches the visitor glued to the real
+            # answer, and the two contradict each other. So each turn is held
+            # until it ends, and only turns that made no tool call are released.
+            turn = []
+
             async for event in agent.astream_events(
                 {"messages": history_msgs},
                 config={"configurable": {"thread_id": thread_id}},
                 version="v2"
             ):
                 event_name = event.get("event")
+
                 if event_name == "on_chat_model_stream":
                     chunk = event.get("data", {}).get("chunk")
                     text = chunk_to_text(chunk) if chunk else ""
                     if text:
-                        full_response += text
-                        yield sse_payload({"event": "chunk", "thread_id": thread_id, "text": text})
+                        turn.append(text)
+
+                elif event_name == "on_chat_model_end":
+                    output = event.get("data", {}).get("output")
+                    spoken = "".join(turn)
+                    turn = []
+                    if spoken and not getattr(output, "tool_calls", None):
+                        full_response += spoken
+                        yield sse_payload({"event": "chunk", "thread_id": thread_id, "text": spoken})
 
             user_msg = {"id": f"msg-{len(stored_messages)}", "type": "human", "content": user_content}
             ai_msg = {"id": f"msg-{len(stored_messages)+1}", "type": "ai", "content": full_response}
